@@ -5,8 +5,7 @@ The intent is to summarize representations of the president from disparate media
 * compare features across information streams;
 * investigate means of "reading" across divergent ideological perspectives
 * explore methods of visualizing the extracted information to facilitate exposure to a wider array of news;
-
-and more.
+* ... and more.
 
 The repository will contain:
 * Descriptions of the data/text sources (much of the raw news text cannot be shared freely, but those with access to the same databases can replicate the queries; other information streams are publicly available)
