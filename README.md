@@ -15,3 +15,4 @@ The repository will contain:
 * R scripts for topic modelng on corpus
 * ... more to come.
 
+If you're interested in contributing to the project, we'd love to talk to you!
