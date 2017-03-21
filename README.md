@@ -8,7 +8,7 @@ The intent is to summarize representations of the president from disparate media
 
 and more.
 
-The repoitory will contain
+The repository will contain:
 * Descriptions of the data/text sources (much of the raw news text cannot be shared freely, but those with access to the same databases can replicate the queries; other information streams are publicly available)
 * R scripts for reading in the text and creating a corpus
 * R scripts for exploring and cleaning the corpus
