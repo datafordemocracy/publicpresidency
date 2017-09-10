@@ -193,4 +193,8 @@ save.image("workspaceR/newspaperTopicModel.RData")
 
 ## Next steps?
 # Structural topic model with souce pub as covariate
+<<<<<<< HEAD
 # Unsupervised clustering for exploration...
+=======
+# Unsupervised clustering for exploration...
+>>>>>>> origin/master
