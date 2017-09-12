@@ -1,7 +1,7 @@
-# publicpresidency
+# public presidency
 Scripts, workflows for extracting features from information streams
 
-The intent is to summarize representations of the president from disparate media environments in order to:
+The intent is to summarize representations of the presidential attention and action from disparate media environments in order to:
 * compare features across information streams;
 * investigate means of "reading" across divergent ideological perspectives
 * explore methods of visualizing the extracted information to facilitate exposure to a wider array of news;
