@@ -24,7 +24,7 @@ library(topicmodels)
 library(forcats)
 library(ggjoy)
 
-# Load the data and environment from exploreNews.R
+# Load the data and environment from sentimentNews.R
 setwd("~/Box Sync/mpc/dataForDemocracy/newspaper/")
 load("workspaceR/newspaperSentiment.RData")
 
@@ -193,8 +193,5 @@ save.image("workspaceR/newspaperTopicModel.RData")
 
 ## Next steps?
 # Structural topic model with souce pub as covariate
-<<<<<<< HEAD
 # Unsupervised clustering for exploration...
-=======
 # Unsupervised clustering for exploration...
->>>>>>> origin/master
