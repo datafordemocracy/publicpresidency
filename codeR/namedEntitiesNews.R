@@ -34,4 +34,3 @@ named_entity_news <- subset(entity_news, entity_type=="PERSON")
 
 
 save.image("workspaceR/newspaperEntities.RData")
-
