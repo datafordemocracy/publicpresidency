@@ -2,7 +2,7 @@
 
 ### First time only
 
-1. In GitHub, fork the repository, https://github.com/datafordemocracy/publicpresidency, to your own github account and go to the forked repository; click on "Clone or Download" and copy the repository URL to the clipboard
+1. In GitHub, fork the repository, https://github.com/datafordemocracy/publicpresidency, to your own github account and go to the forked repository; click on "Clone or Download" and copy the repository URL to the clipboard.
 
 2. In the terminal, navigate to your local directory (where you want the repository to live)
 
@@ -32,7 +32,9 @@ $ git remove -v # verify
 
 ### Working with local files
 
-Make changes to the forked repository on your local machine; when you're ready to commit those changes (to your forked repository on your local machine)
+Before making changes to the files on your local repository, it's probably worth syncing with the source repository first (in case something has changed in the meantime, steps 1-3 below).
+
+Make changes to the forked repository on your local machine; when you're ready to commit those changes (to your forked repository on your local machine).
 
 1. In the terminal, navigate to your local directory
 
