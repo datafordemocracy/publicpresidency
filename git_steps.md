@@ -42,7 +42,7 @@ Make changes to the forked repository on your local machine; when you're ready t
 
 ```sh
 $ git status
-$ git diff # show file differnces
+$ git diff # show file differences; use q to exit results
 ```
 
 3. Stage files for commit, then commit
@@ -59,14 +59,13 @@ When you want to add changes from the repository on your local machine to the fo
 
 1. In the terminal, navigate to your local directory
 
-2. Fetch the contents of the source repository, datademo
+2. Fetch the contents of the source repository, datademo. so you're starting with the most recent version
 
 ```sh
 $ git fetch datademo
-$ git checkout master # switch to the master branch on your local repository
 ```
 
-3. Merge the changes from datademo/master (specified branch) into your local master branch (the current working directory you set above)
+3. Merge the changes from datademo/master into your local master branch
 
 ```sh
 $ git merge datademo/master # this brings your fork's master branch (working directory) in sync with the source repository's master branch)
