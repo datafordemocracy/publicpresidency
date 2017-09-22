@@ -163,4 +163,8 @@ summary(qcorpus, showmeta=TRUE)
 
 # Save data
 save(nytcorpus, qcorpus_nyt, wsjcorpus, qcorpus_wsj, qcorpus, qmeta, file="workspaceR/newspaper.Rdata")
+<<<<<<< HEAD
 # load("workspaceR/newspaper.RData")
+=======
+# load("workspaceR/newspaper.RData")
+>>>>>>> origin/master
