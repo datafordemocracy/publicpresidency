@@ -121,8 +121,4 @@ qmeta2 %>% group_by(pub) %>% summarize(mean(readability))
 # Save
 rm("p", "fk", "bigrams", "palD", "palO", "palB")
 save.image("workspaceR/newspaperExplore.RData")
-<<<<<<< HEAD
 # load("workspaceR/newspaperExplore.RData")
-=======
-# load("workspaceR/newspaperExplore.RData")
->>>>>>> origin/master
