@@ -30,32 +30,10 @@ $ git remote add datademo https://github.com/datafordemocracy/publicpresidency.g
 $ git remove -v # verify
 ```
 
-### Working with local files
+### Syncing local files with source repository
 
-Before making changes to the files on your local repository, it's probably worth syncing with the source repository first (in case something has changed in the meantime, steps 1-3 below).
-
-Make changes to the forked repository on your local machine; when you're ready to commit those changes (to your forked repository on your local machine).
-
-1. In the terminal, navigate to your local directory
-
-2. List new or modified files available to be committed
-
-```sh
-$ git status
-$ git diff # show file differences; use q to exit results
-```
-
-3. Stage files for commit, then commit
-
-```sh
-$ git add [file]
-$ git commit -m "[add commit message]"
-```
-
-### Syncing local files with forked repository
-
-When you want to add changes from the repository on your local machine to the forked repository on GitHub (the one in your account,
-[see more here](https://help.github.com/articles/syncing-a-fork/).
+Before adding changes from the repository on your local machine to the forked repository on GitHub (the one in your account,
+[see more here](https://help.github.com/articles/syncing-a-fork/), make sure you're working with the most recent files.
 
 1. In the terminal, navigate to your local directory
 
@@ -76,6 +54,28 @@ $ git merge datademo/master # this brings your fork's master branch (working dir
 ```sh
 $ git push origin master # pushes the name on your local machine (origin) to a branch on your GitHub page (master)
 ```
+
+### Working with local files
+
+Make changes to the forked repository on your local machine; when you're ready, commit those changes to your local repository and push these to your forked repository on GitHub.
+
+1. In the terminal, navigate to your local directory
+
+2. List new or modified files available to be committed
+
+```sh
+$ git status
+$ git diff # show file differences; use q to exit results
+```
+
+3. Stage files for commit, then commit
+
+```sh
+$ git add [file]
+$ git commit -m "[add commit message]"
+```
+
+4. Sync your local files with the source repository (again) and push these to your forked repository on GitHub.
 
 ### Make a pull request
 When you want to add the changes from your forked repository on GitHub to the source repository
