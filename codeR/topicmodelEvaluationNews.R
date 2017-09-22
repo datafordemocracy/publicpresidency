@@ -99,4 +99,9 @@ perplex <- c(perplex, perplexityK) # combine the perplexity lists
 px <- unlist(perplex)
 perplexline <- as.data.frame(cbind(px, k=c(30,40,50,60,70,80,90,100,110))) # and add k values
 ggplot(perplexline, aes(x=k, y=px)) + geom_line() + scale_x_continuous(breaks=c(30,40,50,60,70,80,90,100,110))
+
+<<<<<<< HEAD
 save.image("workspaceR/newspaperTopicModelEval.RData")
+=======
+save.image("workspaceR/newspaperTopicModelEval.RData")
+>>>>>>> origin/master

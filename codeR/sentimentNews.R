@@ -227,4 +227,8 @@ save.image("workspaceR/newspaperSentiment.RData")
 ## Next steps?
 # Consider Lexicoder Sentiment Dictionary...http://www.lexicoder.com/
 # Need to output the text of each article in the corpus to separate file in common folder (e.g., writeCorpus from tm)
+<<<<<<< HEAD
 # also contains beta version of policy dictionary to identify attention to policy areas
+=======
+# also contains beta version of policy dictionary to identify attention to policy areas
+>>>>>>> origin/master
