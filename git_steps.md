@@ -16,15 +16,13 @@
 
   $ cd publicpresidency
 
-5. Tell git about the source repository (https://help.github.com/articles/configuring-a-remote-for-a-fork/)
+5. Tell git about the source repository [(more here)](https://help.github.com/articles/configuring-a-remote-for-a-fork/)
 
   $ git remote -v # initially only your forked repository should be listed
 
   $ git remote add datademo https://github.com/datafordemocracy/publicpresidency.git # datademo is a name we provided to reference the source repository
 
   $ git remove -v # verify
-
-6. And Bob's your uncle!
 
 
 ### Working with local files
@@ -49,7 +47,7 @@ Make changes to the forked repository on your local machine; when you're ready t
 ### Syncing local files with forked repository
 
 When you want to add changes from the repository on your local machine to the forked repository on GitHub (the one in your account,
-see https://help.github.com/articles/syncing-a-fork/)
+[see more here](https://help.github.com/articles/syncing-a-fork/).
 
 1. In the terminal, navigate to your local directory
 
@@ -70,3 +68,9 @@ see https://help.github.com/articles/syncing-a-fork/)
 
 ### Make a pull request
 When you want to add the changes from your forked repository on GitHub to the source repository
+
+1. Go to source repository on GitHub and click "New pull request"
+
+2. On the compare page, click "compare across forks"; the base fork is the original source repository, the head fork is your fork
+
+3. Give your request a title and description and "Create pull request"
