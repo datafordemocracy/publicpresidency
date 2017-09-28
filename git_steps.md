@@ -2,7 +2,7 @@
 
 ### Overview 
 
-![Overview](/images/overview for publicpresidency.jpg "Overview of publicpresidency")
+![Overview](/images/overview.jpg "Overview of publicpresidency")
 
 
 
