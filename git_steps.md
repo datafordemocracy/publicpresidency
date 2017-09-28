@@ -2,7 +2,7 @@
 
 ### Overview 
 
-<img src="images/overview.jpg">
+<img src="images/overview.jpg" align="center">
 
 
 ### First time only
