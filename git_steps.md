@@ -1,9 +1,10 @@
 ## Git Steps
 
-### Overview 
+### Overview
 
-<img src="images/overview.jpg" align="center">
-
+<p align="center">
+  <img src="images/overview.jpg">
+</p>
 
 ### First time only
 
@@ -114,7 +115,9 @@ $ git pull datademo master # Pull all changes to branch master
 ```
 At this point, your repository looks something like this:
 
-![Branching in Git](images/branch.jpg "Branching in git")
+<p align="center">
+  <img src="images/branch.jpg">
+</p>
 
 You need to merge your changes with the local master and push it to the forked repo. In order to do that, use the
 following code
