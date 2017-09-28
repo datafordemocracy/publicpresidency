@@ -2,7 +2,7 @@
 
 ### Overview 
 
-<img src="iamges/overview.jpg">
+<img src="images/overview.jpg">
 
 
 ### First time only
