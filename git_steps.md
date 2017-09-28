@@ -1,5 +1,12 @@
 ## Git Steps
 
+### Overview 
+
+![alt text](/images/overview for publicpresidency.jpg "Overview of
+publicpresidency")
+
+
+
 ### First time only
 
 1. In GitHub, fork the repository, https://github.com/datafordemocracy/publicpresidency, to your own github account and go to the forked repository; click on "Clone or Download" and copy the repository URL to the clipboard.
@@ -109,7 +116,7 @@ $ git pull datademo master # Pull all changes to branch master
 ```
 At this point, your repository looks something like this:
 
-![Branching in Git](images/branch.jpg "Branching in Git")
+![Branching in Git](images/branch.jpg)
 
 You need to merge your changes with the local master and push it to the forked repo. In order to do that, use the
 following code
