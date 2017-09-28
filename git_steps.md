@@ -137,3 +137,11 @@ When you want to add the changes from your forked repository on GitHub to the so
 2. On the compare page, click "compare across forks"; the base fork is the original source repository, the head fork is your fork
 
 3. Give your request a title and description and "Create pull request"
+
+## Some useful links
+
+* [syncing your local to remote](https://www.atlassian.com/git/tutorials/syncing)
+* [cheatsheet for Git](http://supercollider.github.io/development/git-cheat-sheet)
+* [Git interactive tutorials](https://try.github.io/levels/1/challenges/1)
+* [Learn git branching](http://learngitbranching.js.org/)
+
