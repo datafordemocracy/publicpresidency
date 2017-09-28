@@ -2,8 +2,7 @@
 
 ### Overview 
 
-![Overview](/images/overview.jpg "Overview of publicpresidency")
-
+<img src="iamges/overview.jpg" align="center">
 
 
 ### First time only
