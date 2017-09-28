@@ -99,17 +99,27 @@ $ git commit -m <insert commit message>
 
 3. Working with pull
 
-Now you have your changes in the local branch called dev. We need to find a way to sync our local repository to
-datademo. Inorder to do this and avoid merge conflicts, we will sync our local master with remote and merge our changes
+Now you have your changes in the local branch called dev. You need to find a way to sync our local repository to
+datademo. Inorder to do this and avoid merge conflicts, you need sync your local master with remote ( datademo )  and merge your changes ( on branch dev )
 on top of it
 
 ```sh
 $ git checkout master # switch to branch master
 $ git pull datademo master # Pull all changes to branch master
-$ 
 ```
+At this point, your repository looks something like this:
 
+![Branching in Git](images/branch.jpg "Branching in Git")
 
+You need to merge your changes with the local master and push it to the forked repo. In order to do that, use the
+following code
+
+```sh
+$ git merge dev    # git will prompt you with a commit file, this is fine. Save it.
+$ git add <Files you need to push>
+$ git commit -m "Your new commit name"
+$ git push origin master  # This will push changes to the forked repository
+```
 
 ### Make a pull request
 When you want to add the changes from your forked repository on GitHub to the source repository
