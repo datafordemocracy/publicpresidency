@@ -2,8 +2,7 @@
 
 ### Overview 
 
-![alt text](/images/overview for publicpresidency.jpg "Overview of
-publicpresidency")
+![Overview](/images/overview for publicpresidency.jpg "Overview of publicpresidency")
 
 
 
@@ -116,7 +115,7 @@ $ git pull datademo master # Pull all changes to branch master
 ```
 At this point, your repository looks something like this:
 
-![Branching in Git](images/branch.jpg)
+![Branching in Git](images/branch.jpg "Branching in git")
 
 You need to merge your changes with the local master and push it to the forked repo. In order to do that, use the
 following code
