@@ -16,3 +16,8 @@ The repository will contain:
 * ... more to come.
 
 If you're interested in contributing to the project, we'd love to talk to you!
+
+Enjoy!
+
+# alicia's edit
+
