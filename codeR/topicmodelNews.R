@@ -128,6 +128,9 @@ ggplot(topicweeklong2, aes(x=week, y=terms2, height=prevalence, group=terms2)) +
   theme_joy(font_size=10)
 ggsave("figuresR/topicJoyPrevalenceWeek.png")
 
+# consider heatmap of topics over time
+
+
 # d. Topic prevalence by publication
 probtopic75pub <- cbind(probtopic75, pub=qmeta2$pub)
 # Group by publication
@@ -193,5 +196,4 @@ save.image("workspaceR/newspaperTopicModel.RData")
 
 ## Next steps?
 # Structural topic model with souce pub as covariate
-# Unsupervised clustering for exploration...
 # Unsupervised clustering for exploration...

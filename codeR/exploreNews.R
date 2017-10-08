@@ -1,6 +1,6 @@
 ###################################
 # Media Coverage of Trump: NYT, WSJ
-# Initial Exploration 
+# Initial Exploration
 # Michele Claibourn
 # February 21, 2017
 # Updated September 1, 2017
@@ -42,16 +42,16 @@ table(qmeta2$pub)
 table(qmeta2$date, qmeta2$pub)
 
 # Number of stories by day
-p <- ggplot(qmeta2, aes(x=date)) 
+p <- ggplot(qmeta2, aes(x=date))
 # Create date breaks to get chosen tick marks on graph
 date.vec <- seq(from=as.Date("2017-01-20"), to=as.Date("2017-09-01"), by="week") # update to Friday after last story
-p + stat_count(aes(fill=..count..), geom="point") + 
+p + stat_count(aes(fill=..count..), geom="point") +
   facet_wrap(~ pub) +
-  scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) + 
+  scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
   ggtitle("Volume of News Coverage of Trump\n New York Times and Wall Street Journal") +
   labs(x="Date", y="Number of Stories") +
-  theme(axis.text.x=element_text(angle=90), 
-        plot.title = element_text(face="bold", size=20, hjust=0), 
+  theme(axis.text.x=element_text(angle=90),
+        plot.title = element_text(face="bold", size=20, hjust=0),
         axis.title = element_text(face="bold", size=16),
         panel.grid.minor = element_blank(),
         legend.position="none")
@@ -66,12 +66,12 @@ bigrams <- removeFeatures(bigrams, stopwords("english"))
 bigrams
 # replace some key phrases with single-token versions
 # united states, white house, north korea, health care, national security,
-# attorney general, supreme court, executive order, 
+# attorney general, supreme court, executive order,
 qcorpus3 <- phrasetotoken(qcorpus2, bigrams[c(1:2,4:6,8,10,13)])
 
 
 ## Frequent words/Wordclouds
-nydfm <- dfm(qcorpus3, remove = c(stopwords("english")), 
+nydfm <- dfm(qcorpus3, remove = c(stopwords("english")),
              removePunct = TRUE, verbose=TRUE) # turn it into a document-feature matrix
 topfeatures(nydfm, 100)
 palD <- brewer.pal(8, "Paired")
@@ -104,7 +104,7 @@ qmeta2$readability <- fk
 p <- ggplot(qmeta2, aes(x = date, y = readability))
 p + geom_jitter(aes(color=pub), alpha=0.5, width=0.25, height=0.0, size=2) +
   geom_smooth(aes(color=pub)) +
-  scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) + 
+  scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
   ggtitle("'Readability' of Newspaper Coverage of Trump") +
   labs(y = "Readability (grade level)", x = "Date of Article") +
   scale_color_manual(values=c("blue3","orange3"), name="Source") +
@@ -115,15 +115,9 @@ p + geom_jitter(aes(color=pub), alpha=0.5, width=0.25, height=0.0, size=2) +
         legend.text=element_text(size=10))
 ggsave("figuresR/newspaperreadability.png")
 
-qmeta2 %>% group_by(pub) %>% summarize(mean(readability)) 
+qmeta2 %>% group_by(pub) %>% summarize(mean(readability))
 
 
 # Save
 rm("p", "fk", "bigrams", "palD", "palO", "palB")
 save.image("workspaceR/newspaperExplore.RData")
-<<<<<<< HEAD
-# load("workspaceR/newspaperExplore.RData")
-=======
-# load("workspaceR/newspaperExplore.RData")
->>>>>>> origin/master
-# Gautam's edit
