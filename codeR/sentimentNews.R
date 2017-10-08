@@ -3,7 +3,7 @@
 # Sentiment (quanteda) 
 # Michele Claibourn
 # February 21, 2017
-# Updated September 1, 2017
+# Updated October 7, 2017
 ##################################
 
 #####################
@@ -33,13 +33,13 @@ load("workspaceR/newspaperExplore.RData")
 # (all are freely available online, and could be loaded as word vectors)
 bing <- sentiments %>% filter(lexicon=="bing") 
 table(bing$sentiment)
-sample(bing$word[bing$sentiment=="negative"], 10) # examples
-sample(bing$word[bing$sentiment=="positive"], 10) # examples
+# sample(bing$word[bing$sentiment=="negative"], 10) # examples
+# sample(bing$word[bing$sentiment=="positive"], 10) # examples
 
 
 ## Overall Tone/Polarity ##
 sentDict <- dictionary(list(positive = bing$word[bing$sentiment=="positive"], negative = bing$word[bing$sentiment=="negative"]))
-paperDFM <- dfm(qcorpus3, dictionary = sentDict) # apply dictionary
+paperDFM <- dfm(qcorpus2, dictionary = sentDict) # apply dictionary
 head(paperDFM,10)
 
 # Turn this into a dataframe, create tone=positive-negative
@@ -80,13 +80,29 @@ qmeta2 %>% group_by(pub) %>% summarize(mean(pertone), sd(pertone))
 
 mintone <- qmeta2 %>% filter(pertone == min(pertone))
 mintone[,c("heading", "pub", "date", "pertone")] # Identify article
-qcorpus3$documents$texts[docvars(qcorpus3, "heading")==mintone$heading]
-# qmeta2$leadline[qmeta2$id==mintone$id] # first 500 characters of article
+qmeta2$leadline[qmeta2$heading==mintone$heading] # first 500 characters of article
+# texts(qcorpus2)[docvars(qcorpus2, "heading")==mintone$heading]
 
 maxtone <- qmeta2 %>% filter(pertone == max(pertone))
 maxtone[,c("heading", "pub", "date", "pertone")]
-qcorpus3$documents$texts[docvars(qcorpus3, "heading")==maxtone$heading]
-#qmeta2$leadline[qmeta2$id==maxtone$id]
+qmeta2$leadline[qmeta2$heading==maxtone$heading]
+# texts(qcorpus2)[docvars(qcorpus2, "heading")==maxtone$heading]
+
+
+# Plot just opeds
+p <- ggplot(filter(qmeta2, oped==1), aes(x=date, y=pertone))
+p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=.5) +
+  geom_hline(yintercept=median(qmeta2$pertone), color="gray50") +
+  geom_smooth(aes(color=pub)) +
+  scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
+  ggtitle("'Tone' of Op/Ed Articles of Trump") +
+  labs(y = "Overall Tone (% of positive words - % of negative words)", x = "Date of Article") +
+  scale_color_manual(values=c("blue3","orange3"), name="Source") +
+  theme(plot.title = element_text(face="bold", size=20, hjust=0),
+        axis.title = element_text(face="bold", size=16),
+        panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
+        axis.text.x = element_text(angle=90),
+        legend.text=element_text(size=12))
 
 
 ## Other Emotional Affect ##
@@ -98,7 +114,7 @@ affectDict <- dictionary(list(angerW=nrc$word[nrc$sentiment=="anger"],
                               fearW=nrc$word[nrc$sentiment=="fear"],
                               anticipationW=nrc$word[nrc$sentiment=="anticipation"],
                               trustW=nrc$word[nrc$sentiment=="trust"]))
-paperAffectDFM <- dfm(qcorpus3, dictionary = affectDict) # apply dictionary
+paperAffectDFM <- dfm(qcorpus2, dictionary = affectDict) # apply dictionary
 head(paperAffectDFM,10)
 
 # Turn this into a dataframe, add to existing dataframe
@@ -129,8 +145,23 @@ p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2) +
 
 checkanger <- qmeta2 %>% filter(anger == max(anger))
 checkanger[,c("heading", "pub", "anger")]
-qcorpus3$documents$texts[docvars(qcorpus3, "heading")==checkanger$heading]
+qmeta2$leadline[qmeta2$heading==checkanger$heading]
+# texts(qcorpus2)[docvars(qcorpus2, "heading")==checkanger$heading]
 
+# Just op/eds again
+p <- ggplot(filter(qmeta2, oped==1), aes(x=date, y=anger))
+p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2) +
+  geom_hline(yintercept=mean(qmeta2$anger), color="gray50") +
+  geom_smooth(aes(color=pub)) +
+  scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
+  ggtitle("Anger Affect within Op/Ed Articles of Trump") +
+  labs(y = "Anger Affect", x = "Date of Article") +
+  scale_color_manual(values=c("blue3", "orange3"), name="Source") +
+  theme(plot.title = element_text(face="bold", size=20, hjust=0),
+        axis.title = element_text(face="bold", size=16),
+        panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
+        axis.text.x = element_text(angle=90),
+        legend.text=element_text(size=12))
 
 # Or plot all four affect variables
 qmeta2long <- qmeta2 %>% 
@@ -154,13 +185,15 @@ ggsave("figuresR/newspaperaffect_naive.png")
 
 checkfear <- qmeta2 %>% filter(fear==max(fear))
 checkfear[,c("heading", "pub", "fear")]
-qcorpus3$documents$texts[docvars(qcorpus3, "heading")==checkfear$heading]
+qmeta2$leadline[qmeta2$heading==checkfear$heading]
+# texts(qcorpus2)[docvars(qcorpus2, "heading")==checkfear$heading]
 
 
 ## Text polarity accounting for amplifiers/modifiers/qualifiers
+# install.packages("sentimentr")
 library(sentimentr)
 # sentimentr operates on the sentence level
-sentSent <- sentiment(qcorpus3$documents$texts) # apply sentiment function
+sentSent <- sentiment(qcorpus2$documents$texts) # apply sentiment function
 
 # Use sentence-level sentiment to get average for story
 articleSent <- sentSent %>% 
@@ -186,13 +219,31 @@ ggsave("figuresR/newspapersentiment.png")
 
 mintone <- qmeta2 %>% filter(avgSent == min(avgSent))
 mintone[,c("heading", "pub", "date", "avgSent")] # Identify article
-qcorpus3$documents$texts[docvars(qcorpus3, "heading")==mintone$heading]
-# qmeta2$leadline[qmeta2$id==mintone$id] # first 500 characters of article
+qcorpus2$documents$texts[docvars(qcorpus2, "heading")==mintone$heading]
+# texts(qcorpus2)[docvars(qcorpus2, "heading")==mintone$heading]
 
 maxtone <- qmeta2 %>% filter(avgSent == max(avgSent))
 maxtone[,c("heading", "pub", "date", "avgSent")]
-qcorpus3$documents$texts[docvars(qcorpus3, "heading")==maxtone$heading]
-#qmeta2$leadline[qmeta2$id==maxtone$id]
+qcorpus2$documents$texts[docvars(qcorpus2, "heading")==maxtone$heading]
+# texts(qcorpus2)[docvars(qcorpus2, "heading")==maxtone$heading]
+
+# Just opeds again
+p <- ggplot(filter(qmeta2, oped==1), aes(x=date, y=avgSent))
+p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=.5) +
+  geom_hline(yintercept=median(qmeta2$avgSent), color="gray50") +
+  geom_smooth(aes(color=pub)) +
+  scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
+  ggtitle("Sentiment of Op/Ed Articles of Trump") +
+  labs(y = "Average Sentiment across Sentences", x = "Date of Article") +
+  scale_color_manual(values=c("blue3","orange3"), name="Source") +
+  theme(plot.title = element_text(face="bold", size=20, hjust=0),
+        axis.title = element_text(face="bold", size=16),
+        panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
+        axis.text.x = element_text(angle=90),
+        legend.text=element_text(size=12))
+
+qmeta2 %>% filter(oped==1) %>% group_by(pub) %>% summarize(mean(avgSent), sd(avgSent)) 
+
 
 # Sentiment trajectories
 sentSentNYT <- sentSent %>% filter(element_id<=length(qmeta2$pub[qmeta2$pub=="NYT"]))
