@@ -6,7 +6,7 @@ Using the "Advanced Options" for searching, we
 * enter the appropriate dates in the date fields (we've been capturing a month's worth of new articles at the end of each month), and
 * in Build Your Own Segment Search we select "LEAD" and enter Trump as the term. Then search!
 
-After articles are returned, we turned Duplicate Options to "On - High similarity" and sorted the results by Duplicate.
+After articles are returned, we turned Duplicate Options to "On - High similarity" and sorted the results by date.
 
 We could only save 500 articles at a time. Hit the Save button. In the Download Documents window we
 * changed the format to "html",
