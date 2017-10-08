@@ -1,12 +1,13 @@
-####################################
+#######################################
 # Media Coverage of Trump
 # Read, format newspaper articles
 # NYT from Lexis-Nexis; WSJ from Factiva
 # Michele Claibourn
 # February 1, 2017
-# Updated September 1, 2017
-# with newspapers through August 31            
-###################################
+# Updated October 6, 2017
+# with newspapers through September 30
+# and adding dummy for oped articles
+######################################
 
 #####################
 # Loading libraries
@@ -27,8 +28,13 @@ library(dplyr)
 library(readr)
 library(stringr)
 
+
 # Point to path for html files
-setwd("~/Box Sync/newspaper/")
+setwd("~/Box Sync/mpc/dataForDemocracy/newspaper/")
+
+# Adjust readFactivaHTML function (see readNewsError.R for background)
+source("codeR/readFactivaHTML2.R")
+assignInNamespace("readFactivaHTML", readFactivaHTML2, ns="tm.plugin.factiva")
 
 ##########################
 # Read in NYT articles 
@@ -78,11 +84,11 @@ nytmeta <- lapply(nytfiles$filelist, readmymeta)
 nytmeta <- do.call(rbind, nytmeta)
 
 # Improve the metadata
-colnames(nytmeta)[1] <- "byline"
 nytmeta$length <- as.integer(str_extract(nytmeta$LENGTH, "[0-9]{1,4}"))
 nytmeta$date <- as.Date(nytmeta$DATE, "%B %d, %Y")
 nytmeta$pub <- "NYT"
-nytmeta <- nytmeta %>% select(byline, headline = HEADLINE, length, date, pub)
+nytmeta$oped <- if_else(str_detect(nytmeta$SECTION, "Editorial Desk"), 1, 0)
+nytmeta <- nytmeta %>% select(byline = BYLINE, headline = HEADLINE, length, date, pub, oped)
 
 
 ##########################
@@ -126,6 +132,7 @@ docvars(qcorpus_nyt, "author") <- nytmeta$byline
 docvars(qcorpus_nyt, "length") <- nytmeta$length
 docvars(qcorpus_nyt, "date") <- nytmeta$date
 docvars(qcorpus_nyt, "pub") <- nytmeta$pub
+docvars(qcorpus_nyt, "oped") <- nytmeta$oped
 
 # Remove several empty metadata fields
 docvars(qcorpus_nyt, c("description", "language", "intro", "section", "subject", "coverage", "company", "stocksymbol", "industry", "type", "wordcount", "rights")) <- NULL
@@ -142,8 +149,11 @@ summary(qcorpus_wsj, showmeta=TRUE)
 # Assign document variables to corpus
 docvars(qcorpus_wsj, "length") <- docvars(qcorpus_wsj, "wordcount")
 docvars(qcorpus_wsj, "date") <- docvars(qcorpus_wsj, "datetimestamp")
-docvars(qcorpus_wsj, "pub") <- "WSJ"
 docvars(qcorpus_wsj, "date") <- as.Date(docvars(qcorpus_wsj, "date"))
+docvars(qcorpus_wsj, "pub") <- "WSJ"
+oped <- c("Commentaries/Opinions", "Columns", "Editorials")
+docvars(qcorpus_wsj, "oped") <- if_else(str_detect(docvars(qcorpus_wsj, "subject"), paste(oped, collapse = '|')), 1, 0)
+
 
 # Remove several empty (or unused) metadata fields
 docvars(qcorpus_wsj, c("description", "language", "edition", "section", "subject", "coverage", "company", "industry", "infocode", "infodesc", "wordcount", "publisher", "rights")) <- NULL
@@ -156,10 +166,12 @@ summary(qcorpus_wsj, showmeta=TRUE)
 #################
 qcorpus <- qcorpus_nyt + qcorpus_wsj
 qcorpus
+summary(qcorpus)
 qmeta <- docvars(qcorpus)
-# add first paragraph as field in qmeta; probably a better way
+
+# add approx first two paragraphs as field in qmeta; probably a better way
 qmeta$leadlines <- str_sub(qcorpus$documents$texts, 1,500)
-summary(qcorpus, showmeta=TRUE)
+
 
 # Save data
 save(nytcorpus, qcorpus_nyt, wsjcorpus, qcorpus_wsj, qcorpus, qmeta, file="workspaceR/newspaper.Rdata")

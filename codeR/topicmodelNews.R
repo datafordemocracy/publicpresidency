@@ -4,7 +4,7 @@
 # Estimation and visualization
 # Michele Claibourn
 # February 14, 2017
-# Updated September 3, 2017 
+# Updated October 7, 2017 
 ###################################
 
 #####################
@@ -13,6 +13,7 @@
 #####################
 # install.packages("topicmodels")
 # install.packages("ggjoy")
+# install.packages("forcats")
 
 rm(list=ls())
 library(dplyr)
@@ -24,7 +25,7 @@ library(topicmodels)
 library(forcats)
 library(ggjoy)
 
-# Load the data and environment from sentimentNews.R
+# Load the data and environment from exploreNews.R
 setwd("~/Box Sync/mpc/dataForDemocracy/newspaper/")
 load("workspaceR/newspaperSentiment.RData")
 
@@ -32,8 +33,8 @@ load("workspaceR/newspaperSentiment.RData")
 # Topic Model Prep
 ####################
 # 0. Prepping 
-nydfm <- dfm(qcorpus3, remove = c(stopwords("english"), "mr", "trump", "trump's"), 
-             stem = TRUE, removePunct = TRUE, verbose=TRUE) # turn it into a document-feature matrix
+nydfm <- dfm(qcorpus2, remove = c(stopwords("english"), "mr", "trump", "trump's"), 
+             stem = TRUE, remove_punct = TRUE, verbose=TRUE) # turn it into a document-feature matrix
 nydfm
 topfeatures(nydfm, 20)
 # stopwords("english") # what words did we remove?
@@ -58,7 +59,7 @@ t1 <- Sys.time()
 tm75 <- LDA(nydtm, k=75, control=list(seed=seed1)) # estimate lda model with 50 topics
 probterms75 <- as.data.frame(posterior(tm75)$terms) # all the topic-term probabilities
 probtopic75 <- as.data.frame(posterior(tm75)$topics) # all the document-topic probabilities
-Sys.time() - t1 # ~3 hours
+Sys.time() - t1 # ~ 2.4 hours
 
 # 2. Visualize results
 # a. Topic prevalence in corpus
@@ -80,7 +81,7 @@ probtopic75date <- cbind(probtopic75, date=qmeta2$date)
 topicday <- probtopic75date %>% 
   select(c(1:75,77)) %>% 
   group_by(date) %>% 
-  summarize_each(funs(sum)) 
+  summarize_all(funs(sum)) 
 
 # plot single topic
 plottitle <- paste0("Topic 3: ", topiclab$V1[3], "-", topiclab$V2[3], "-", topiclab$V3[3], "-", topiclab$V4[3], "-", topiclab$V5[3])
@@ -106,7 +107,7 @@ topicweek <- probtopic75date %>%
   mutate(week=week(date)) %>% 
   select(c(1:75,78)) %>% 
   group_by(week) %>% 
-  summarize_each(funs(sum))
+  summarize_all(funs(sum))
 
 # plot the weeks
 topicweeklong <- gather(topicweek, topic, prevalence, -week)
@@ -128,16 +129,13 @@ ggplot(topicweeklong2, aes(x=week, y=terms2, height=prevalence, group=terms2)) +
   theme_joy(font_size=10)
 ggsave("figuresR/topicJoyPrevalenceWeek.png")
 
-# consider heatmap of topics over time
-
-
 # d. Topic prevalence by publication
 probtopic75pub <- cbind(probtopic75, pub=qmeta2$pub)
 # Group by publication
 topicpub <- probtopic75pub %>% 
   select(c(1:75,77)) %>% 
   group_by(pub) %>% 
-  summarize_each(funs(sum))
+  summarize_all(funs(sum))
 topicpub <- as.data.frame(t(topicpub)) # transpose
 topicpub <- topicpub[-1,] # get rid of first row containing publication
 names(topicpub) <- c("NYT", "WSJ") # make publication a variable name
@@ -164,6 +162,7 @@ ggsave("figuresR/topicprevalencepub.png")
 
 
 # 3. Dynamic visualization 
+# install.packages(c("LDAvis", "servr"))
 library(LDAvis)
 library(servr)
 # i. phi=probterms
@@ -186,7 +185,7 @@ json <- createJSON(phi = phi, theta = theta,
                    term.frequency = term.frequency, R = 20)
 
 # Serve up files for display
-serVis(json, out.dir = "nypapertopics75", open.browser = FALSE) # save for upload elsewhere
+serVis(json, out.dir = "nypapertopics75toSeptember", open.browser = FALSE) # save for upload elsewhere
 # see: http://people.virginia.edu/~mpc8t/datafordemocracy/nypapertopics75toAugust/
 
 
@@ -195,5 +194,5 @@ save.image("workspaceR/newspaperTopicModel.RData")
 # load("workspaceR/newspaperTopicModel.RData")
 
 ## Next steps?
-# Structural topic model with souce pub as covariate
+# Structural topic model with souce pub, oped as covariates
 # Unsupervised clustering for exploration...
