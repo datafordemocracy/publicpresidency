@@ -28,7 +28,7 @@ library(readr)
 library(stringr)
 
 # Point to path for html files
-setwd("~/Box Sync/mpc/dataForDemocracy/newspaper/")
+setwd("~/Box Sync/newspaper/")
 
 ##########################
 # Read in NYT articles 
