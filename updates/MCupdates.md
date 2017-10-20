@@ -35,3 +35,5 @@
 
 * Loaded R scripts to GitHub
 * Loaded news articles to Box
+* Downloaded August news articles
+* Re-ran all analysis so for Jan-Aug
