@@ -6,7 +6,8 @@
 
 ## 2017-10-13
 
-* Fixed code to work with updated quanteda package
+* Fixed code to work with updated quanteda package; gave up on bigrams/textstat_collocations for the moment
+* Added oped as article variable
 * Updated article downloads, made more systematic
 
 ## 2017-10-06
