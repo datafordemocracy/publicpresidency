@@ -36,6 +36,7 @@
 * Policy issue (via dictionary? [Lexicoder](http://www.lexicoder.com/) has beta policy dictionary, based on [policy agendas project](http://www.comparativeagendas.net/))
 * Moral foundations (Jessica, [dictionary here](http://moralfoundations.org/sites/default/files/files/downloads/moral%20foundations%20dictionary.dic))
 * Empath in Python (Alicia, need clarification on what this would provide, [article here](https://hci.stanford.edu/publications/2016/ethan/empath-chi-2016.pdf))
+* Latent Variable Analysis via Exploratory Graph Analysis (Jessica)
 
 ## Research Questions
 
