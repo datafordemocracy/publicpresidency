@@ -9,7 +9,7 @@
 ### Potential sources to add
 
 * Television news transcripts (e.g., Fox, CNN; looking into NewsBank access)
-* Internet news sites (e.g., Politico, Breitbart, or something else); not sure how to acquire for past, but could set up something going forward?)
+* Internet news sites (e.g., Politico, Breitbart, or something else); select by audience size/[ideological center](http://www.pewresearch.org/pj_14-10-21_mediapolarization-08-2/); not sure how to acquire for past, but could set up something going forward?)
 * Trump twitter feed (e.g., from [Trump Twitter Archive](http://www.trumptwitterarchive.com/))
 * Formal presidential statements (e.g., [The Daily Compilation of Presidential Documents](https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CPD&browsePath=2017&isCollapsed=false&leafLevelBrowse=false&ycord=0); ideally with available metadata like subject codes and named entities)
 * News outlet tweets (e.g., the [GWU Libaries collection](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/2FIFLH))
