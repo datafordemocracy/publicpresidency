@@ -4,7 +4,7 @@
 # Estimation and visualization
 # Michele Claibourn
 # February 14, 2017
-# Updated October 7, 2017 
+# Updated October 27, 2017 
 ###################################
 
 #####################
@@ -14,6 +14,7 @@
 # install.packages("topicmodels")
 # install.packages("ggjoy")
 # install.packages("forcats")
+# install.packages("ggridges")
 
 rm(list=ls())
 library(dplyr)
@@ -23,7 +24,7 @@ library(quanteda)
 library(tm)
 library(topicmodels)
 library(forcats)
-library(ggjoy)
+library(ggridges)
 
 # Load the data and environment from exploreNews.R
 setwd("~/Box Sync/mpc/dataForDemocracy/newspaper/")
@@ -120,14 +121,14 @@ ggplot(topicweeklong2, aes(x=week, y=prevalence)) +
   geom_line() + facet_wrap(~ terms2, ncol=5) + 
   ggtitle("Topic Prevalence by Week")
 
-# topic by weeks via joyplot
+# topic by weeks via ridgeline plot: udpdated with ggridges
 ggplot(topicweeklong2, aes(x=week, y=terms2, height=prevalence, group=terms2)) + 
   ggtitle("Topical Prevalence by Week") +
   labs(y = "", x = "Weeks since Inauguration") +
   scale_x_continuous(breaks=seq(5,30,5)) +
-  geom_joy(stat="identity", scale = 2, fill="lightblue", color="lightblue") + 
-  theme_joy(font_size=10)
-ggsave("figuresR/topicJoyPrevalenceWeek.png")
+  geom_density_ridges(stat="identity", scale = 2, fill="lightblue", color="lightblue") + 
+  theme_ridges(font_size=10)
+ggsave("figuresR/topicRidgePrevalenceWeek.png")
 
 # d. Topic prevalence by publication
 probtopic75pub <- cbind(probtopic75, pub=qmeta2$pub)
@@ -187,6 +188,10 @@ json <- createJSON(phi = phi, theta = theta,
 # Serve up files for display
 serVis(json, out.dir = "nypapertopics75toSeptember", open.browser = FALSE) # save for upload elsewhere
 # see: http://people.virginia.edu/~mpc8t/datafordemocracy/nypapertopics75toAugust/
+
+# 5. Add article topics (probtopics75) to qmeta2
+names(probtopic75) <- (c(topicsum$terms, "id"))
+qmeta2 <- left_join(qmeta2, probtopic75, by="id")
 
 
 #  save
