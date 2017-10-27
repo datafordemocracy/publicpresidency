@@ -1,3 +1,9 @@
+## 2017-10-27
+
+* Update topicmodelNews.R: [change ggjoy to ggridges](http://serialmentor.com/blog/2017/9/15/goodbye-joyplots), add topics to qmeta2
+* Ran moral foundations script on newspaperTopicModel.RData
+* Exploration of qmeta2
+
 ## 2017-10-20
 
 * Started bibliography of relevant literature
