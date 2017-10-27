@@ -5,7 +5,9 @@
 #	October 18, 2017                                                       #
 #	Jessica Mazen                                                          #
 ##----------------------------------------------------------------------##
+# devtools::install_github('miserman/lingmatch')
 
+rm(list=ls())
 library(dplyr)
 library(tm)
 library(ggplot2)
@@ -16,6 +18,8 @@ library(tokenizers)
 # Run readNews.R first
 # Run exploreNews.R first
 # Run sentimentNews.R first
+# Run topicmodelNews.R first 
+load("workspaceR/newspaperTopicModel.RData")
 
 # Read in & create dictionary
 #mfDic <- read.dic("http://moralfoundations.org/sites/default/files/files/downloads/moral%20foundations%20dictionary.dic")
@@ -153,6 +157,10 @@ p1 + theme_bw() + theme(axis.line = element_line(colour = "black"),
                         axis.line.y = element_line(color = "black", size = .5),
                         axis.text=element_text(size=14),
                         axis.title=element_text(size=16,face="bold"))
+
+# Save
+save.image("workspaceR/newspaperMoral.RData")
+# load("workspaceR/newspaperMoral.RData")
 
 
 
