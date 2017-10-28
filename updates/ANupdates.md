@@ -17,3 +17,8 @@
   * Categories are determined by ConceptNet
   * Can use it's 200 categories (already generated and crowd sourced for validation), generate your own categories using seed terms (e.g. bleed & punch generate violence), and request Empath to validate them by crowd sourcing
 * Consider hierarchical topic modeling?
+
+## 2017-11-03
+* Downloaded and reviewed comScore's "Cross Platform Future in Focus for U.S. 2017" report
+* We can use comScore to determine how many people are using the news media sites
+* http://www.comscore.com/Insights/Rankings
