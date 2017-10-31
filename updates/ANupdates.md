@@ -25,6 +25,7 @@
 * r/politics only allows posts of articles that deal explicitly with American politics, published in last 31 days, must be an original source, and in English
   * People are allowed to comment though.
   * Community decides through upvoting/downvoting (see overall score) what is quality source of information regardless of political ideaology (i.e., you are asked to set your personal bias aside when judging the quality of a source). Those with higher scores indicate higher quality according to this community.
+  * Scraping links for Trump and Charlottesville.
   * ICWSM is interested in credibility of online content, how people judge quality, social engagement, group behavior, and digital humanities [they have published articles related to politics in past])
 * r/PoliticalDiscussion is reserved for political discussion.
 * Scrapy. It is not possible to create a generic scraper that can handle multiple websites since every website is structured differently.  We likely need to select one from each side.
