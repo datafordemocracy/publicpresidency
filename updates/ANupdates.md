@@ -29,3 +29,29 @@
   * ICWSM is interested in credibility of online content, how people judge quality, social engagement, group behavior, and digital humanities [they have published articles related to politics in past])
 * r/PoliticalDiscussion is reserved for political discussion.
 * Scrapy. It is not possible to create a generic scraper that can handle multiple websites since every website is structured differently.  We likely need to select one from each side.
+* Souneil Park, Minsam Ko, Jungwoo Kim, Ying Liu, and Junehwa Song. 2011. The politics of comments: predicting political orientation of news stories with commenters' sentiment patterns. In Proceedings of the ACM 2011 conference on Computer supported cooperative work (CSCW '11). ACM, New York, NY, USA, 113-122. DOI: https://doi.org/10.1145/1958824.1958842
+  * Discusses how political, ideological slant turns journalism into subjective propaganda
+   - political views conflict in coverage of contentious political issues
+   - this increases polarization, misunderstanding, and significantly impacts elections
+  * Difficult for ordinary readers to identify and critically analyze the political views for a large number of news articles
+  * Difficult to interpret political orientation from computational analysis of news text and point to two studies that attempted to use text and metadata (references 8 and 12)
+  * Built a classifier to classify political orientation of the news articles by commenters’ sentiment patterns towards the articles
+   - class = conservative, liberal, or vague
+   - predictors for comments = positive, negative, or vague
+   - final accuracy = 80%
+   - compared to a classifier using tf-idf of news articles themselves (although I don’t see the results of this)
+* Jisun An, Daniele Quercia, and Jon Crowcroft. 2013. Fragmented social media: a look into selective exposure to political news. In Proceedings of the 22nd International Conference on World Wide Web (WWW '13 Companion). ACM, New York, NY, USA, 51-52. DOI: http://dx.doi.org/10.1145/2487788.2487807
+  * Provide evidence for the hypothesis that people predominantly seek out political information confirming their beliefs and avoid challenging information
+  * References two CHI papers (references 4 and 5) that focus on encouraging politically diverse news consumption
+  * Building tools to counter partisanship on social media would require the ability to identify partisan users first
+  * Used 62k news articles from 37 US news sties shared by 12.5k Facebook users
+  * Classified if a news article contained political content using the Alchemy API
+   - Given a URL, Alchemy extracts the associated text and returns featured words, the main topic (e.g., Culture/Politics), and a confidence value for the categorization
+  * Used www.left-right.us to classify if the 37 news sites are right, center, or left
+  * Measured selective exposure of FB users using “net partisan skew” = ln(no of conservative news + 1) – ln(no of liberal news + 1)
+  * Users self-defined themselves in a political leaning and took a personality trait survey
+  * Used number of FB friends, number of postings, number of likes, age, sex, size of city, and five personality traits to predict political partisianship
+  * Claim to be first study to unobtrusively measure selective exposure of online news consumption
+  * Found that selective exposure exists, but difficult to predict political partisanship (claim most research has focused on predicting political leaning)
+
+
