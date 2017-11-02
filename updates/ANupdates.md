@@ -46,7 +46,7 @@
   * Building tools to counter partisanship on social media would require the ability to identify partisan users first
   * Used 62k news articles from 37 US news sties shared by 12.5k Facebook users
   * Classified if a news article contained political content using the Alchemy API
-   - Given a URL, Alchemy extracts the associated text and returns featured words, the main topic (e.g., Culture/Politics), and a confidence value for the categorization
+    * Given a URL, Alchemy extracts the associated text and returns featured words, the main topic (e.g., Culture/Politics), and a confidence value for the categorization
   * Used www.left-right.us to classify if the 37 news sites are right, center, or left
   * Measured selective exposure of FB users using “net partisan skew” = ln(no of conservative news + 1) – ln(no of liberal news + 1)
   * Users self-defined themselves in a political leaning and took a personality trait survey
