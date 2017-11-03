@@ -1,3 +1,10 @@
+## 2017-11-03
+
+* Create repo - eventnews - for partisan news project
+* Add/update readme, poke around on reddit, add resources_tasks 
+* Download October articles from NYT and from WSJ
+* Update news scripts to bring in October articles
+
 ## 2017-10-27
 
 * Update topicmodelNews.R: [change ggjoy to ggridges](http://serialmentor.com/blog/2017/9/15/goodbye-joyplots), add topics to qmeta2
