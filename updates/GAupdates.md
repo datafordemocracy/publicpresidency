@@ -1,3 +1,11 @@
+11/01/2017
+
+* Scraped data from Left and Right politics related subbreddits and wrote a script to search for a query and check the
+  most shared sources from both sides.
+* Scrappy is not able to scrape from multiple sites. News sites are structured differently and hence it is impossible to
+  scrape from different news sources ( Talk to Michele for alternatives )
+
+
 10/20/2017
 
 * Watched the TEDx video on [moral theory foundation](https://www.ted.com/talks/jonathan_haidt_on_the_moral_mind)
