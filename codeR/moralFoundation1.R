@@ -18,8 +18,7 @@ library(tokenizers)
 # Run readNews.R first
 # Run exploreNews.R first
 # Run sentimentNews.R first
-# Run topicmodelNews.R first 
-load("workspaceR/newspaperTopicModel.RData")
+load("workspaceR/newspaperSentiment.RData")
 
 # Read in & create dictionary
 #mfDic <- read.dic("http://moralfoundations.org/sites/default/files/files/downloads/moral%20foundations%20dictionary.dic")
