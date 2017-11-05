@@ -3,7 +3,7 @@
 # Initial Exploration 
 # Michele Claibourn
 # February 21, 2017
-# Updated October 7, 2017
+# Updated November 3, 2017
 ##################################
 
 #####################
@@ -44,7 +44,7 @@ table(qmeta2$date, qmeta2$pub)
 # Number of stories by day
 p <- ggplot(qmeta2, aes(x=date)) 
 # Create date breaks to get chosen tick marks on graph
-date.vec <- seq(from=as.Date("2017-01-20"), to=as.Date("2017-10-06"), by="week") # update to Friday after last story
+date.vec <- seq(from=as.Date("2017-01-20"), to=as.Date("2017-11-03"), by="week") # update to Friday after last story
 p + stat_count(aes(fill=..count..), geom="point") + 
   facet_wrap(~ pub) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) + 
@@ -62,17 +62,17 @@ ggsave("figuresR/newspapervolume.png")
 # common bigrams
 qcorpus_tokens  <- tokens(qcorpus2) # textstat_collocations wants tokenized text
 qcorpus_tokens <- tokens_remove(qcorpus_tokens, stopwords("english"), padding = TRUE)
-bigrams <- textstat_collocations(qcorpus_tokens, min_count = 100, size = 2) # took about 45 minutes
-bigrams[bigrams$count>1000,]
-# replace some key phrases with single-token versions
-save_bigrams <- bigrams[c(1:2,4:6,12:13,24,52,57,64),] # save key bigrams
-# united states, white house, national security, health care, north korea,
-# executive order, justice department, attorney general, united nations,  
-# prime minister, supreme court
-qcorpus3 <- tokens_compound(qcorpus_tokens, save_bigrams) 
-# hmmm, qcorpus3 is now a tokens object; 
-# also, this didn't do what I'd expected (i.e., replace selected phrases with concatenated phrase)
-# https://stackoverflow.com/questions/38931507/create-dfm-step-by-step-with-quanteda
+# bigrams <- textstat_collocations(qcorpus_tokens, min_count = 100, size = 2) # took about 45 minutes
+# bigrams[bigrams$count>1000,]
+## replace some key phrases with single-token versions
+# save_bigrams <- bigrams[c(1:2,4:6,12:13,24,52,57,64),] # save key bigrams
+## united states, white house, national security, health care, north korea,
+## executive order, justice department, attorney general, united nations,  
+## prime minister, supreme court
+# qcorpus3 <- tokens_compound(qcorpus_tokens, save_bigrams) 
+## hmmm, qcorpus3 is now a tokens object; 
+## also, this didn't do what I'd expected (i.e., replace selected phrases with concatenated phrase)
+## https://stackoverflow.com/questions/38931507/create-dfm-step-by-step-with-quanteda
 
 
 ## Frequent words/Wordclouds
@@ -102,7 +102,7 @@ qcorpus_tokens %>% dfm(groups = "pub", remove = c(stopwords("english")),
 ## Key words in context (from quanteda)
 tweetcount <- kwic(qcorpus_tokens, "tweet", 3)
 tweetcount
-qcorpus_tokens %>% kwic("tweet") %>% textplot_xray() # doesn't seem to plot
+# qcorpus_tokens %>% kwic("tweet") %>% textplot_xray() # doesn't seem to plot
 # whitecount <- kwic(qcorpus2, "white", 3) # without replacing key bigrams with concatenated version, this is meaningless
 # whitecount
 
@@ -112,7 +112,7 @@ fk <- textstat_readability(qcorpus2, measure = "Flesch.Kincaid") # back to qcorp
 qmeta2$readability <- fk
 
 # Plot
-p <- ggplot(qmeta2, aes(x = date, y = readability))
+p <- ggplot(qmeta2[qmeta2$readability<100,], aes(x = date, y = readability))
 p + geom_jitter(aes(color=pub), alpha=0.5, width=0.25, height=0.0, size=2) +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) + 
@@ -126,10 +126,11 @@ p + geom_jitter(aes(color=pub), alpha=0.5, width=0.25, height=0.0, size=2) +
         legend.text=element_text(size=10))
 ggsave("figuresR/newspaperreadability.png")
 
-qmeta2 %>% group_by(pub) %>% summarize(mean(readability)) 
+qmeta2 %>% filter(readability<100) %>% 
+  group_by(pub) %>% summarize(mean(readability)) 
 
 
 # Save
-rm("p", "fk", "bigrams", "palD", "palO", "palB")
+rm("p", "fk", "palD", "palO", "palB")
 save.image("workspaceR/newspaperExplore.RData")
 # load("workspaceR/newspaperExplore.RData")

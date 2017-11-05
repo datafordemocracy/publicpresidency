@@ -3,7 +3,7 @@
 # Sentiment (quanteda) 
 # Michele Claibourn
 # February 21, 2017
-# Updated October 7, 2017
+# Updated November 3, 2017
 ##################################
 
 #####################
@@ -104,6 +104,8 @@ p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=.5) +
         axis.text.x = element_text(angle=90),
         legend.text=element_text(size=12))
 
+qmeta2 %>% filter(oped==1) %>% group_by(pub) %>% 
+  summarize(mean(pertone), sd(pertone)) 
 
 ## Other Emotional Affect ##
 nrc <- sentiments %>% filter(lexicon=="nrc") 
@@ -246,15 +248,15 @@ qmeta2 %>% filter(oped==1) %>% group_by(pub) %>% summarize(mean(avgSent), sd(avg
 
 
 # Sentiment trajectories
-sentSentNYT <- sentSent %>% filter(element_id<=length(qmeta2$pub[qmeta2$pub=="NYT"]))
-sentSentWSJ <- sentSent %>% filter(element_id>length(qmeta2$pub[qmeta2$pub=="NYT"]))
+# sentSentNYT <- sentSent %>% filter(element_id<=length(qmeta2$pub[qmeta2$pub=="NYT"]))
+# sentSentWSJ <- sentSent %>% filter(element_id>length(qmeta2$pub[qmeta2$pub=="NYT"]))
 
 # sentiment trajectory of NYT articles (first 20)
-p <- ggplot(filter(sentSentNYT, element_id<21), aes(x=sentence_id, y=sentiment, group=element_id))
-p + geom_line(aes(color=element_id), alpha=0.5)
+# p <- ggplot(filter(sentSentNYT, element_id<21), aes(x=sentence_id, y=sentiment, group=element_id))
+# p + geom_line(aes(color=element_id), alpha=0.5)
 
-p <- ggplot(filter(sentSentNYT, element_id<21), aes(x=sentence_id, y=sentiment))
-p + geom_line() + facet_wrap(~element_id)
+# p <- ggplot(filter(sentSentNYT, element_id<21), aes(x=sentence_id, y=sentiment))
+# p + geom_line() + facet_wrap(~element_id)
 
 
 ## First three sentencences only (approximate the casual readers)

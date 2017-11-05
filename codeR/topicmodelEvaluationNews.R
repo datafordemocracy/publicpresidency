@@ -21,7 +21,7 @@ library(quanteda)
 library(tm)
 library(topicmodels)
 
-# Load the data and environment from sentimentNews.R
+# Load the data and environment from exploreNews.R
 setwd("~/Box Sync/mpc/dataForDemocracy/newspaper/")
 load("workspaceR/newspaperSentiment.RData")
 

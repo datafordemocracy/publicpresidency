@@ -4,9 +4,8 @@
 # NYT from Lexis-Nexis; WSJ from Factiva
 # Michele Claibourn
 # February 1, 2017
-# Updated October 6, 2017
-# with newspapers through September 30
-# and adding dummy for oped articles
+# Updated November 3, 2017
+# with newspapers through October 31
 ######################################
 
 #####################
