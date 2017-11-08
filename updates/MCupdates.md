@@ -1,3 +1,9 @@
+## 2017-11-10
+
+* Review, play with Gautam's script
+* Update publicpresidency repo with code through October
+* Wrote first post about presidential news to webpage
+
 ## 2017-11-03
 
 * Create repo - eventnews - for partisan news project
