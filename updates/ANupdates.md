@@ -54,4 +54,6 @@
   * Claim to be first study to unobtrusively measure selective exposure of online news consumption
   * Found that selective exposure exists, but difficult to predict political partisanship (claim most research has focused on predicting political leaning)
 
+## 2017-11-17
+* Potential way to scrape digital news sites: https://github.com/codelucas/newspaper
 
