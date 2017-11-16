@@ -1,3 +1,9 @@
+11/16/2017
+
+* Facebook Graph API (v2.1) has depreciated the function to scrape posts. I'm looking for a way around this.
+* Have started reading "Bad News or Mad News? Sentiment Scoring of Negativity, Fear, and Anger in News Content" to get an idea of how news content are delivered to people.
+
+
 11/01/2017
 
 * Scraped data from Left and Right politics related subbreddits and wrote a script to search for a query and check the
