@@ -56,4 +56,5 @@
 
 ## 2017-11-17
 * Potential way to scrape digital news sites: https://github.com/codelucas/newspaper
+* Is the Bing API helpful? https://azure.microsoft.com/en-us/services/cognitive-services/bing-news-search-api/
 
