@@ -57,4 +57,5 @@
 ## 2017-11-17
 * Potential way to scrape digital news sites: https://github.com/codelucas/newspaper
 * Is the Bing API helpful? https://azure.microsoft.com/en-us/services/cognitive-services/bing-news-search-api/
+* 6% of online users are reddit users http://www.pewinternet.org/2013/07/03/6-of-online-adults-are-reddit-users/
 
