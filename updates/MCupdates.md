@@ -1,4 +1,4 @@
-## 2-17-11-17
+## 2017-11-17
 
 * Got Gautam's script working with Python 3
 * Talked to newsbank about access
