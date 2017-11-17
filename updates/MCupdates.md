@@ -1,3 +1,9 @@
+## 2-17-11-17
+
+* Got Gautam's script working with Python 3
+* Talked to newsbank about access
+* [Top cable news programs](http://www.adweek.com/tvnewser/the-top-cable-news-programs-of-may-2017/330624); scrape the key [Fox transcripts](http://www.foxnews.com/on-air/the-five/transcripts) and [CNN transcripts](http://www.cnn.com/TRANSCRIPTS/) directly?
+
 ## 2017-11-10
 
 * Review, play with Gautam's script
