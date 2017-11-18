@@ -1,3 +1,9 @@
+## 2017-11-24
+Scraped cable news transcripts for (top rating news shows):
+* CNN: Anderson Cooper 360, Erin Burnett Outfront, The Situation Room
+* MSNBC: Rachel Maddow, The Last Word/O'Donnell, All In/Hayes
+* FOX: The Five, Hannity, The Story/MacCallum (Carlson and Baier not available on Fox News site)
+
 ## 2017-11-17
 
 * Got Gautam's script working with Python 3
