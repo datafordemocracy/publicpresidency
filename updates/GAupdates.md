@@ -1,3 +1,7 @@
+12/01/2017
+
+* Finished writing the script that scrapes news articles from reddits and stores it in a csv file
+
 11/16/2017
 
 * Facebook Graph API (v2.1) has depreciated the function to scrape posts. I'm looking for a way around this.
