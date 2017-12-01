@@ -1,17 +1,23 @@
 # Proposed Next Steps
 
+## Images?
+
+* Images of Trump from different news sources -- could algorithm predict source? and identify the kinds of features that might differentiate images (e.g., biased images, or images that produce different audience responses(
+* For example, search for images of Trump from Fox News and from Washington Post... (site:www.foxnews.com <trump>); need about 1000 images per class
+* Alternatively, use exisitng image data sets for classifying mood; train on that and feed in Trump images (from different media sources) to estimate different trump representations (happy/angry, etc.) by soruce
+
 ## Sources
 
-### So far
+### Sources so far
 
-* Newspaper articles (Michele; New York Times and Wall Street Journal)
-
-### Potential sources to add
-
-* Television news transcripts (e.g., Fox, CNN; looking into NewsBank access)
-* Internet news sites (e.g., Politico, Breitbart, or something else); select by audience size/[ideological center](http://www.pewresearch.org/pj_14-10-21_mediapolarization-08-2/); not sure how to acquire for past, but could set up something going forward?)
+* Newspaper articles (New York Times and Wall Street Journal)
+* Television news transcripts (e.g., Fox, CNN, MSNBC)
 * Trump twitter feed (e.g., from [Trump Twitter Archive](http://www.trumptwitterarchive.com/))
 * Formal presidential statements (e.g., [The Daily Compilation of Presidential Documents](https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CPD&browsePath=2017&isCollapsed=false&leafLevelBrowse=false&ycord=0); ideally with available metadata like subject codes and named entities)
+
+Possible additional sources
+
+* Internet news sites (e.g., Politico, Breitbart, or something else); select by audience size/[ideological center](http://www.pewresearch.org/pj_14-10-21_mediapolarization-08-2/); not sure how to acquire for past, but could set up something going forward?)
 * News outlet tweets (e.g., the [GWU Libaries collection](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/2FIFLH))
 
 ## Features
