@@ -1,4 +1,5 @@
 ## 2017-12-01
+
 * Downloaded Trump tweets from Jan 20, 2017 to Nov 20, 2017 from [Trump Twitter Archive}(http://www.trumptwitterarchive.com/); added md file to document process
 * Added brief R script to read the tweets in (read_twitter.R)
 * Wrote script to acquire all documents from the complication of presidential documents (acquire_presdoc.R) from [GPO](https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CPD); it's crude -- I did it by month with the idea that I'd be updating monthly, but it needs improvement (e.g., write a function, automate the acquisition of the monthly source page, etc.)
