@@ -18,7 +18,7 @@ Then hit the Download button and saved the resulting file to the NYT folder in t
 
 We repeated this process as second time to retrieve the article metadata. In the Download Documents window, we
 * changed the format to "Excel" (really a csv file),
-* accepted the mandatory segments under Document View, and
+* updated the Document View to add SUBJECT and PERSON, and
 * selected the first 500 items in Document Range and saved the file to the NYT directory (again, iterating as needed to get metadata for all articles).
 
 And Bob's your uncle!
