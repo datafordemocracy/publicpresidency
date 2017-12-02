@@ -1,4 +1,4 @@
-# Acquring New York Times articles about President Trump
+# Acquiring New York Times articles about President Trump
 We pulled the New York Times articls from LexisNexis Academi, licensed through the UVA Libary.
 
 Using the "Advanced Options" for searching, we
