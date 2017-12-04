@@ -10,19 +10,19 @@
 
 ### Sources so far
 
-* Newspaper articles (New York Times and Wall Street Journal)
+* Newspaper articles (New York Times, Wall Street Journal, Washington Post)
 * Television news transcripts (e.g., Fox, CNN, MSNBC)
-* Trump twitter feed (e.g., from [Trump Twitter Archive](http://www.trumptwitterarchive.com/))
-* Formal presidential statements (e.g., [The Daily Compilation of Presidential Documents](https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CPD&browsePath=2017&isCollapsed=false&leafLevelBrowse=false&ycord=0); ideally with available metadata like subject codes and named entities)
+* Trump twitter feed (from [Trump Twitter Archive](http://www.trumptwitterarchive.com/))
+* Formal presidential statements (from [The Daily Compilation of Presidential Documents](https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CPD&browsePath=2017&isCollapsed=false&leafLevelBrowse=false&ycord=0); ideally with available metadata like subject codes and named entities)
 
-Possible additional sources
+### Possible additional sources
 
 * Internet news sites (e.g., Politico, Breitbart, or something else); select by audience size/[ideological center](http://www.pewresearch.org/pj_14-10-21_mediapolarization-08-2/); not sure how to acquire for past, but could set up something going forward?)
 * News outlet tweets (e.g., the [GWU Libaries collection](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/2FIFLH))
 
 ## Features
 
-### So far
+### Captured so far
 
 * Publication source
 * Date
@@ -31,17 +31,17 @@ Possible additional sources
 * Length
 * First 500 words
 * Readability (or other measures of complexity)
-* Polarity or tone (could be improved)
-* Other affect (could be improved)
-* Topics (output from LDA with k-75; could try structured topic model, something else)
+* Polarity or tone (multiple dictionary methods; could be improved)
+* Other affect (anger, fear, trust, anticipation; could be improved)
+* Topics (output from LDA with k=100; could try structured topic model, something else)
+* Moral foundation dimensions, [dictionary here](http://moralfoundations.org/sites/default/files/files/downloads/moral%20foundations%20dictionary.dic))
 
 ### Potential new features
 
 * Named entities
 * Events (in the spirit of [Phoenix, Open Event Data Alliance](http://phoenixdata.org/), but for domestic/presidential)
 * Policy issue (via dictionary? [Lexicoder](http://www.lexicoder.com/) has beta policy dictionary, based on [policy agendas project](http://www.comparativeagendas.net/))
-* Moral foundations (Jessica, [dictionary here](http://moralfoundations.org/sites/default/files/files/downloads/moral%20foundations%20dictionary.dic))
-* Empath in Python (Alicia, need clarification on what this would provide, [article here](https://hci.stanford.edu/publications/2016/ethan/empath-chi-2016.pdf))
+* Empath in Python (need clarification on what this would provide, [article here](https://hci.stanford.edu/publications/2016/ethan/empath-chi-2016.pdf))
 * Latent Variable Analysis via Exploratory Graph Analysis (Jessica)
 
 ## Research Questions
