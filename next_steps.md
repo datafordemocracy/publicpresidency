@@ -2,8 +2,8 @@
 
 ## Images?
 
-* Images of Trump from different news sources -- could algorithm predict source? and identify the kinds of features that might differentiate images (e.g., biased images, or images that produce different audience responses(
-* For example, search for images of Trump from Fox News and from Washington Post... (site:www.foxnews.com <trump>); need about 1000 images per class
+* Images of Trump from different news sources -- could algorithm predict source? and identify the kinds of features that might differentiate images (e.g., biased images, or images that produce different audience responses)
+* For example, search for images of Trump from Fox News (site:www.foxnews.com <trump>); need about 1000 images per class
 * Alternatively, use exisitng image data sets for classifying mood; train on that and feed in Trump images (from different media sources) to estimate different trump representations (happy/angry, etc.) by soruce
 
 ## Sources
