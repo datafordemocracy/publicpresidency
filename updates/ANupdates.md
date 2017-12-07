@@ -1,22 +1,12 @@
-## 2017-10-20
-* Taking Udemy course on Scrapy (can we crawl digital native sites)
-* Compared metadata for WSJ vs. NYT
-  * WSJ meta includes subject (e.g. health policy, domestic politics, elections, civil unrest, corporate, agriculture)
-  * NYT meta does not include similar field
-* Link to Pew study for media coverage of early Trump presidency
-  * http://www.pewresearch.org/fact-tank/2017/10/04/early-coverage-of-the-trump-presidency-rarely-included-citizen-voices/
+## 2017-12-08
+* Ran LIWC and Empath on reddit news articles
+  * News articles are currently not in utf-8, so there are character encoding issues
 
-## 2017-10-27
-* Reviewed Empath
-  * https://github.com/Ejhfast/empath-client
-  * Empath has high correlation with LIWC (r = 0.8-0.9) depending on training corpus
-  * Contains ~200 categories (e.g., dominant personality, government, social media, health, journalism, optimism, violence; can share list)
-  * Provides word count and normalized word count per category
-  * Living lexicon trained on modern text
-  * Uses a VSM to determine similarity of words
-  * Categories are determined by ConceptNet
-  * Can use it's 200 categories (already generated and crowd sourced for validation), generate your own categories using seed terms (e.g. bleed & punch generate violence), and request Empath to validate them by crowd sourcing
-* Consider hierarchical topic modeling?
+
+## 2017-11-17
+* Potential way to scrape digital news sites: https://github.com/codelucas/newspaper
+* Is the Bing API helpful? https://azure.microsoft.com/en-us/services/cognitive-services/bing-news-search-api/
+* 6% of online users are reddit users http://www.pewinternet.org/2013/07/03/6-of-online-adults-are-reddit-users/
 
 ## 2017-11-03
 * Downloaded and reviewed comScore's "Cross Platform Future in Focus for U.S. 2017" report
@@ -54,8 +44,22 @@
   * Claim to be first study to unobtrusively measure selective exposure of online news consumption
   * Found that selective exposure exists, but difficult to predict political partisanship (claim most research has focused on predicting political leaning)
 
-## 2017-11-17
-* Potential way to scrape digital news sites: https://github.com/codelucas/newspaper
-* Is the Bing API helpful? https://azure.microsoft.com/en-us/services/cognitive-services/bing-news-search-api/
-* 6% of online users are reddit users http://www.pewinternet.org/2013/07/03/6-of-online-adults-are-reddit-users/
+## 2017-10-27
+* Reviewed Empath
+  * https://github.com/Ejhfast/empath-client
+  * Empath has high correlation with LIWC (r = 0.8-0.9) depending on training corpus
+  * Contains ~200 categories (e.g., dominant personality, government, social media, health, journalism, optimism, violence; can share list)
+  * Provides word count and normalized word count per category
+  * Living lexicon trained on modern text
+  * Uses a VSM to determine similarity of words
+  * Categories are determined by ConceptNet
+  * Can use it's 200 categories (already generated and crowd sourced for validation), generate your own categories using seed terms (e.g. bleed & punch generate violence), and request Empath to validate them by crowd sourcing
+* Consider hierarchical topic modeling?
 
+## 2017-10-20
+* Taking Udemy course on Scrapy (can we crawl digital native sites)
+* Compared metadata for WSJ vs. NYT
+  * WSJ meta includes subject (e.g. health policy, domestic politics, elections, civil unrest, corporate, agriculture)
+  * NYT meta does not include similar field
+* Link to Pew study for media coverage of early Trump presidency
+  * http://www.pewresearch.org/fact-tank/2017/10/04/early-coverage-of-the-trump-presidency-rarely-included-citizen-voices/
