@@ -4,7 +4,7 @@
 # Estimation and visualization
 # Michele Claibourn
 # February 14, 2017
-# Updated October 27, 2017 
+# Updated December 2, 2017 
 ###################################
 
 #####################
@@ -51,18 +51,24 @@ nydtm
 
 #########################
 # Topic Model Estimation
-# Estimation, k=75
+# Estimation, k=100
 # using topicmodels
 #########################
 # 1. Estimate model
 seed1=823 # for reproducibility
 t1 <- Sys.time()
-tm75 <- LDA(nydtm, k=75, control=list(seed=seed1)) # estimate lda model with 50 topics
+tm75 <- LDA(nydtm, k=100, control=list(seed=seed1)) # estimate lda model with 50 topics
 probterms75 <- as.data.frame(posterior(tm75)$terms) # all the topic-term probabilities
 probtopic75 <- as.data.frame(posterior(tm75)$topics) # all the document-topic probabilities
-Sys.time() - t1 # ~ 3.6 hours
+Sys.time() - t1 # ~ 7.7 hours
 
-# 2. Visualize results
+
+#########################
+# Topic Model Exploration
+# Estimation, k=100
+#########################
+
+# 1. Visualize results
 # a. Topic prevalence in corpus
 topiclab <- as.data.frame(t(terms(tm75, 5)))
 topicsum <- probtopic75 %>% 
@@ -74,39 +80,16 @@ names(topicsum)[1] <- "prev"
 ggplot(topicsum, aes(x=reorder(terms, prev), y=prev)) + 
   geom_bar(stat="identity") + coord_flip()
 
-# b. Topic prevalence by day
+# b. Topic prevalence by week
 # Bind date (from nymeta) to probtopic
 probtopic75$id <- row.names(probtopic75)
 probtopic75date <- cbind(probtopic75, date=qmeta2$date)
-# Group by day
-topicday <- probtopic75date %>% 
-  select(c(1:75,77)) %>% 
-  group_by(date) %>% 
-  summarize_all(funs(sum)) 
 
-# plot single topic
-plottitle <- paste0("Topic 3: ", topiclab$V1[3], "-", topiclab$V2[3], "-", topiclab$V3[3], "-", topiclab$V4[3], "-", topiclab$V5[3])
-ggplot(topicday, aes(x=date, y=`3`)) + geom_line() + 
-  ggtitle(plottitle)
-
-# # plot all of the days (gather from tidyr)
-# topicdaylong <- gather(topicday, topic, prevalence, -date)
-# # and merge topic labels to resulting long data frame
-# topicdaylong$topic <- as.integer(topicdaylong$topic)
-# topicdaylong2 <- merge(topicdaylong, topicsum, by="topic")
-# library(forcats) # need to make terms a factor, sorted in the order of overall prevalance (for figure)
-# topicdaylong2 <- arrange(topicdaylong2, desc(prev)) # sort by overall prevalence
-# topicdaylong2$terms2 <- as_factor(topicdaylong2$terms) # make factors of terms in this order
-# ggplot(topicdaylong2, aes(x=date, y=prevalence)) + 
-#   geom_line() + facet_wrap(~ terms2, ncol=5) + 
-#   ggtitle("Topic Prevalence by Day")
-
-# c. Topic prevalence by week
 # Group by week
 library(lubridate)
 topicweek <- probtopic75date %>% 
   mutate(week=week(date)) %>% 
-  select(c(1:75,78)) %>% 
+  select(c(1:100,103)) %>% 
   group_by(week) %>% 
   summarize_all(funs(sum))
 
@@ -130,7 +113,7 @@ ggplot(topicweeklong2, aes(x=week, y=terms2, height=prevalence, group=terms2)) +
   theme_ridges(font_size=10)
 ggsave("figuresR/topicRidgePrevalenceWeek.png")
 
-# d. Topic prevalence by publication
+# c. Topic prevalence by publication
 probtopic75pub <- cbind(probtopic75, pub=qmeta2$pub)
 # Group by publication
 topicpub <- probtopic75pub %>% 
@@ -162,7 +145,7 @@ ggplot(topicpublong, aes(x=reorder(terms, prev), y=prev, fill=pub)) +
 ggsave("figuresR/topicprevalencepub.png")
 
 
-# 3. Dynamic visualization 
+# 2. Dynamic visualization 
 # install.packages(c("LDAvis", "servr"))
 library(LDAvis)
 library(servr)
@@ -189,7 +172,8 @@ json <- createJSON(phi = phi, theta = theta,
 serVis(json, out.dir = "nypapertopics75toOctober", open.browser = FALSE) # save for upload elsewhere
 # see: http://people.virginia.edu/~mpc8t/datafordemocracy/nypapertopics75toOctober/
 
-# 5. Add article topics (probtopics75) to qmeta2
+
+# 3. Add article topics (probtopics75) to qmeta2
 names(probtopic75) <- (c(topicsum$terms, "id"))
 qmeta2 <- left_join(qmeta2, probtopic75, by="id")
 

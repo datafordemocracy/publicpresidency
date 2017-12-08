@@ -3,7 +3,7 @@
 # Sentiment (quanteda) 
 # Michele Claibourn
 # February 21, 2017
-# Updated November 3, 2017
+# Updated December 2, 2017
 ##################################
 
 #####################
@@ -61,13 +61,13 @@ qmeta2 <- qmeta2 %>% mutate(words = as.integer(length),
 
 # Plot!
 p <- ggplot(qmeta2, aes(x=date, y=pertone))
-p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=.5) +
+p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=.15) +
   geom_hline(yintercept=median(qmeta2$pertone), color="gray50") +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
   ggtitle("'Tone' of Newspaper Coverage of Trump") +
   labs(y = "Overall Tone (% of positive words - % of negative words)", x = "Date of Article") +
-  scale_color_manual(values=c("blue3","orange3"), name="Source") +
+  scale_color_manual(values=c("blue3","turquoise", "orange3"), name="Source") +
   theme(plot.title = element_text(face="bold", size=20, hjust=0),
         axis.title = element_text(face="bold", size=16),
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
@@ -91,13 +91,13 @@ qmeta2$leadline[qmeta2$heading==maxtone$heading]
 
 # Plot just opeds
 p <- ggplot(filter(qmeta2, oped==1), aes(x=date, y=pertone))
-p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=.5) +
+p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=.15) +
   geom_hline(yintercept=median(qmeta2$pertone), color="gray50") +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
   ggtitle("'Tone' of Op/Ed Articles of Trump") +
   labs(y = "Overall Tone (% of positive words - % of negative words)", x = "Date of Article") +
-  scale_color_manual(values=c("blue3","orange3"), name="Source") +
+  scale_color_manual(values=c("blue3","turquoise", "orange3"), name="Source") +
   theme(plot.title = element_text(face="bold", size=20, hjust=0),
         axis.title = element_text(face="bold", size=16),
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
@@ -132,14 +132,14 @@ qmeta2 <- qmeta2 %>%
 
 # Plot!
 p <- ggplot(qmeta2, aes(x=date, y=anger))
-p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2) +
+p + geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
   geom_hline(yintercept=mean(qmeta2$anger), color="gray50") +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
   ggtitle("Anger Affect within Newspaper Coverage of Trump") +
   labs(y = "Anger Affect", x = "Date of Article") +
-  scale_color_manual(values=c("blue3", "orange3"), name="Source") +
-  theme(plot.title = element_text(face="bold", size=20, hjust=0),
+  scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
+  theme(plot.title = element_text(face="bold", size=18, hjust=0),
         axis.title = element_text(face="bold", size=16),
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
         axis.text.x = element_text(angle=90),
@@ -152,13 +152,13 @@ qmeta2$leadline[qmeta2$heading==checkanger$heading]
 
 # Just op/eds again
 p <- ggplot(filter(qmeta2, oped==1), aes(x=date, y=anger))
-p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2) +
+p + geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
   geom_hline(yintercept=mean(qmeta2$anger), color="gray50") +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
   ggtitle("Anger Affect within Op/Ed Articles of Trump") +
   labs(y = "Anger Affect", x = "Date of Article") +
-  scale_color_manual(values=c("blue3", "orange3"), name="Source") +
+  scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
   theme(plot.title = element_text(face="bold", size=20, hjust=0),
         axis.title = element_text(face="bold", size=16),
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
@@ -171,14 +171,14 @@ qmeta2long <- qmeta2 %>%
   gather(sentiment, value, -date, -pub)
 
 p <- ggplot(qmeta2long, aes(x=date, y=value)) 
-p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=0.5) +
+p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=0.15) +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
   ggtitle("'Affect' of Newspaper Coverage of Trump") +
   labs(y = "Percent of Affect Words", x = "Date of Article") +
   facet_wrap(~ sentiment, ncol=2, scales="free_y") +
-  scale_color_manual(values=c("blue3","orange3"), name="Source") +
-  theme(plot.title = element_text(face="bold", size=20, hjust=0),
+  scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
+  theme(plot.title = element_text(face="bold", size=18, hjust=0),
         axis.title = element_text(face="bold", size=16),
         strip.text = element_text(size=16),
         axis.text.x = element_text(angle=90),
@@ -205,13 +205,13 @@ qmeta2[,ncol(qmeta2)+1:3] <- articleSent[,2:4]
 
 # Plot!
 p <- ggplot(qmeta2, aes(x=date, y=avgSent))
-p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=.5) +
+p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=.15) +
   geom_hline(yintercept=median(qmeta2$avgSent), color="gray50") +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
   ggtitle("Sentiment of Newspaper Coverage of Trump") +
   labs(y = "Average Sentiment across Sentences", x = "Date of Article") +
-  scale_color_manual(values=c("blue3","orange3"), name="Source") +
+  scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
   theme(plot.title = element_text(face="bold", size=20, hjust=0),
         axis.title = element_text(face="bold", size=16),
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
@@ -231,13 +231,13 @@ qcorpus2$documents$texts[docvars(qcorpus2, "heading")==maxtone$heading]
 
 # Just opeds again
 p <- ggplot(filter(qmeta2, oped==1), aes(x=date, y=avgSent))
-p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=.5) +
+p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=.15) +
   geom_hline(yintercept=median(qmeta2$avgSent), color="gray50") +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
   ggtitle("Sentiment of Op/Ed Articles of Trump") +
   labs(y = "Average Sentiment across Sentences", x = "Date of Article") +
-  scale_color_manual(values=c("blue3","orange3"), name="Source") +
+  scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
   theme(plot.title = element_text(face="bold", size=20, hjust=0),
         axis.title = element_text(face="bold", size=16),
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
@@ -276,6 +276,48 @@ rm("mintone", "maxtone", "checkanger", "checkfear", "bing", "nrc", "paperAffect"
 save.image("workspaceR/newspaperSentiment.RData")
 # load("workspaceR/newspaperSentiment.RData")
 
+
+fakelies <- dictionary(list(lies=c("lie", "lied", "lies"), fake="fake"))
+fakeliedfm  <- dfm(qcorpus2, dictionary=fakelies)
+head(fakeliedfm,10)
+
+# Turn this into a dataframe
+paperfakelie <- as.data.frame(fakeliedfm, row.names = fakeliedfm@Dimnames$docs)
+qmeta2[,ncol(qmeta2)+1:2] <- paperfakelie[,1:2]
+
+# Group by week
+library(lubridate)
+byweek <- qmeta2 %>% 
+  mutate(week=week(date)) %>% 
+  group_by(week, pub) %>% 
+  summarize(fake=sum(fake), lie=sum(lies))
+
+# Plot!
+p <- ggplot(byweek, aes(x=week, y=lie))
+p + geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
+  geom_hline(yintercept=mean(qmeta2$anger), color="gray50") +
+  geom_smooth(aes(color=pub)) +
+  ggtitle("Mention of 'Lies' within Newspaper Coverage of Trump") +
+  labs(y = "Anger Affect", x = "Date of Article") +
+  scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
+  theme(plot.title = element_text(face="bold", size=18, hjust=0),
+        axis.title = element_text(face="bold", size=16),
+        panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
+        axis.text.x = element_text(angle=90),
+        legend.text=element_text(size=12))
+
+p <- ggplot(byweek, aes(x=week, y=fake))
+p + geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
+  geom_hline(yintercept=mean(qmeta2$anger), color="gray50") +
+  geom_smooth(aes(color=pub)) +
+  ggtitle("Mention of 'Fake' within Newspaper Coverage of Trump") +
+  labs(y = "Anger Affect", x = "Date of Article") +
+  scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
+  theme(plot.title = element_text(face="bold", size=18, hjust=0),
+        axis.title = element_text(face="bold", size=16),
+        panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
+        axis.text.x = element_text(angle=90),
+        legend.text=element_text(size=12))
 
 ## Next steps?
 # Consider Lexicoder Sentiment Dictionary...http://www.lexicoder.com/
