@@ -1,3 +1,9 @@
+12/07/2017
+
+* Minor corrections in code ( utf-8 encoding)
+* Add upvotes and downotes column
+
+
 12/01/2017
 
 * Finished writing the script that scrapes news articles from reddits and stores it in a csv file
