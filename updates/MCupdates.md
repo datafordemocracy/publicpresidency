@@ -1,3 +1,8 @@
+## 2017-12-08
+
+* Downloaded WSJ through November; downloaded WP articles from January-November, this time capturing subject fields in metadata for later use; downloaded WP articles from January-November as new source
+* Updated R script for newspapers to incoporate articles through November, keep new subject fields in metadata, and bring in newly added WP articles
+
 ## 2017-12-01
 
 * Downloaded Trump tweets from Jan 20, 2017 to Nov 20, 2017 from [Trump Twitter Archive}(http://www.trumptwitterarchive.com/); added md file to document process
