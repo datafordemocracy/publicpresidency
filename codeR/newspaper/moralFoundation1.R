@@ -4,6 +4,7 @@
 #	StatLab                                                                #
 #	October 18, 2017                                                       #
 #	Jessica Mazen                                                          #
+# Updated December 2, 2017
 ##----------------------------------------------------------------------##
 # devtools::install_github('miserman/lingmatch')
 
@@ -51,13 +52,13 @@ qmeta2 <- qmeta2 %>%
 # Plot
 
 p <- ggplot(qmeta2, aes(x=date, y=HarmVirtue))
-p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2) +
+p + geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
   geom_hline(yintercept=mean(qmeta2$HarmVirtue), color="gray50") +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
   ggtitle("HarmVirtue MF within Newspaper Coverage of Trump") +
   labs(y = "HarmVirtue", x = "Date of Article") +
-  scale_color_manual(values=c("blue3", "orange3"), name="Source") +
+  scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
   theme(plot.title = element_text(face="bold", size=20, hjust=0),
         axis.title = element_text(face="bold", size=16),
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
@@ -65,13 +66,13 @@ p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2) +
         legend.text=element_text(size=12))
 
 p <- ggplot(qmeta2, aes(x=date, y=HarmVice))
-p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2) +
+p + geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
   geom_hline(yintercept=mean(qmeta2$HarmVice), color="gray50") +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
   ggtitle("HarmVice MF within Newspaper Coverage of Trump") +
   labs(y = "HarmVice", x = "Date of Article") +
-  scale_color_manual(values=c("blue3", "orange3"), name="Source") +
+  scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
   theme(plot.title = element_text(face="bold", size=20, hjust=0),
         axis.title = element_text(face="bold", size=16),
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
@@ -79,13 +80,13 @@ p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2) +
         legend.text=element_text(size=12))
 
 p <- ggplot(qmeta2, aes(x=date, y=FairnessVirtue))
-p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2) +
+p + geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
   geom_hline(yintercept=mean(qmeta2$FairnessVirtue), color="gray50") +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
   ggtitle("FairnessVirtue MF within Newspaper Coverage of Trump") +
   labs(y = "FairnessVirtue", x = "Date of Article") +
-  scale_color_manual(values=c("blue3", "orange3"), name="Source") +
+  scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
   theme(plot.title = element_text(face="bold", size=20, hjust=0),
         axis.title = element_text(face="bold", size=16),
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
@@ -93,13 +94,13 @@ p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2) +
         legend.text=element_text(size=12))
 
 p <- ggplot(qmeta2, aes(x=date, y=FairnessVice))
-p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2) +
+p + geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
   geom_hline(yintercept=mean(qmeta2$FairnessVice), color="gray50") +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
   ggtitle("FairnessVice MF within Newspaper Coverage of Trump") +
   labs(y = "FairnessVice", x = "Date of Article") +
-  scale_color_manual(values=c("blue3", "orange3"), name="Source") +
+  scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
   theme(plot.title = element_text(face="bold", size=20, hjust=0),
         axis.title = element_text(face="bold", size=16),
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
