@@ -1,3 +1,6 @@
+## 2017-12-14
+* Reviewed and summarized LIWC
+
 ## 2017-12-08
 * Added LIWC and Empath scores on reddit news articles
   * News articles are currently not in utf-8, so there are character encoding issues
