@@ -1,3 +1,9 @@
+## 2017-12-15
+
+* Purchased license to LIWC2015, read through documentation
+* Worked on extracting the dictionaries from the jar file (frowned upon by the company) for use in [LIWCalike](https://github.com/kbenoit/LIWCalike) 
+* Read Empath article and Moral Foundations chapter
+
 ## 2017-12-08
 
 * Downloaded WSJ through November; downloaded WP articles from January-November, this time capturing subject fields in metadata for later use; downloaded WP articles from January-November as new source
