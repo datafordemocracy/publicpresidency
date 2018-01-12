@@ -1,3 +1,11 @@
+## 2018-01-12
+
+* Downloaded WSJ, NYT, WP through December; re-ran scripts to incorporate December articles
+* Added structured topic model to topicmodelNews.R (still running)
+* Downloaded Trump tweets through December
+* Updated acquire_presdoc.R to bring in documents through November (there's a time lag on this source)
+* Updated acquire_cnn.R, acquire_msnbc.R, and acquire_fox.R to get transcripts through December (need to think more about the Fox transcripts)
+
 ## 2017-12-15
 
 * Purchased license to LIWC2015, read through documentation
