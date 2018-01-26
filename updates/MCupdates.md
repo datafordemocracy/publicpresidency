@@ -1,3 +1,7 @@
+## 2018-01-26
+
+* Estimated structural topic models (with source/party and days since event) on reddit-posted CVille event stories
+
 ## 2018-01-12
 
 * Downloaded WSJ, NYT, WP through December; re-ran scripts to incorporate December articles
