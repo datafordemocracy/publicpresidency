@@ -3,7 +3,7 @@
 # Initial Exploration 
 # Michele Claibourn
 # February 21, 2017
-# Updated December 2, 2017
+# Updated January 9, 2017
 ##################################
 
 #####################
@@ -44,7 +44,7 @@ table(qmeta2$pub)
 # Number of stories by day
 p <- ggplot(qmeta2, aes(x=date)) 
 # Create date breaks to get chosen tick marks on graph
-date.vec <- seq(from=as.Date("2017-01-20"), to=as.Date("2017-12-01"), by="week") # update to Friday after last story
+date.vec <- seq(from=as.Date("2017-01-20"), to=as.Date("2018-01-05"), by="week") # update to Friday after last story
 p + stat_count(aes(fill=..count..), geom="point") + 
   facet_wrap(~ pub) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) + 

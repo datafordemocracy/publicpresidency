@@ -2,7 +2,7 @@
 # MSNBC Transcripts
 # Michele Claibourn
 # Acquire daily compilations of presidential documents
-# By month: through October
+# By month: through November 2017
 #####################
 
 rm(list=ls())
@@ -28,7 +28,7 @@ url1 <- source_page %>%
   html_nodes(".browse-download-links a") %>% 
   html_attr("href")
 # a:nth-child(2) selects just .htm links, but has extra NA on end...
-url2 <- url1[seq.int(2,length(url1),3)]
+url2 <- url1[seq.int(2,length(url1),3)] # grab the .htm urls (every 3rd item in list, beginning with the 2nd)
 
 # Get doc number, title, type, and date
 doc1 <- source_page %>% 
@@ -415,6 +415,45 @@ for(i in seq(nrow(presdococt))) {
     html_text() 
   
   filename <- paste0(presdococt$docid[i], ".txt")
+  sink(file = filename) %>% 
+    cat(text, sep = "\n")  
+  sink() 
+}
+
+
+## November
+source_page <- read_html("https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CPD&browsePath=2017%2F11&isCollapsed=false&leafLevelBrowse=false&isDocumentResults=true&ycord=239")
+
+# Get URLs associated with each text
+url1 <- source_page %>% 
+  html_nodes(".browse-download-links a") %>% 
+  html_attr("href")
+# a:nth-child(2) selects just .htm links, but has extra NA on end...
+url2 <- url1[seq.int(2,length(url1),3)]
+
+# Get doc number, title, type, and date
+doc1 <- source_page %>% 
+  html_nodes("#browse-drilldown-mask span") %>% 
+  html_text()
+doc2 <- doc1[seq.int(1,length(doc1),2)] # doc number is first element
+type2 <- doc1[seq.int(2,length(doc1),2)] # type is second element
+
+# Combine `links` and `urls` into a data frame
+presdocnov <- data.frame(link=url2, doc=doc2, info=type2, stringsAsFactors=FALSE)
+# Extract doc id, title, address type, date
+presdocnov$docid <- str_split_fixed(presdocnov$doc, " - ", n=2)[,1]
+presdocnov$title <- str_split_fixed(presdocnov$doc, " - ", n=2)[,2]
+presdocnov$type <- str_split_fixed(presdocnov$info, "\\.", n=2)[,1]
+presdocnov$date <- str_split_fixed(presdocnov$info, "\\.", n=2)[,2]
+presdocnov$date <- as.Date(presdocnov$date, " %A, %B %d, %Y.")
+
+# Loop through each link in data.frame (nrow(presdocnov)) and grab text
+for(i in seq(nrow(presdocnov))) {
+  text <- read_html(presdocnov$link[i]) %>% 
+    html_nodes("p") %>% 
+    html_text() 
+  
+  filename <- paste0(presdocnov$docid[i], ".txt")
   sink(file = filename) %>% 
     cat(text, sep = "\n")  
   sink() 

@@ -6,8 +6,8 @@
 # WP from Lexis-Nexis
 # Michele Claibourn
 # February 1, 2017
-# Updated December 2, 2017
-# with newspapers through November 30
+# Updated January 9, 2017
+# with newspapers through December 31
 ######################################
 
 #####################
@@ -109,8 +109,6 @@ readmyfiles <- function(x){
 
 wpcorpus <- lapply(wpfiles$filelist, readmyfiles) 
 wpcorpus <- do.call(c, wpcorpus)
-# do.call is a shortcut for this (calling c() on each element in the list)
-# corpus <- c(corpus[[1]], corpus[[2]], corpus[[3]], corpus[[4]], corpus[[5]])
 
 # View the corpus
 wpcorpus
