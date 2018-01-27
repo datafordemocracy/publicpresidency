@@ -1,8 +1,9 @@
 #####################
 # FOX Transcripts
 # Michele Claibourn
-# Acquire data
+# Acquire data: Jan 20, 2017 through Nov 16, 2017
 # The Five, Hannity, The Story/MacCallum
+# Updated through December 31, 2017
 #####################
 
 rm(list=ls())
@@ -26,8 +27,9 @@ setwd("five")
 # Load the source pages
 five <- NULL # create null data set
 
-for (i in 0:34) { # manually searched for pages containing jan 20
-  source_page <- read_html(paste0("http://www.foxnews.com/on-air/the-five/transcripts?page=", i, "&Submit=DISPLAY"))
+# for (i in 0:34) { # On initial run: manually searched for pages containing shows from jan 20 on; at that time (mid-November), had to seach through page 34
+for (i in 0:4) { # On January run: searched for pages containing November 17 and on; had to search through page 4
+    source_page <- read_html(paste0("http://www.foxnews.com/on-air/the-five/transcripts?page=", i, "&Submit=DISPLAY"))
   
   # Get URLs associated with each day's transcript text
   url1 <- source_page %>% 
@@ -45,8 +47,11 @@ five$date <- str_extract(five$url, "[0-9]{4}/[0-9]{2}/[0-9]{2}")
 five$date <- as.Date(five$date, "%Y/%m/%d")
 five$seg <- ifelse(grepl("gutfeld", five$url), "gut", "five")
 
-# Keep only transcripts since January 20, 2017
-five <- five %>% filter(date > as.Date("2017-01-19"))
+# # On initial run: Keep only transcripts since January 20, 2017
+# five <- five %>% filter(date > as.Date("2017-01-19"))
+# On January run: Keep only transcripts since initial download, November 17, 2017 to December 31, 2017
+five <- five %>% 
+  filter(date > as.Date("2017-11-16") & date < as.Date("2018-01-01"))
 
 # Loop through each link in data.frame (nrow(five)) and 
 # a. grab the html (read_html()), isolating node with text
@@ -87,7 +92,8 @@ setwd("hannity")
 # Load the source pages
 hann <- NULL # create null data set
 
-for (i in 0:19) { # manually searched for pages containing jan 20
+# for (i in 0:19) { # On initial run: manually searched for pages containing shows from jan 20 on; at that time (mid-November), had to seach through page 19
+for (i in 0:2) { # On January run: searched for pages containing November 17 and on; had to search through page 2
   source_page <- read_html(paste0("http://www.foxnews.com/on-air/hannity/transcripts?page=", i, "&Submit=DISPLAY"))
   
   # Get URLs associated with each day's transcript text
@@ -105,8 +111,11 @@ hann$show <- "hannity"
 hann$date <- str_extract(hann$url, "[0-9]{4}/[0-9]{2}/[0-9]{2}")
 hann$date <- as.Date(hann$date, "%Y/%m/%d")
 
-# Keep only transcripts since January 20, 2017
-hann <- hann %>% filter(date > as.Date("2017-01-19"))
+# # On initial run: Keep only transcripts since January 20, 2017
+# hann <- hann %>% filter(date > as.Date("2017-01-19"))
+# On January run: Keep only transcripts since initial download, November 17, 2017 to December 31, 2017
+hann <- hann %>% 
+  filter(date > as.Date("2017-11-16") & date < as.Date("2018-01-01"))
 
 # Download transcripts as text files 
 for(i in seq(nrow(hann))) {
@@ -130,7 +139,9 @@ for(i in seq(nrow(hann))) {
 
 
 #####################
-# Bret Baier (can only get last month so far, 10/16-11/17)
+# Bret Baier 
+# In mid-November, can only get last month so far, 10/16-11/17
+# SKIP
 #####################
 setwd("~/Box Sync/mpc/dataForDemocracy/cablenews/")
 
@@ -166,7 +177,10 @@ for(i in seq(nrow(baier))) {
 
 
 #####################
-# The Story, began on May 1
+# The Story
+# Show began on May 1
+# Need to figure out how to control webpage via script
+# or skip
 #####################
 setwd("~/Box Sync/mpc/dataForDemocracy/cablenews/")
 
@@ -327,11 +341,42 @@ url1 <- c("http://www.foxnews.com/transcript/2017/05/01/rep-kinzinger-do-diploma
           "http://www.foxnews.com/transcript/2017/11/17/former-clinton-aide-blasts-sen-gillibrand-as-hypocrite.html"
           )
 
+# On January run:
+url1 <- c("http://www.foxnews.com/transcript/2017/11/17/former-clinton-aide-blasts-sen-gillibrand-as-hypocrite.html",
+          "http://www.foxnews.com/transcript/2017/11/20/what-will-it-take-for-economic-boom-in-2018.html",
+          "http://www.foxnews.com/transcript/2017/11/21/turley-in-hollywood-and-dc-principle-is-matter-timing.html",
+          "http://www.foxnews.com/transcript/2017/11/22/calls-increase-for-rep-john-conyers-resignation.html",
+          "http://www.foxnews.com/transcript/2017/11/23/debating-turkey-day-politics.html",
+          "http://www.foxnews.com/transcript/2017/11/24/pressure-mounts-to-unmask-capitol-hill-harassers.html",
+          "http://www.foxnews.com/transcript/2017/11/27/sen-lankford-want-to-be-able-to-get-to-yes-on-tax-bill.html",
+          "http://www.foxnews.com/transcript/2017/11/28/sen-daines-on-what-will-get-him-to-yes-on-tax-reform.html",
+          "http://www.foxnews.com/transcript/2017/11/30/marc-thiessen-san-francisco-is-guilty-steinles-murder.html",
+          "http://www.foxnews.com/transcript/2017/12/01/rep-steve-king-on-future-kates-law.html",
+          "http://www.foxnews.com/transcript/2017/12/04/napolitano-on-bias-at-fbi-obstruction-justice-debate.html",
+          "http://www.foxnews.com/transcript/2017/12/05/former-cia-analyst-russia-probe-is-democratic-trap.html",
+          "http://www.foxnews.com/transcript/2017/12/06/nikki-haley-on-decision-to-move-us-embassy-to-jerusalem.html",
+          "http://www.foxnews.com/transcript/2017/12/07/gohmert-talks-political-bias-allegations-against-fbi.html",
+          "http://www.foxnews.com/transcript/2017/12/08/white-house-celebrating-good-economic-news.html",
+          "http://www.foxnews.com/transcript/2017/12/11/moore-campaign-spokeswoman-talks-about-final-hours.html",
+          "http://www.foxnews.com/transcript/2017/12/12/turley-on-benefits-and-drawbacks-special-counsels.html",
+          "http://www.foxnews.com/transcript/2017/12/14/pollster-mueller-and-fbi-face-crisis-in-public-confidence.html",
+          "http://www.foxnews.com/transcript/2017/12/15/former-fbi-official-comey-let-politics-creep-into-process.html",
+          "http://www.foxnews.com/transcript/2017/12/18/trump-critic-explains-his-support-for-tax-reform.html",
+          "http://www.foxnews.com/transcript/2017/12/19/scalise-tax-bill-is-big-step-to-get-economy-moving.html",
+          "http://www.foxnews.com/transcript/2017/12/20/speaker-ryan-reflects-on-journey-to-passing-tax-reform.html",
+          "http://www.foxnews.com/transcript/2017/12/21/dems-block-mcconnell-effort-to-shield-college-from-tax-hike.html",
+          "http://www.foxnews.com/transcript/2017/12/22/story-looks-back-at-2017s-naughtiest-and-nicest.html",
+          "http://www.foxnews.com/transcript/2017/12/26/report-nunes-prepping-report-on-corruption-at-fbi.html",
+          "http://www.foxnews.com/transcript/2017/12/28/rep-black-on-leaving-key-budget-post-after-fruitful-year.html"
+  )
+
 # Turn into a dataframe and extract date, show segment
 thestory <- data.frame(show="thestory", urls=url1, stringsAsFactors=FALSE)
 thestory$date <- str_extract(thestory$urls, "[0-9]{4}/[0-9]{2}/[0-9]{2}")
 thestory$date <- as.Date(thestory$date, "%Y/%m/%d")
-thestory$date[53] <- as.Date("2017-07-13") # aired on different day
+# On initial run: thestory$date[53] <- as.Date("2017-07-13") # aired on different day
+
+
 
 # Download transcripts as text files 
 for(i in seq(nrow(thestory))) {

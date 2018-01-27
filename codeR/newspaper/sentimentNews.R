@@ -3,7 +3,7 @@
 # Sentiment (quanteda) 
 # Michele Claibourn
 # February 21, 2017
-# Updated December 2, 2017
+# Updated January 9, 2017
 ##################################
 
 #####################
@@ -61,6 +61,8 @@ qmeta2 <- qmeta2 %>% mutate(words = as.integer(length),
 
 # Plot!
 p <- ggplot(qmeta2, aes(x=date, y=pertone))
+# Create date breaks to get chosen tick marks on graph
+date.vec <- seq(from=as.Date("2017-01-20"), to=as.Date("2018-01-05"), by="week") # update to Friday after last story
 p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=.15) +
   geom_hline(yintercept=median(qmeta2$pertone), color="gray50") +
   geom_smooth(aes(color=pub)) +

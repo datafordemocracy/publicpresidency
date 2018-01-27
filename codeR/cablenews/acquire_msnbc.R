@@ -1,8 +1,9 @@
 #####################
 # MSNBC Transcripts
 # Michele Claibourn
-# Acquire data
+# Acquire data: Jan 20, 2017 through Nov 16, 2017
 # Rachel Maddow, Last Word/O'Donnell, All In/Hayes
+# Updated through December 31, 2017
 #####################
 
 rm(list=ls())
@@ -26,7 +27,7 @@ setwd("maddow")
 # Load the source pages
 maddow <- NULL # create null data set
 
-for (i in 1:11) { 
+for (i in 1:12) { 
   source_page <- read_html(paste0("http://www.msnbc.com/transcripts/rachel-maddow-show/2017/", i))
   
   # Get URLs associated with each day's transcript text
@@ -45,8 +46,11 @@ maddow$show <- "maddow"
 maddow$date <- str_extract(maddow$url, "[0-9]{4}-[0-9]{2}-[0-9]{2}")
 maddow$date <- as.Date(maddow$date, "%Y-%m-%d")
 
-# Keep only transcripts since January 20, 2017
-maddow <- maddow %>% filter(date > as.Date("2017-01-19"))
+# # On initial run: Keep only transcripts since January 20, 2017
+# maddow <- maddow %>% filter(date > as.Date("2017-01-19"))
+# On January run: Keep only transcripts since initial download, November 17, 2017 to December 31, 2017
+maddow <- maddow %>% 
+  filter(date > as.Date("2017-11-16") & date < as.Date("2018-01-01"))
 
 # Loop through each link in data.frame (nrow(maddow)) and 
 # a. grab the html (read_html()), isolating node with text (".pane-node-body .pane-content",
@@ -78,7 +82,7 @@ setwd("lastword")
 # Load the source pages
 lastword <- NULL # create null data set
 
-for (i in 1:11) { 
+for (i in 1:12) { 
   source_page <- read_html(paste0("http://www.msnbc.com/transcripts/the-last-word/2017/", i))
   
   # Get URLs associated with each day's transcript text
@@ -97,8 +101,11 @@ lastword$show <- "lastword"
 lastword$date <- str_extract(lastword$url, "[0-9]{4}-[0-9]{2}-[0-9]{2}")
 lastword$date <- as.Date(lastword$date, "%Y-%m-%d")
 
-# Keep only transcripts since January 20, 2017
-lastword <- lastword %>% filter(date > as.Date("2017-01-19"))
+# # On initial run: Keep only transcripts since January 20, 2017
+# lastword <- lastword %>% filter(date > as.Date("2017-01-19"))
+# On January run: Keep only transcripts since initial download, November 17, 2017 to December 31, 2017
+lastword <- lastword %>% 
+  filter(date > as.Date("2017-11-16") & date < as.Date("2018-01-01"))
 
 # Download transcripts as text files 
 for(i in seq(nrow(lastword))) {
@@ -126,7 +133,7 @@ setwd("allin")
 # Load the source pages
 allin <- NULL # create null data set
 
-for (i in 1:11) { 
+for (i in 1:12) { 
   source_page <- read_html(paste0("http://www.msnbc.com/transcripts/all-in/2017/", i))
   
   # Get URLs associated with each day's transcript text
@@ -145,8 +152,11 @@ allin$show <- "allin"
 allin$date <- str_extract(allin$url, "[0-9]{4}-[0-9]{2}-[0-9]{2}")
 allin$date <- as.Date(allin$date, "%Y-%m-%d")
 
-# Keep only transcripts since January 20, 2017
-allin <- allin %>% filter(date > as.Date("2017-01-19"))
+# # On initial run: Keep only transcripts since January 20, 2017
+# allin <- allin %>% filter(date > as.Date("2017-01-19"))
+# On January run: Keep only transcripts since initial download, November 17, 2017 to December 31, 2017
+allin <- allin %>% 
+  filter(date > as.Date("2017-11-16") & date < as.Date("2018-01-01"))
 
 # Download transcripts as text files 
 for(i in seq(nrow(allin))) {
