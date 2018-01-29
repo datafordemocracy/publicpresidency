@@ -1,3 +1,11 @@
+## 2018-02-02
+* Reviewed LIWC vars
+* Reviewed communication journals for fit
+
+## 2018-01-26
+* Reviewed journals
+* Viz of LIWC vars for reddit data
+
 ## 2017-12-14
 * Reviewed and summarized LIWC
 
