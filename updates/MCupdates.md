@@ -1,5 +1,5 @@
 ## 2018-02-02
-* Selected some readings (Cohen 2008, Hall-Jamieson 2008), and got Berry
+* Selected some readings (Cohen 2008, Hall-Jamieson and Capella 2020), and checked out Berry 2014
 
 ## 2018-01-26
 * Focused on eventnews
