@@ -1,3 +1,10 @@
+02/01/2018
+
+* Read "The Presidency in the Era of 24-Hour News"
+* Take a look at cablenews and see how the segments are structured
+
+
+
 12/07/2017
 
 * Minor corrections in code ( utf-8 encoding)
