@@ -1,3 +1,6 @@
+## 2018-02-09
+* Revised acquire_presdoc.R, rewriting steps as functions (pres_doc_fun.R), adding documents through December, and saving document metadata (acquire_presdoc.RData). 
+
 ## 2018-02-02
 * Selected some readings (Cohen 2008, Hall-Jamieson and Capella 2020), and checked out Berry 2014
 
