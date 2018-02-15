@@ -1,3 +1,8 @@
+## 2018-02-16
+* Re-read Cohen
+* Started marking up news segments in cable news transcripts -- managed to look through one transcript for Anderson Cooper, All In, Erin Burnett, The Five, Hannity, Last Word, Rachel Maddow, The Situation Room; didn't get to The Story -- a first attempt to understand if there are simpler ways of identifying separate "stories"
+* Also downloaded (but haven't yet read) several papers on story segmentation in the news; added these to a subfolder in the cablenews folder (called "storysegmentation")
+
 ## 2018-02-09
 * Revised acquire_presdoc.R, rewriting steps as functions (pres_doc_fun.R), adding documents through December, and saving document metadata (acquire_presdoc.RData). 
 
