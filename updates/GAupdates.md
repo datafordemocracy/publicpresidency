@@ -1,3 +1,10 @@
+02/016/2018
+
+* Read "The Presidency in the Era of 24-Hour News"
+* Update resources_tasks in publicpresidency folder
+* Include names, tags, locations from pres docs in csv file
+
+
 02/01/2018
 
 * Read "The Presidency in the Era of 24-Hour News"
