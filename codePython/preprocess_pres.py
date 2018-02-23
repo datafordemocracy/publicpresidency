@@ -1,3 +1,9 @@
+'''
+Author: Gautam Somappa
+Python code to read presedential documents,process and chunk data into different columns.
+Data is stored in a CSV file called 'presDocument.csv'. File is uploaded in box under the folder processed_files.
+'''
+
 import glob
 import datefinder
 import re
