@@ -1,4 +1,4 @@
-02/016/2018
+02/16/2018 and 02/23/2018
 
 * Read "The Presidency in the Era of 24-Hour News"
 * Update resources_tasks in publicpresidency folder
