@@ -1,10 +1,10 @@
-#####################
+##############################################################
 # MSNBC Transcripts
 # Michele Claibourn
 # Acquire data: Jan 20, 2017 through Nov 16, 2017
 # Rachel Maddow, Last Word/O'Donnell, All In/Hayes
-# Updated through December 31, 2017
-#####################
+# Updated through February 28, 2018
+##############################################################
 
 rm(list=ls())
 library(dplyr)
@@ -17,18 +17,17 @@ library(quanteda)
 #####################
 # Rachel Maddow
 #####################
-setwd("~/Box Sync/mpc/dataForDemocracy/cablenews/")
-
-if (!file.exists("maddow")) {
-  dir.create("maddow")
-}
+setwd("~/Box Sync/mpc/dataForDemocracy/presidency_project/cablenews/")
+# if (!file.exists("maddow")) {
+#   dir.create("maddow")
+# }
 setwd("maddow") 
 
 # Load the source pages
 maddow <- NULL # create null data set
-
+# for 2018, change year in path (initially 2017) to 2018
 for (i in 1:12) { 
-  source_page <- read_html(paste0("http://www.msnbc.com/transcripts/rachel-maddow-show/2017/", i))
+  source_page <- read_html(paste0("http://www.msnbc.com/transcripts/rachel-maddow-show/2018/", i))
   
   # Get URLs associated with each day's transcript text
   url1 <- source_page %>% 
@@ -48,9 +47,13 @@ maddow$date <- as.Date(maddow$date, "%Y-%m-%d")
 
 # # On initial run: Keep only transcripts since January 20, 2017
 # maddow <- maddow %>% filter(date > as.Date("2017-01-19"))
-# On January run: Keep only transcripts since initial download, November 17, 2017 to December 31, 2017
+# # On January run: Keep only transcripts since initial download, November 17, 2017 to December 31, 2017
+# maddow <- maddow %>% 
+#   filter(date > as.Date("2017-11-16") & date < as.Date("2018-01-01"))
+
+# On March run: Keep only transcripts since December 31, 2017 to February 28, 2018
 maddow <- maddow %>% 
-  filter(date > as.Date("2017-11-16") & date < as.Date("2018-01-01"))
+  filter(date > as.Date("2017-12-31") & date < as.Date("2018-03-01"))
 
 # Loop through each link in data.frame (nrow(maddow)) and 
 # a. grab the html (read_html()), isolating node with text (".pane-node-body .pane-content",
@@ -72,18 +75,17 @@ for(i in seq(nrow(maddow))) {
 #####################
 # Last Word with Lawrence O'Donnell
 #####################
-setwd("~/Box Sync/mpc/dataForDemocracy/cablenews/")
-
-if (!file.exists("lastword")) {
-  dir.create("lastword")
-}
+setwd("~/Box Sync/mpc/dataForDemocracy/presidency_project/cablenews/")
+# if (!file.exists("lastword")) {
+#   dir.create("lastword")
+# }
 setwd("lastword") 
 
 # Load the source pages
 lastword <- NULL # create null data set
-
+# for 2018, change year in path (initially 2017) to 2018
 for (i in 1:12) { 
-  source_page <- read_html(paste0("http://www.msnbc.com/transcripts/the-last-word/2017/", i))
+  source_page <- read_html(paste0("http://www.msnbc.com/transcripts/the-last-word/2018/", i))
   
   # Get URLs associated with each day's transcript text
   url1 <- source_page %>% 
@@ -103,9 +105,13 @@ lastword$date <- as.Date(lastword$date, "%Y-%m-%d")
 
 # # On initial run: Keep only transcripts since January 20, 2017
 # lastword <- lastword %>% filter(date > as.Date("2017-01-19"))
-# On January run: Keep only transcripts since initial download, November 17, 2017 to December 31, 2017
+# # On January run: Keep only transcripts since initial download, November 17, 2017 to December 31, 2017
+# lastword <- lastword %>% 
+#   filter(date > as.Date("2017-11-16") & date < as.Date("2018-01-01"))
+
+# On March run: Keep only transcripts since December 31, 2017 to February 28, 2018
 lastword <- lastword %>% 
-  filter(date > as.Date("2017-11-16") & date < as.Date("2018-01-01"))
+  filter(date > as.Date("2017-12-31") & date < as.Date("2018-03-01"))
 
 # Download transcripts as text files 
 for(i in seq(nrow(lastword))) {
@@ -123,18 +129,17 @@ for(i in seq(nrow(lastword))) {
 #####################
 # All In with Chris Hayes
 #####################
-setwd("~/Box Sync/mpc/dataForDemocracy/cablenews/")
-
-if (!file.exists("allin")) {
-  dir.create("allin")
-}
+setwd("~/Box Sync/mpc/dataForDemocracy/presidency_project/cablenews/")
+# if (!file.exists("allin")) {
+#   dir.create("allin")
+# }
 setwd("allin") 
 
 # Load the source pages
 allin <- NULL # create null data set
-
+# for 2018, change year in path (initially 2017) to 2018
 for (i in 1:12) { 
-  source_page <- read_html(paste0("http://www.msnbc.com/transcripts/all-in/2017/", i))
+  source_page <- read_html(paste0("http://www.msnbc.com/transcripts/all-in/2018/", i))
   
   # Get URLs associated with each day's transcript text
   url1 <- source_page %>% 
@@ -154,9 +159,13 @@ allin$date <- as.Date(allin$date, "%Y-%m-%d")
 
 # # On initial run: Keep only transcripts since January 20, 2017
 # allin <- allin %>% filter(date > as.Date("2017-01-19"))
-# On January run: Keep only transcripts since initial download, November 17, 2017 to December 31, 2017
+# # On January run: Keep only transcripts since initial download, November 17, 2017 to December 31, 2017
+# allin <- allin %>% 
+#   filter(date > as.Date("2017-11-16") & date < as.Date("2018-01-01"))
+
+# On March run: Keep only transcripts since December 31, 2017 to February 28, 2018
 allin <- allin %>% 
-  filter(date > as.Date("2017-11-16") & date < as.Date("2018-01-01"))
+  filter(date > as.Date("2017-12-31") & date < as.Date("2018-03-01"))
 
 # Download transcripts as text files 
 for(i in seq(nrow(allin))) {
