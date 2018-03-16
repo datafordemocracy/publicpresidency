@@ -3,7 +3,7 @@
 # Michele Claibourn
 # Acquire daily compilations of 
 #   presidential documents
-# By month: through December 2017
+# By month: through January 2018
 #################################
 
 rm(list=ls())
@@ -13,7 +13,7 @@ library(tm)
 library(stringr)
 library(quanteda)
 
-setwd("~/Box Sync/mpc/dataForDemocracy/presdoc")
+setwd("~/Box Sync/mpc/dataForDemocracy/presidency_project/presdoc")
 source("pres_doc_fun.R")
 
 
@@ -271,6 +271,27 @@ presdoc <- rbind(presdoc, newpres)
 rm(newpres, source_page)
 save.image("acquire_presdoc.RData")
 
+
+#################
+## January 2018
+#################
+load("acquire_presdoc.Rdata")
+source_page <- read_html("https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CPD&browsePath=2018%2F01&isCollapsed=false&leafLevelBrowse=false&isDocumentResults=true&ycord=121")
+
+# Get links, made document data set
+newpres <- get_presdoc_data(source_page)
+newpres <- make_presdoc_data(newpres)
+summary(newpres$date) # check
+
+# Download texts to subfolder
+setwd("docs") 
+scrape_presdoc(newpres)
+setwd("../")
+
+presdoc <- rbind(presdoc, newpres)
+
+rm(newpres, source_page)
+save.image("acquire_presdoc.RData")
 
 # NOTES
 # via https://www.govinfo.gov/link-docs/ could generate sequence of links; e.g., 

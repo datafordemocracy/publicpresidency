@@ -1,10 +1,10 @@
-#####################
+##############################################################
 # CNN Transcripts
 # Michele Claibourn
 # Acquire data: Jan 20, 2017 through Nov 16, 2017
 # Anderson Cooper, Erin Burnnett, Wolf Blitzer/Situation Room
-# Updated through December 31, 2017
-#####################
+# Updated through Feburary 28, 2018
+##############################################################
 
 rm(list=ls())
 library(dplyr)
@@ -17,11 +17,10 @@ library(quanteda)
 #####################
 # Anderson Cooper 360
 #####################
-setwd("~/Box Sync/mpc/dataForDemocracy/cablenews/")
-
-if (!file.exists("ac360")) { # create folder if it doesn't exist
-  dir.create("ac360")
-}
+setwd("~/Box Sync/mpc/dataForDemocracy/presidency_project/cablenews/")
+# if (!file.exists("ac360")) { # create folder if it doesn't exist
+#   dir.create("ac360")
+# }
 setwd("ac360") # then set it as working directory
 
 # Load the source page
@@ -42,8 +41,12 @@ cnnac360$seg <- str_sub(cnnac360$urls, urllength-6, urllength-5)
 # # On initial run: Keep only transcripts since January 20, 2017
 # cnnac360 <- cnnac360 %>% filter(date > as.Date("2017-01-19"))
 # On January run: Keep only transcripts since initial download, November 17, 2017 to December 31, 2017
+# cnnac360 <- cnnac360 %>% 
+#   filter(date > as.Date("2017-11-16") & date < as.Date("2018-01-01"))
+
+# On March run: Keep only transcripts since December 31, 2017 to February 28, 2018
 cnnac360 <- cnnac360 %>% 
-  filter(date > as.Date("2017-11-16") & date < as.Date("2018-01-01"))
+  filter(date > as.Date("2017-12-31") & date < as.Date("2018-03-01"))
 
 # Loop through each link in data.frame (nrow(cnnac360)) and 
 # a. grab the html (read_html()), isolating node with text (":nth-child(8)",
@@ -64,30 +67,29 @@ for(i in seq(nrow(cnnac360))) {
 # # On initial run: http://www.cnn.com/TRANSCRIPTS/1704/18/acd.01.html is missing, code stops
 # cnnac360b <- cnnac360 %>% filter(date < as.Date("2017-04-18"))
 
-# On January run: The first segment for November 29 returns a 404 error; redo for missing dates
-cnnac360b <- cnnac360 %>% filter(date < as.Date("2017-11-30"))
-cnnac360b <- cnnac360b[2:10,]
-
-for(i in seq(nrow(cnnac360b))) {
-  text <- read_html(cnnac360b$urls[i]) %>% # load the page
-    html_nodes(":nth-child(8)") %>% # isolate the text
-    html_text() # get the text
-  
-  filename <- paste0(cnnac360b$date[i], "-", cnnac360b$seg[i], ".txt")
-  sink(file = filename) %>% # open file to write 
-    cat(text)  # put the contents of "text" in the file
-  sink() # close the file
-}
+# # On January run: The first segment for November 29 returns a 404 error; redo for missing dates
+# cnnac360b <- cnnac360 %>% filter(date < as.Date("2017-11-30"))
+# cnnac360b <- cnnac360b[2:10,]
+# 
+# for(i in seq(nrow(cnnac360b))) {
+#   text <- read_html(cnnac360b$urls[i]) %>% # load the page
+#     html_nodes(":nth-child(8)") %>% # isolate the text
+#     html_text() # get the text
+#   
+#   filename <- paste0(cnnac360b$date[i], "-", cnnac360b$seg[i], ".txt")
+#   sink(file = filename) %>% # open file to write 
+#     cat(text)  # put the contents of "text" in the file
+#   sink() # close the file
+# }
 
 
 #######################
 # Erin Burnett Outfront
 #######################
-setwd("~/Box Sync/mpc/dataForDemocracy/cablenews/")
-
-if (!file.exists("ebo")) {
-  dir.create("ebo")
-}
+setwd("~/Box Sync/mpc/dataForDemocracy/presidency_project/cablenews/")
+# if (!file.exists("ebo")) {
+#   dir.create("ebo")
+# }
 setwd("ebo") 
 
 # Load the source page
@@ -107,9 +109,13 @@ urllength <- str_length(ebo$urls)
 ebo$seg <- str_sub(ebo$urls, urllength-6, urllength-5)
 # # On initial run: Keep only transcripts since January 20, 2017
 # ebo <- ebo %>% filter(date > as.Date("2017-01-19"))
-# On January run: Keep only transcripts since initial download, November 17, 2017 to December 31, 2017
+# # On January run: Keep only transcripts since initial download, November 17, 2017 to December 31, 2017
+# ebo <- ebo %>% 
+#   filter(date > as.Date("2017-11-16") & date < as.Date("2018-01-01"))
+
+# On March run: Keep only transcripts since December 31, 2017 to February 28, 2018
 ebo <- ebo %>% 
-  filter(date > as.Date("2017-11-16") & date < as.Date("2018-01-01"))
+  filter(date > as.Date("2017-12-31") & date < as.Date("2018-03-01"))
 
 # Download transcripts as text files 
 for(i in seq(nrow(ebo))) {
@@ -123,19 +129,19 @@ for(i in seq(nrow(ebo))) {
   sink() # close the file
 }
 
-# stopped on 10/10 - not sure why...
-ebob <- ebo %>% filter(date < as.Date("2017-10-10"))
-
-for(i in seq(nrow(ebob))) {
-  text <- read_html(ebob$urls[i]) %>% # load the page
-    html_nodes(":nth-child(8)") %>% # isolate the text
-    html_text() # get the text
-  
-  filename <- paste0(ebob$date[i], "-", ebob$seg[i], ".txt")
-  sink(file = filename) %>% # open file to write 
-    cat(text)  # put the contents of "text" in the file
-  sink() # close the file
-}
+# # On initial run: stopped on 10/10 - not sure why...
+# ebob <- ebo %>% filter(date < as.Date("2017-10-10"))
+# 
+# for(i in seq(nrow(ebob))) {
+#   text <- read_html(ebob$urls[i]) %>% # load the page
+#     html_nodes(":nth-child(8)") %>% # isolate the text
+#     html_text() # get the text
+#   
+#   filename <- paste0(ebob$date[i], "-", ebob$seg[i], ".txt")
+#   sink(file = filename) %>% # open file to write 
+#     cat(text)  # put the contents of "text" in the file
+#   sink() # close the file
+# }
 
 # # On initial run: stopped on 1/24 - not sure why...
 # eboc <- ebo %>% filter(date < as.Date("2017-1-24"))
@@ -155,11 +161,10 @@ for(i in seq(nrow(ebob))) {
 #######################
 # The Situation Room
 #######################
-setwd("~/Box Sync/mpc/dataForDemocracy/cablenews/")
-
-if (!file.exists("tsr")) {
-  dir.create("tsr")
-}
+setwd("~/Box Sync/mpc/dataForDemocracy/presidency_project/cablenews/")
+# if (!file.exists("tsr")) {
+#   dir.create("tsr")
+# }
 setwd("tsr") 
 
 # Load the source page
@@ -179,9 +184,13 @@ urllength <- str_length(tsr$urls)
 tsr$seg <- str_sub(tsr$urls, urllength-6, urllength-5)
 # # On initial run: Keep only transcripts since January 20, 2017
 # tsr <- tsr %>% filter(date > as.Date("2017-01-19"))
-# On January run: Keep only transcripts since initial download, November 17, 2017 to December 31, 2017
+# # On January run: Keep only transcripts since initial download, November 17, 2017 to December 31, 2017
+# tsr <- tsr %>% 
+#   filter(date > as.Date("2017-11-16") & date < as.Date("2018-01-01"))
+
+# On March run: Keep only transcripts since December 31, 2017 to February 28, 2018
 tsr <- tsr %>% 
-  filter(date > as.Date("2017-11-16") & date < as.Date("2018-01-01"))
+  filter(date > as.Date("2017-12-31") & date < as.Date("2018-03-01"))
 
 # Download transcripts as text files 
 for(i in seq(nrow(tsr))) {
