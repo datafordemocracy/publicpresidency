@@ -4,21 +4,16 @@
 #	StatLab                                                                #
 #	October 18, 2017                                                       #
 #	Jessica Mazen                                                          #
-# Updated December 2, 2017
+# Updated March 20, 2018
 ##----------------------------------------------------------------------##
-# devtools::install_github('miserman/lingmatch')
 
 rm(list=ls())
-library(dplyr)
-library(tm)
-library(ggplot2)
-library(stringr)
-library(lingmatch)
-library(tokenizers)
+library(tidyverse)
 
 # Run readNews.R first
 # Run exploreNews.R first
 # Run sentimentNews.R first
+setwd("~/Box Sync/mpc/dataForDemocracy/presidency_project/newspaper/")
 load("workspaceR/newspaperSentiment.RData")
 
 # Read in & create dictionary
@@ -50,63 +45,61 @@ qmeta2 <- qmeta2 %>%
 
 
 # Plot
-
-p <- ggplot(qmeta2, aes(x=date, y=HarmVirtue))
-p + geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
+ggplot(qmeta2, aes(x=date, y=HarmVirtue)) +
+  geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
   geom_hline(yintercept=mean(qmeta2$HarmVirtue), color="gray50") +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
-  ggtitle("HarmVirtue MF within Newspaper Coverage of Trump") +
+  ggtitle("HarmVirtue MF within Trump Coverage") +
   labs(y = "HarmVirtue", x = "Date of Article") +
   scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
   theme(plot.title = element_text(face="bold", size=20, hjust=0),
-        axis.title = element_text(face="bold", size=16),
+        axis.title = element_text(face="bold", size=14),
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
         axis.text.x = element_text(angle=90),
         legend.text=element_text(size=12))
 
-p <- ggplot(qmeta2, aes(x=date, y=HarmVice))
-p + geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
+ggplot(qmeta2, aes(x=date, y=HarmVice)) + 
+  geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
   geom_hline(yintercept=mean(qmeta2$HarmVice), color="gray50") +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
-  ggtitle("HarmVice MF within Newspaper Coverage of Trump") +
+  ggtitle("HarmVice MF within Trump Coverage") +
   labs(y = "HarmVice", x = "Date of Article") +
   scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
   theme(plot.title = element_text(face="bold", size=20, hjust=0),
-        axis.title = element_text(face="bold", size=16),
+        axis.title = element_text(face="bold", size=14),
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
         axis.text.x = element_text(angle=90),
         legend.text=element_text(size=12))
 
-p <- ggplot(qmeta2, aes(x=date, y=FairnessVirtue))
-p + geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
+ggplot(qmeta2, aes(x=date, y=FairnessVirtue)) + 
+  geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
   geom_hline(yintercept=mean(qmeta2$FairnessVirtue), color="gray50") +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
-  ggtitle("FairnessVirtue MF within Newspaper Coverage of Trump") +
+  ggtitle("FairnessVirtue MF within Trump Coverage") +
   labs(y = "FairnessVirtue", x = "Date of Article") +
   scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
   theme(plot.title = element_text(face="bold", size=20, hjust=0),
-        axis.title = element_text(face="bold", size=16),
+        axis.title = element_text(face="bold", size=14),
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
         axis.text.x = element_text(angle=90),
         legend.text=element_text(size=12))
 
-p <- ggplot(qmeta2, aes(x=date, y=FairnessVice))
-p + geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
+ggplot(qmeta2, aes(x=date, y=FairnessVice)) + 
+  geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
   geom_hline(yintercept=mean(qmeta2$FairnessVice), color="gray50") +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
-  ggtitle("FairnessVice MF within Newspaper Coverage of Trump") +
+  ggtitle("FairnessVice MF within Trump Coverage") +
   labs(y = "FairnessVice", x = "Date of Article") +
   scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
   theme(plot.title = element_text(face="bold", size=20, hjust=0),
-        axis.title = element_text(face="bold", size=16),
+        axis.title = element_text(face="bold", size=14),
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
         axis.text.x = element_text(angle=90),
         legend.text=element_text(size=12))
-
 
 # Plot barplot of all MF
 head(senMF,10)
@@ -118,14 +111,13 @@ semMF_colMeans$MF <- c("HarmVirtue","HarmVice","FairnessVirtue","FairnessVice",
                        "IngroupVirtue","IngroupVice","AuthorityVirtue","AuthorityVice",
                        "PurityVirtue","PurityVice","MoralityGeneral")
 
-p1 <- ggplot(semMF_colMeans, aes(x=MF, y=MeanMF)) +
+ggplot(semMF_colMeans, aes(x=MF, y=MeanMF)) +
   geom_bar(stat="identity") +
   xlab("Moral Foundation") +
   ylab("Mean") +
-  coord_flip()
-
-
-p1 + theme_bw() + theme(axis.line = element_line(colour = "black"),
+  coord_flip() +
+  theme_bw() + 
+  theme(axis.line = element_line(colour = "black"),
                         panel.border = element_blank(),
                         panel.grid.major = element_blank(),
                         panel.grid.minor = element_blank(),
@@ -142,13 +134,13 @@ meanMF2 <- c(mean(c(2.18181818,1.81818182)),mean(c(1.54545455,0.27272727)),mean(
 MF2 <- c("Harm","Fairness","Ingroup","Authority","Purity","MoralityGeneral")
 senMF_new <- as.data.frame(cbind(meanMF2,MF2))
 
-p1 <- ggplot(senMF_new, aes(x=MF2, y=meanMF2)) +
+ggplot(senMF_new, aes(x=MF2, y=meanMF2)) +
   geom_bar(stat="identity") +
   xlab("Moral Foundation") +
   ylab("Mean") +
-  coord_flip()
-
-p1 + theme_bw() + theme(axis.line = element_line(colour = "black"),
+  coord_flip() +
+  theme_bw() + 
+  theme(axis.line = element_line(colour = "black"),
                         panel.border = element_blank(),
                         panel.grid.major = element_blank(),
                         panel.grid.minor = element_blank(),

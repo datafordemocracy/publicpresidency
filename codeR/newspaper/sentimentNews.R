@@ -3,7 +3,7 @@
 # Sentiment (quanteda) 
 # Michele Claibourn
 # February 21, 2017
-# Updated January 9, 2017
+# Updated March 20, 2018
 ##################################
 
 #####################
@@ -13,15 +13,13 @@
 # install.packages("tidytext")
 
 rm(list=ls())
-library(dplyr)
-library(tidyr)
-library(ggplot2)
+library(tidyverse)
 library(quanteda)
 library(scales)
 library(tidytext)
 
 # Load the data and environment from exploreNews.R
-setwd("~/Box Sync/mpc/dataForDemocracy/newspaper/")
+setwd("~/Box Sync/mpc/dataForDemocracy/presidency_project/newspaper/")
 load("workspaceR/newspaperExplore.RData")
 
 
@@ -60,18 +58,20 @@ qmeta2 <- qmeta2 %>% mutate(words = as.integer(length),
                               pertone = perpos - perneg)
 
 # Plot!
-p <- ggplot(qmeta2, aes(x=date, y=pertone))
 # Create date breaks to get chosen tick marks on graph
-date.vec <- seq(from=as.Date("2017-01-20"), to=as.Date("2018-01-05"), by="week") # update to Friday after last story
-p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=.15) +
+date.vec <- seq(from=as.Date("2017-01-20"), to=as.Date("2018-03-02"), by="week") # update to Friday after last story
+ggplot(qmeta2, aes(x=date, y=pertone)) + 
+  geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=.05) +
   geom_hline(yintercept=median(qmeta2$pertone), color="gray50") +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
-  ggtitle("'Tone' of Newspaper Coverage of Trump") +
-  labs(y = "Overall Tone (% of positive words - % of negative words)", x = "Date of Article") +
+  labs(title = "'Tone' of Trump Coverage", 
+       subtitle = "New York Times, Washington Post, Wall Street Journal", 
+       y = "Overall Tone\n(% positive words - % neg words)", 
+       x = "Date of Article") +
   scale_color_manual(values=c("blue3","turquoise", "orange3"), name="Source") +
   theme(plot.title = element_text(face="bold", size=20, hjust=0),
-        axis.title = element_text(face="bold", size=16),
+        axis.title = element_text(face="bold", size=14),
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
         axis.text.x = element_text(angle=90),
         legend.text=element_text(size=12))
@@ -92,19 +92,22 @@ qmeta2$leadline[qmeta2$heading==maxtone$heading]
 
 
 # Plot just opeds
-p <- ggplot(filter(qmeta2, oped==1), aes(x=date, y=pertone))
-p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=.15) +
+ggplot(filter(qmeta2, oped==1), aes(x=date, y=pertone)) + 
+  geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=.15) +
   geom_hline(yintercept=median(qmeta2$pertone), color="gray50") +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
-  ggtitle("'Tone' of Op/Ed Articles of Trump") +
-  labs(y = "Overall Tone (% of positive words - % of negative words)", x = "Date of Article") +
+  labs(title = "'Tone' of Trump Op-Ed Coverage", 
+       subtitle = "New York Times, Washington Post, Wall Street Journal", 
+       y = "Overall Tone\n(% positive words - % neg words)", 
+       x = "Date of Article") +
   scale_color_manual(values=c("blue3","turquoise", "orange3"), name="Source") +
   theme(plot.title = element_text(face="bold", size=20, hjust=0),
-        axis.title = element_text(face="bold", size=16),
+        axis.title = element_text(face="bold", size=14),
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
         axis.text.x = element_text(angle=90),
         legend.text=element_text(size=12))
+ggsave("figuresR/opedtone_naive.png")
 
 qmeta2 %>% filter(oped==1) %>% group_by(pub) %>% 
   summarize(mean(pertone), sd(pertone)) 
@@ -133,16 +136,17 @@ qmeta2 <- qmeta2 %>%
          trust=(trustW/words)*100)
 
 # Plot!
-p <- ggplot(qmeta2, aes(x=date, y=anger))
-p + geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
+ggplot(qmeta2, aes(x=date, y=anger)) +
+  geom_jitter(aes(color=pub), alpha=0.05, width=0.2, height=0.0, size=2) +
   geom_hline(yintercept=mean(qmeta2$anger), color="gray50") +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
-  ggtitle("Anger Affect within Newspaper Coverage of Trump") +
-  labs(y = "Anger Affect", x = "Date of Article") +
+  labs(title = "Anger Affect in Trump Coverage", 
+       subtitle = "New York Times, Washington Post, Wall Street Journal", 
+       y = "Anger Affect", x = "Date of Article") +
   scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
   theme(plot.title = element_text(face="bold", size=18, hjust=0),
-        axis.title = element_text(face="bold", size=16),
+        axis.title = element_text(face="bold", size=14),
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
         axis.text.x = element_text(angle=90),
         legend.text=element_text(size=12))
@@ -153,16 +157,17 @@ qmeta2$leadline[qmeta2$heading==checkanger$heading]
 # texts(qcorpus2)[docvars(qcorpus2, "heading")==checkanger$heading]
 
 # Just op/eds again
-p <- ggplot(filter(qmeta2, oped==1), aes(x=date, y=anger))
-p + geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
+ggplot(filter(qmeta2, oped==1), aes(x=date, y=anger)) +
+  geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
   geom_hline(yintercept=mean(qmeta2$anger), color="gray50") +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
-  ggtitle("Anger Affect within Op/Ed Articles of Trump") +
-  labs(y = "Anger Affect", x = "Date of Article") +
+  labs(title = "Anger Affect in Trump Op-Ed Coverage",        
+       subtitle = "New York Times, Washington Post, Wall Street Journal", 
+       y = "Anger Affect", x = "Date of Article") +
   scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
   theme(plot.title = element_text(face="bold", size=20, hjust=0),
-        axis.title = element_text(face="bold", size=16),
+        axis.title = element_text(face="bold", size=14),
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
         axis.text.x = element_text(angle=90),
         legend.text=element_text(size=12))
@@ -172,12 +177,13 @@ qmeta2long <- qmeta2 %>%
   select(date, pub, anger, fear, anticipation, trust) %>% 
   gather(sentiment, value, -date, -pub)
 
-p <- ggplot(qmeta2long, aes(x=date, y=value)) 
-p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=0.15) +
+ggplot(qmeta2long, aes(x=date, y=value)) +
+  geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=0.15) +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
-  ggtitle("'Affect' of Newspaper Coverage of Trump") +
-  labs(y = "Percent of Affect Words", x = "Date of Article") +
+  labs(title = "'Affect' of Trump Coverage", 
+       subtitle = "New York Times, Washington Post, Wall Street Journal", 
+       y = "Percent of Affect Words", x = "Date of Article") +
   facet_wrap(~ sentiment, ncol=2, scales="free_y") +
   scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
   theme(plot.title = element_text(face="bold", size=18, hjust=0),
@@ -206,16 +212,17 @@ articleSent <- sentSent %>%
 qmeta2[,ncol(qmeta2)+1:3] <- articleSent[,2:4]
 
 # Plot!
-p <- ggplot(qmeta2, aes(x=date, y=avgSent))
-p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=.15) +
+ggplot(qmeta2, aes(x=date, y=avgSent)) +
+  geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=.05) +
   geom_hline(yintercept=median(qmeta2$avgSent), color="gray50") +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
-  ggtitle("Sentiment of Newspaper Coverage of Trump") +
-  labs(y = "Average Sentiment across Sentences", x = "Date of Article") +
+  labs(title = "Sentiment of Trump Coverage",
+       subtitle = "New York Times, Washington Post, Wall Street Journal", 
+       y = "Average Sentiment across Sentences", x = "Date of Article") +
   scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
   theme(plot.title = element_text(face="bold", size=20, hjust=0),
-        axis.title = element_text(face="bold", size=16),
+        axis.title = element_text(face="bold", size=14),
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
         axis.text.x = element_text(angle=90),
         legend.text=element_text(size=12))
@@ -232,22 +239,23 @@ qcorpus2$documents$texts[docvars(qcorpus2, "heading")==maxtone$heading]
 # texts(qcorpus2)[docvars(qcorpus2, "heading")==maxtone$heading]
 
 # Just opeds again
-p <- ggplot(filter(qmeta2, oped==1), aes(x=date, y=avgSent))
-p + geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=.15) +
+ggplot(filter(qmeta2, oped==1), aes(x=date, y=avgSent)) +
+  geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=.15) +
   geom_hline(yintercept=median(qmeta2$avgSent), color="gray50") +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
-  ggtitle("Sentiment of Op/Ed Articles of Trump") +
-  labs(y = "Average Sentiment across Sentences", x = "Date of Article") +
+  labs(title = "Sentiment of Trump Op-Ed Coverage",
+       subtitle = "New York Times, Washington Post, Wall Street Journal", 
+       y = "Average Sentiment across Sentences", x = "Date of Article") +
   scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
   theme(plot.title = element_text(face="bold", size=20, hjust=0),
-        axis.title = element_text(face="bold", size=16),
+        axis.title = element_text(face="bold", size=14),
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
         axis.text.x = element_text(angle=90),
         legend.text=element_text(size=12))
 
-qmeta2 %>% filter(oped==1) %>% group_by(pub) %>% summarize(mean(avgSent), sd(avgSent)) 
-
+qmeta2 %>% filter(oped==1) %>% group_by(pub) %>% 
+  summarize(mean(avgSent), sd(avgSent)) 
 
 # Sentiment trajectories
 # sentSentNYT <- sentSent %>% filter(element_id<=length(qmeta2$pub[qmeta2$pub=="NYT"]))
@@ -295,28 +303,30 @@ byweek <- qmeta2 %>%
   summarize(fake=sum(fake), lie=sum(lies))
 
 # Plot!
-p <- ggplot(byweek, aes(x=week, y=lie))
-p + geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
+ggplot(byweek, aes(x=week, y=lies)) +
+  geom_jitter(aes(color=pub), alpha=0.05, width=0.2, height=0.0, size=2) +
   geom_hline(yintercept=mean(qmeta2$anger), color="gray50") +
   geom_smooth(aes(color=pub)) +
-  ggtitle("Mention of 'Lies' within Newspaper Coverage of Trump") +
-  labs(y = "Anger Affect", x = "Date of Article") +
+  labs(title = "Frequency of 'Lies' in Trump Coverage",
+       subtitle = "New York Times, Washington Post, Wall Street Journal", 
+       y = "Anger Affect", x = "Date of Article") +
   scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
   theme(plot.title = element_text(face="bold", size=18, hjust=0),
-        axis.title = element_text(face="bold", size=16),
+        axis.title = element_text(face="bold", size=14),
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
         axis.text.x = element_text(angle=90),
         legend.text=element_text(size=12))
 
-p <- ggplot(byweek, aes(x=week, y=fake))
-p + geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
+ggplot(byweek, aes(x=week, y=fake)) +
+  geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
   geom_hline(yintercept=mean(qmeta2$anger), color="gray50") +
   geom_smooth(aes(color=pub)) +
-  ggtitle("Mention of 'Fake' within Newspaper Coverage of Trump") +
-  labs(y = "Anger Affect", x = "Date of Article") +
+  labs(title = "Frequency of 'Fake' in Trump Coverage",
+       subtitle = "New York Times, Washington Post, Wall Street Journal", 
+       y = "Anger Affect", x = "Date of Article") +
   scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
   theme(plot.title = element_text(face="bold", size=18, hjust=0),
-        axis.title = element_text(face="bold", size=16),
+        axis.title = element_text(face="bold", size=14),
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
         axis.text.x = element_text(angle=90),
         legend.text=element_text(size=12))
