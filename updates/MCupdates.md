@@ -7,7 +7,7 @@
 ## 2018-03-16
 * Updated trump tweets through Feb, presidential documents through January, CNN and MSNBC news transcripts through February
 * Rewrote Fox news scraper -- webstie changed structure -- using RSelenium for interacting with web browser; updated Fox news transcripts through February
-* Looked into [UCLA news archive](https://tvnews.sscnet.ucla.edu/public/), [Red Hen Labs](https://sites.google.com/site/distributedlittleredhen/) work, news-reader work (find site)
+* Looked into [UCLA news archive](https://tvnews.sscnet.ucla.edu/public/), [Red Hen Labs](https://sites.google.com/site/distributedlittleredhen/) work, [newsreader work](http://www.newsreader-project.eu/news-events/news/)
 
 ## 2018-03-09
 * Updated NYT, WP, WSJ content through February
