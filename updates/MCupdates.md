@@ -1,3 +1,17 @@
+## 2018-03-23
+* Updated newspaper analysis with content through February (updated tm.plugin.factiva and added new replacement function to fix regular expression)
+* Read more on story/text segementation (articles in storysegmentation folder); focus on topictiling work
+* Caliskan talk, and read Science article on word embedding association test
+* Read Lowe article on text scaling
+
+## 2018-03-16
+* Updated trump tweets through Feb, presidential documents through January, CNN and MSNBC news transcripts through February
+* Rewrote Fox news scraper -- webstie changed structure -- using RSelenium for interacting with web browser; updated Fox news transcripts through February
+* Looked into [UCLA news archive](https://tvnews.sscnet.ucla.edu/public/), [Red Hen Labs](https://sites.google.com/site/distributedlittleredhen/) work, news-reader work (find site)
+
+## 2018-03-09
+* Updated NYT, WP, WSJ content through February
+
 ## 2018-02-16
 * Re-read Cohen
 * Started marking up news segments in cable news transcripts -- managed to look through one transcript for Anderson Cooper, All In, Erin Burnett, The Five, Hannity, Last Word, Rachel Maddow, The Situation Room; didn't get to The Story -- a first attempt to understand if there are simpler ways of identifying separate "stories"
