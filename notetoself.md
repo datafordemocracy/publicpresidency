@@ -6,3 +6,7 @@ Commercial sector
 * [AlchemyAPI](https://github.com/AlchemyAPI) acquird by IBM; Alchemy DataNews is now [Watson Discovery News](https://www.ibm.com/watson/services/discovery-news/); given search term, returns top stories with links, entities (topics, people), sentiment (and sentient by source domain), anomalies (days with unusually high mentions), co-mentioned entities (and sentiment of co-mentions). Also IBM's Naturual Language Understanding, given demo text, it provides sentiment, emotions (joy,anger,disgust,sadness,fear), keywords, entities, concepts...
 
 Methods are not open/transparent (proprietary), sources aren't known, content is not free...
+
+Academic initiatives
+* Add more on UCLA news archive, Red Hen Labs work, newsreader work
+* Where do GDELT and Internet Archive's TV News archive fit?
