@@ -1,7 +1,7 @@
 ## 2018-03-23
 * Updated newspaper analysis with content through February (updated tm.plugin.factiva and added new replacement function to fix regular expression)
 * Read more on story/text segementation (articles in storysegmentation folder); focus on topictiling work
-* Caliskan talk, and read Science article on word embedding association test
+* Caliskan talk, and read [Science article](http://science.sciencemag.org/content/sci/356/6334/183.full.pdf) on word embedding association test; read more on word embeddings ([this series](http://ruder.io/word-embeddings-1/) was particularly helpful)
 * Read Lowe article on text scaling
 
 ## 2018-03-16
