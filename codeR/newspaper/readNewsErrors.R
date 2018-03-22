@@ -60,5 +60,5 @@ corpusname$dup <- duplicated(corpusname$id)
 
 # Article IDs were assigned by extracting values from the AN field. The regular 
 # expression reading in the document id was reading in too few values, so not unique.
-# Added readFactivaHTML2.R (adjusting the regexc slightly) and use assignInNameSpace 
+# Added readFactivaHTML2.R (adjusting the regexec slightly, add + at end) and use assignInNameSpace 
 # to call the adjusted function.

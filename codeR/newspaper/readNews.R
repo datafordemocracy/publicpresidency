@@ -6,37 +6,34 @@
 # WP from Lexis-Nexis
 # Michele Claibourn
 # February 1, 2017
-# Updated January 9, 2017
-# with newspapers through December 31
+# Updated March 20, 2018
+# with newspapers through February 28
 ######################################
 
 #####################
 # Loading libraries
 # Setting directories
 #####################
-# install.packages("readr")
 # install.packages("tm")
-# install.packages("quanteda")
 # install.packages("tm.plugin.lexisnexis")
 # install.packages("tm.plugin.factiva")
+# install.packages("quanteda")
 
 rm(list=ls())
 library(tm)
-library(XML)
+library(xml2) # instead of XML?
 library(tm.plugin.factiva)
 library(tm.plugin.lexisnexis)
 library(quanteda)
-library(dplyr)
-library(readr)
-library(stringr)
-
+library(tidyverse)
+library(rvest)
 
 # Point to path for html files
-setwd("~/Box Sync/mpc/dataForDemocracy/newspaper/")
+setwd("~/Box Sync/mpc/dataForDemocracy/presidency_project/newspaper/")
 
 # Adjust readFactivaHTML function (see readNewsError.R for background)
-source("codeR/readFactivaHTML2.R")
-assignInNamespace("readFactivaHTML", readFactivaHTML2, ns="tm.plugin.factiva")
+source("codeR/readFactivaHTML3.R")
+assignInNamespace("readFactivaHTML", readFactivaHTML3, ns="tm.plugin.factiva")
 
 ##########################
 # Read in NYT articles 
@@ -115,12 +112,7 @@ wpcorpus
 wpcorpus[[1]][1]
 meta(wpcorpus[[1]])
 
-# In later exploration, found that NYT and WSJ use different abbreviation styles, 
-# altered the most common ones in NYT to match WSJ
-# f.b.i; c.i.a; e.p.a (appears mostly with periods (sometimes all caps) in NYT; usually all caps (sometimes with periods) in WSJ
-# nytcorpus <- tm_map(nytcorpus, content_transformer(function(x) gsub("F.B.I.", "FBI", x)))
-# nytcorpus <- tm_map(nytcorpus, content_transformer(function(x) gsub("C.I.A.", "CIA", x)))
-# nytcorpus <- tm_map(nytcorpus, content_transformer(function(x) gsub("E.P.A.", "EPA", x)))
+# In later exploration, found that WP and WSJ use different abbreviation styles, 
 wpcorpus <- tm_map(wpcorpus, content_transformer(function(x) gsub("U.S.", "United States", x)))
 
 

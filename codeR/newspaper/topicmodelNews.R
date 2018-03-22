@@ -4,7 +4,7 @@
 # Estimation and visualization
 # Michele Claibourn
 # February 14, 2017
-# Updated January 10, 2017 
+# Updated March 20, 2018 
 ###################################
 
 #####################
@@ -12,42 +12,39 @@
 # Setting directories
 #####################
 # install.packages("topicmodels")
-# install.packages("ggjoy")
-# install.packages("forcats")
 # install.packages("ggridges")
 
 rm(list=ls())
-library(dplyr)
-library(tidyr)
-library(ggplot2)
+library(tidyverse)
+# library(forcats)
 library(quanteda)
 library(tm)
 library(topicmodels)
-library(forcats)
 library(ggridges)
+library(lubridate)
 
 # Load the data and environment from exploreNews.R
-setwd("~/Box Sync/mpc/dataForDemocracy/newspaper/")
+setwd("~/Box Sync/mpc/dataForDemocracy/presidency_project/newspaper/")
 load("workspaceR/newspaperMoral.RData")
 
 ####################
 # Topic Model Prep
 ####################
 # 0. Prepping 
-nydfm <- dfm(qcorpus2, remove = c(stopwords("english"), "mr", "trump", "trump's"), 
+npdfm <- dfm(qcorpus2, remove = c(stopwords("english"), "mr", "trump", "trump's"), 
              stem = TRUE, remove_punct = TRUE, verbose=TRUE) # turn it into a document-feature matrix
-nydfm
-topfeatures(nydfm, 20)
+npdfm
+topfeatures(npdfm, 20)
 # stopwords("english") # what words did we remove?
 
 # Trim low frequency words, and words that appear across few documents (to reduce the size of the matrix)
-nydfmReduced <- dfm_trim(nydfm, min_count = 100, min_docfreq = 3, max_docfreq = 1960)
-nydfmReduced
+npdfmReduced <- dfm_trim(npdfm, min_count = 100, min_docfreq = 5, max_docfreq = 21400)
+npdfmReduced
 
 # Remove empty rows and confert to a tm corpus (the topicmodels package expects the triplet matrix format used by tm)
-nydfmReduced <- nydfmReduced[which(rowSums(nydfmReduced) > 0),]
-nydtm <- convert(nydfmReduced, to="topicmodels")
-nydtm
+npdfmReduced <- npdfmReduced[which(rowSums(npdfmReduced) > 0),]
+npdtm <- convert(npdfmReduced, to="topicmodels")
+npdtm
 
 #########################
 # Topic Model Estimation
@@ -57,7 +54,7 @@ nydtm
 # 1. Estimate model
 seed1=823 # for reproducibility
 t1 <- Sys.time()
-tm100 <- LDA(nydtm, k=100, control=list(seed=seed1)) # estimate lda model with 50 topics
+tm100 <- LDA(npdtm, k=100, control=list(seed=seed1)) # estimate lda model with 50 topics
 probterms100 <- as.data.frame(posterior(tm100)$terms) # all the topic-term probabilities
 probtopic100 <- as.data.frame(posterior(tm100)$topics) # all the document-topic probabilities
 Sys.time() - t1 # ~ 4.7 hours
@@ -86,7 +83,6 @@ probtopic100$id <- row.names(probtopic100)
 probtopic100date <- cbind(probtopic100, date=qmeta2$date)
 
 # Group by week
-library(lubridate)
 topicweek <- probtopic100date %>% 
   mutate(week=week(date)) %>% 
   select(c(1:100,103)) %>% 
@@ -160,11 +156,11 @@ phi <- t(apply(t(probterms100) + .002, 2, function(x) x/sum(x)))
 theta <- probtopic100
 theta <- theta[,1:100]
 # iii. doc.length (number words in each document, create from DTM)
-doc.length <- slam::row_sums(nydtm)
+doc.length <- slam::row_sums(npdtm)
 # iv. vocab (create from column names in phi)
 vocab <- names(probterms100)
 # v. term.frequency (create from column sums in DTM)
-term.frequency <- slam::col_sums(nydtm)
+term.frequency <- slam::col_sums(npdtm)
 
 # Create web visualization
 json <- createJSON(phi = phi, theta = theta, 
@@ -172,11 +168,11 @@ json <- createJSON(phi = phi, theta = theta,
                    term.frequency = term.frequency, R = 20)
 
 # Serve up files for display
-serVis(json, out.dir = "nypapertopics100toDecember", open.browser = FALSE) # save for upload elsewhere
+serVis(json, out.dir = "papertopics100_2018_03", open.browser = FALSE) # save for upload elsewhere
 # see: http://people.virginia.edu/~mpc8t/datafordemocracy/nypapertopics100_2017_12/
 
 
-# 3. Add article topics (probtopics75) to qmeta2
+# 3. Add article topics (probtopics100) to qmeta2
 names(probtopic100) <- (c(topicsum$terms, "id"))
 qmeta2 <- left_join(qmeta2, probtopic100, by="id")
 
@@ -190,29 +186,28 @@ save.image("workspaceR/newspaperTopicModel.RData")
 # Structural Topic Model (stm)
 #################################
 library(stm)
-docvars(qcorpus2, "month") <- month(qmeta2$date)
+inaugdate <- as.Date("2017-01-20", format="%Y-%m-%d")
+qmeta2$days <- difftime(qmeta2$date, inaugdate, units="days")
+docvars(qcorpus2, "days") <- qmeta2$days
+
 paperDocVars <- docvars(qcorpus2)
-paperOut <- convert(nydfmReduced, to = "stm", 
+paperOut <- convert(npdfmReduced, to = "stm", 
                   docvars = paperDocVars)
 
 ## Explore
 # searchK estimates topic exclusivity, coherence; model likelihood, residuals for each k
-t1 <- Sys.time()
-paperEval <- searchK(paperOut$documents, paperOut$vocab, K = seq(10,100,10), 
-                   prevalence = ~ as.factor(pub) + as.factor(month), 
-                   data = paperOut$meta, init.type = "Spectral")
-Sys.time() - t1 # ~ 6 hours
-plot(paperEval)
+# t1 <- Sys.time()
+# paperEval <- searchK(paperOut$documents, paperOut$vocab, K = seq(10,100,10), 
+#                    prevalence = ~ as.factor(pub) + as.factor(month), 
+#                    data = paperOut$meta, init.type = "Spectral")
+# Sys.time() - t1 # ~ 6 hours
+# plot(paperEval)
 
-## Estimate with k=25
+## Estimate with k=100
 paperFit100 <- stm(paperOut$documents, paperOut$vocab, K = 100,
-                prevalence = ~ as.factor(pub) + as.factor(month), 
-                max.em.its = 75,
+                prevalence = ~ as.factor(pub) + s(days), 
+                max.em.its = 100,
                 data = paperOut$meta, init.type = "Spectral")
-
-#  save
-save.image("workspaceR/newspaperTopicModel2.RData")
-# load("workspaceR/newspaperTopicModel2.RData")
 
 ## Examine
 # Topic quality
@@ -222,40 +217,52 @@ plot(paperFit100, type = "summary", labeltype="frex")
 # Topic top words
 labelTopics(paperFit100)
 # Topic prevalence by covariates
-paperEffect100 <- estimateEffect(1:100 ~ pub + month, paperFit100, meta = paperOut$meta)
-plot(paperEffect100, covariate = "pub", topics = 1, # xlim=c(-0.2, 0.5),
-     labeltype="custom", custom.labels=c("NYT", "WSJ", "WP"))
-
+paperEffect100 <- estimateEffect(1:100 ~ as.factor(pub) + s(days), 
+                                 paperFit100, meta = paperOut$meta)
+summary(paperEffect100, topics = 3)
+# plot(paperEffect100, covariate = "pub", topics = 3, # xlim=c(-0.2, 0.5),
+#      labeltype="custom", custom.labels=c("NYT", "WSJ", "WP"))
+# plot(paperEffect100, covariate = "days", method = "continuous", topics = 3)
 
 # Dynamic visualization
 # stmBrowser: https://github.com/mroberts/stmBrowser
-library(stmBrowser)
+# library(stmBrowser)
+# 
+# stmBrowser(paperFit100, data=paperOut$meta, 
+#            covariates=c("pub", "days"), text="heading", 
+#            n=length(paperOut$documents), labeltype="frex", directory=getwd())
 
-stmBrowser(paperFit100, data=paperOut$meta, 
-           covariates=c("pub", "month"), text="heading", 
-           n=length(paperOut$documents), labeltype="frex", directory=getwd())
-# See output: http://people.virginia.edu/~mpc8t/rhetoric2016/debatesSTMvis/
+library(htmlwidgets)
+devtools::install_github("timelyportfolio/stmBrowser@htmlwidget")
+stmwidget <- stmBrowser_widget(mod = paperFit100, data = paperOut$meta, 
+                  covariates = c("pub", "days"), text = "heading", 
+                  n = length(paperOut$documents), labeltype = "frex", width = 8, height = 8) 
+
+saveWidget(stmwidget, file = "stmwidget.html", selfcontained = FALSE, title = "Trump Newspaper Coverage: Topics")
 
 
 ## More Plots
 paperTopics <- as.data.frame(paperFit100$theta)
-paperTopics <- cbind(paperTopics, debates16) # UPDATE debates16
+paperTopics <- cbind(paperTopics, qmeta2) # UPDATE debates16
 
 # Topic prevalance by publication
 pubTopics <- paperTopics %>% 
-  select(c(1:100,104)) %>% # CHECK THIS
+  select(c(1:100,109)) %>% # all topics, pub
   group_by(pub) %>% 
   summarize_all(funs(sum))
 
 # Topic prevalence by month
-topicsLong <- paperTopics %>% 
-  select(V1:V100, month, pub) %>% 
-  gather(topic, value, -month, -pub)
+# topicsLong <- paperTopics %>% 
+#   select(V1:V100, month, pub) %>% # haven't created month
+#   gather(topic, value, -month, -pub)
 
 # topicsLongGeneral <- topicsLong %>% filter(date>as.Date("2016-09-01"))
 # p <- ggplot(topicsLongGeneral, aes(x=topic, y=value, fill=party))
 # p + geom_bar(stat="identity") + facet_wrap(~date) + 
 #   scale_fill_manual(values=c("blue3", "orange3"))
 
+#  save
+save.image("workspaceR/newspaperTopicModel2.RData")
+# load("workspaceR/newspaperTopicModel2.RData")
 
 # Unsupervised clustering for exploration...
