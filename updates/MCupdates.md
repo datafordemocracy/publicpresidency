@@ -1,7 +1,7 @@
 ## 2018-03-30
-* Read through Gautam's text.txt; emailed back with the following:
+1. Read through Gautam's text.txt; emailed back with the following:
 
-This is a great start! And this text may be a hard case, as it’s dominated by breaking news. So by my count there are between 3-6 stories here
+This is a great start! And this text may be a hard case, as it’s dominated by breaking news. By my count there are between 3-6 stories here
  
   * The starting story about the release of Trump’s 2005 1040 form
   * Possibly a transition when the discussion turns to collusion or influence of foreign powers
@@ -38,7 +38,7 @@ So three (trump tax return leak; health care bill; fbi investigation), and possi
  
 I’m wondering (1) how much fine tuning is possible? I noticed the github site recommends 50/topics for alpha, but in the paper they seem to prefer something closer to 0.1. (2) If this is likely to work better on more straight shows and less well on shows with a panel of simultaneous speakers? Or maybe panel shows need a wider window parameter (though I may not be correctly understand just what the window parameter is doing).  What parameters did you use?
 
-* Read through more story segmentation papers (following citation trail of Riedl and Biemann 2012); added some to the folder (incorporating entity coherence with LDA, distance with LDA, speaker with LDA, word embeddings).
+2. Read through more story segmentation papers (following citation trail of Riedl and Biemann 2012); added some to the folder (incorporating entity coherence with LDA, distance with LDA, speaker with LDA, word embeddings).
 
 ## 2018-03-23
 * Updated newspaper analysis with content through February (updated tm.plugin.factiva and added new replacement function to fix regular expression)
