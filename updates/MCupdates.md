@@ -1,3 +1,45 @@
+## 2018-03-30
+* Read through Gautam's text.txt; emailed back with the following:
+
+This is a great start! And this text may be a hard case, as it’s dominated by breaking news. So by my count there are between 3-6 stories here
+ 
+  * The starting story about the release of Trump’s 2005 1040 form
+  * Possibly a transition when the discussion turns to collusion or influence of foreign powers
+       ```
+       <depthScore>0.6330848396493047</depthScore>
+       <text>
+       Is our president compromised by a hostile foreign power?  We know his election was affected by hostile foreign power.
+       ```
+  * Possibly a transition when we switch to Jim Acosta for the White House response
+       ```
+       <depthScore>0.1677275624925081</depthScore>
+       <text>
+       CNN Jim Acosta is back with new information from the White House.  Jim? JIM ACOSTA, CNN SENIOR POLITICAL HOUSE     CORRESPONDENT:  That&apos;s right, Anderson.
+       ```
+  * Possibly a transition when we go back to the panel, after Jim Acosta’s segment
+       ```
+       <depthScore>0.8021977228616285</depthScore>
+       <text>
+       However, if MSNBC has them, any number of people could have given it to MSNC
+       ```
+  * A definite transition when we switch to the healthcare bill
+       ```
+       <depthScore>0.7677569810464278</depthScore>
+       <text>
+       We&apos;ll be right back.(COMMERCIAL BREAK)[21:41:12] COOPER:  Well, the White House spent the day embracing parts of          the House Obamacare replacement bill, like in part of the assessment a bit from the Congressional Budget Office that          down playing outright dismissing another namely the estimated 24 million fewer people would be insured under the              legislation by 2026.Now, the reaction has been intense all day.
+       ```
+  * A definite transition when we switch to discussion the FBI investigation
+       ```
+       <depthScore>0.617851130197758</depthScore>
+       <text>
+       FBI coming out publicly.  We&apos;ll tell you about the next.(COMMERCIAL BREAK)[21:50:26] COOPER:  Well, the other            breaking story tonight involves the question of ties between the Trump campaign and Russia.
+       ```
+So three (trump tax return leak; health care bill; fbi investigation), and possibly more. The topictiling finds lots more (with a threshold of .6), about 25. While it finds at least 5 of these (and the switch to the white house response is a subjective judgement at best), there are plenty of larger depth scores for places that really don’t seem like transitions at all (e.g., the 8 segments with depth scores above .9).
+ 
+I’m wondering (1) how much fine tuning is possible? I noticed the github site recommends 50/topics for alpha, but in the paper they seem to prefer something closer to 0.1. (2) If this is likely to work better on more straight shows and less well on shows with a panel of simultaneous speakers? Or maybe panel shows need a wider window parameter (though I may not be correctly understand just what the window parameter is doing).  What parameters did you use?
+
+* Read through more story segmentation papers (following citation trail of Riedl and Biemann 2012); added some to the folder (incorporating entity coherence with LDA, distance with LDA, speaker with LDA, word embeddings).
+
 ## 2018-03-23
 * Updated newspaper analysis with content through February (updated tm.plugin.factiva and added new replacement function to fix regular expression)
 * Read more on story/text segementation (articles in storysegmentation folder); focus on topictiling work
