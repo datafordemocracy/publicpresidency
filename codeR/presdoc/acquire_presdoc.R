@@ -1,10 +1,13 @@
-#################################
-# Presidential Documents
-# Michele Claibourn
-# Acquire daily compilations of 
-#   presidential documents
-# By month: through January 2018
-#################################
+###################################################################################
+# PUBLIC PRESIDENCY PROJECT
+# Download daily compilations of prsidential documents (each month)
+# Calls function in pres_doc_fun.R
+# 1. January 2017...
+# 13. January 2018
+# Michele Claibourn (mclaibourn@virginia.edu)
+# July 2017, mpc
+# Updated: March 13, 2018
+###################################################################################
 
 rm(list=ls())
 library(dplyr)
@@ -17,9 +20,9 @@ setwd("~/Box Sync/mpc/dataForDemocracy/presidency_project/presdoc")
 source("pres_doc_fun.R")
 
 
-################
-## January 2017
-################
+#################
+# 1. January 2017
+#################
 source_page <- read_html("https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CPD&browsePath=2017%2F01&isCollapsed=false&leafLevelBrowse=false&isDocumentResults=true&ycord=130")
 
 # Get links, made document data set
@@ -41,9 +44,9 @@ rm(newpres, source_page)
 save.image("acquire_presdoc.RData")
 
 
-################
-## February 2017
-################
+##################
+# 2. February 2017
+##################
 source_page <- read_html("https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CPD&browsePath=2017%2F02&isCollapsed=false&leafLevelBrowse=false&isDocumentResults=true&ycord=0")
 
 # Get links, made document data set
@@ -63,7 +66,7 @@ save.image("acquire_presdoc.RData")
 
 
 ################
-## March 2017
+# 3. March 2017
 ################
 source_page <- read_html("https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CPD&browsePath=2017%2F03&isCollapsed=false&leafLevelBrowse=false&isDocumentResults=true&ycord=152")
 
@@ -84,7 +87,7 @@ save.image("acquire_presdoc.RData")
 
 
 ################
-## April 2017
+# 4. April 2017
 ################
 source_page <- read_html("https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CPD&browsePath=2017%2F04&isCollapsed=false&leafLevelBrowse=false&isDocumentResults=true&ycord=3094")
 
@@ -105,7 +108,7 @@ save.image("acquire_presdoc.RData")
 
 
 ################
-## May 2017
+# 5. May 2017
 ################
 source_page <- read_html("https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CPD&browsePath=2017%2F05&isCollapsed=false&leafLevelBrowse=false&isDocumentResults=true&ycord=3770")
 
@@ -126,7 +129,7 @@ save.image("acquire_presdoc.RData")
 
 
 ################
-## June 2017
+# 6. June 2017
 ################
 source_page <- read_html("https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CPD&browsePath=2017%2F06&isCollapsed=false&leafLevelBrowse=false&isDocumentResults=true&ycord=4549")
 
@@ -147,7 +150,7 @@ save.image("acquire_presdoc.RData")
 
 
 ################
-## July 2017
+# 7. July 2017
 ################
 source_page <- read_html("https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CPD&browsePath=2017%2F07&isCollapsed=false&leafLevelBrowse=false&isDocumentResults=true&ycord=4705")
 
@@ -168,7 +171,7 @@ save.image("acquire_presdoc.RData")
 
 
 ################
-## August 2017
+# 8. August 2017
 ################
 source_page <- read_html("https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CPD&browsePath=2017%2F08&isCollapsed=false&leafLevelBrowse=false&isDocumentResults=true&ycord=3491")
 
@@ -188,9 +191,9 @@ rm(newpres, source_page)
 save.image("acquire_presdoc.RData")
 
 
-#################
-## September 2017
-#################
+###################
+# 9. September 2017
+###################
 source_page <- read_html("https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CPD&browsePath=2017%2F09&isCollapsed=false&leafLevelBrowse=false&isDocumentResults=true&ycord=2659")
 
 # Get links, made document data set
@@ -209,9 +212,9 @@ rm(newpres, source_page)
 save.image("acquire_presdoc.RData")
 
 
-#################
-## October 2017
-#################
+##################
+# 10. October 2017
+##################
 source_page <- read_html("https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CPD&browsePath=2017%2F10&isCollapsed=false&leafLevelBrowse=false&isDocumentResults=true&ycord=5032")
 
 # Get links, made document data set
@@ -230,9 +233,9 @@ rm(newpres, source_page)
 save.image("acquire_presdoc.RData")
 
 
-#################
-## November 2017
-#################
+###################
+# 11. November 2017
+###################
 source_page <- read_html("https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CPD&browsePath=2017%2F11&isCollapsed=false&leafLevelBrowse=false&isDocumentResults=true&ycord=239")
 
 # Get links, made document data set
@@ -251,9 +254,9 @@ rm(newpres, source_page)
 save.image("acquire_presdoc.RData")
 
 
-#################
-## December 2017
-#################
+###################
+# 12. December 2017
+###################
 source_page <- read_html("https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CPD&browsePath=2017%2F12&isCollapsed=false&leafLevelBrowse=false&isDocumentResults=true&ycord=2699")
 
 # Get links, made document data set
@@ -272,11 +275,33 @@ rm(newpres, source_page)
 save.image("acquire_presdoc.RData")
 
 
-#################
-## January 2018
-#################
+##################
+# 13. January 2018
+##################
 load("acquire_presdoc.Rdata")
 source_page <- read_html("https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CPD&browsePath=2018%2F01&isCollapsed=false&leafLevelBrowse=false&isDocumentResults=true&ycord=121")
+
+# Get links, made document data set
+newpres <- get_presdoc_data(source_page)
+newpres <- make_presdoc_data(newpres)
+summary(newpres$date) # check
+
+# Download texts to subfolder
+setwd("docs") 
+scrape_presdoc(newpres)
+setwd("../")
+
+presdoc <- rbind(presdoc, newpres)
+
+rm(newpres, source_page)
+save.image("acquire_presdoc.RData")
+
+
+##################
+# 14. Februrary 2018
+##################
+load("acquire_presdoc.Rdata")
+source_page <- read_html("https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CPD&browsePath=2018%2F02&isCollapsed=false&leafLevelBrowse=false&isDocumentResults=true&ycord=152")
 
 # Get links, made document data set
 newpres <- get_presdoc_data(source_page)
