@@ -1,8 +1,17 @@
-# Acquire text and metadata for compilation of presidential documents 
+###################################################################################
+# PUBLIC PRESIDENCY PROJECT
+# Acquire text files and metadata for compilation of presidential documents 
 # Run once a month, to acquire data from prior month
+# 1. get_presdoc_data: create data frame links to scrape, document info
+# 2. make_presdoc_data: extract doc id, title, type, and date from newpresoc
+# 3. scrape_presdoc: download the documents
+# Michele Claibourn (mclaibourn@virginia.edu)
+# February 2018, mpc
+# Updated: April 4, 2018 
+###################################################################################
 
-# First function, get_presdoc_data: create data frame links to scrape, document info
-# Arguments: s
+# 1. get_presdoc_data: create data frame links to scrape, document info
+# arguments: s
 
 get_presdoc_data <- function(s) {
   # get URLs associated with each document
@@ -21,8 +30,8 @@ get_presdoc_data <- function(s) {
 }
 
 
-# Second function, make_presdoc_data: extract doc id, title, type, and date from newpresoc
-# Arguments: d
+# 2. make_presdoc_data: extract doc id, title, type, and date from newpresoc
+# arguments: d
 
 make_presdoc_data <- function(d){
   d <- d %>% 
@@ -35,8 +44,8 @@ make_presdoc_data <- function(d){
 }
 
 
-# Third function, scrape_presdoc: download the documents
-# Arguments: d
+# 3. scrape_presdoc: download the documents
+# arguments: d
 
 scrape_presdoc <- function(d){
   for(i in seq(nrow(d))) {
