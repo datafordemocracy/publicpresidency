@@ -7,7 +7,7 @@ Using the "Advanced Options" for searching
 * in Build Your Own Segment Search, select "LEAD" and enter Trump as the term. 
 Then search!
 
-After articles are returned, turn Duplicate Options to "On - High similarity" and sort the results by date.
+After articles are returned, turn Duplicate Options to "On - High similarity" and sort the results by date (from oldest to newest).
 
 We can only save 500 articles at a time. Hit the Save button. In the Download Documents window
 * change the format to "html",
