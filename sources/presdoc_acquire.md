@@ -5,7 +5,7 @@ Used the [Compilation of Presidential Documents collection](https://www.gpo.gov/
 * grabs the plain text of the documents and downloads as .txt files into /docs folder
 * generates `presdoc.RData` with initial metadata
 
-The `preprocess_pres.py` script
+The `preprocess_pres.py` script or `process_presdoc.R` script
 * reads text files in from /docs folder
 * captures metadata fields at the bottom (DCPD number, subjects, names, locations, categories, notes)
 * outputs text and metadata as `presDocument.csv`.
