@@ -2,6 +2,7 @@
 * Update presidential documents through April
 * Update NYT and WP articles through April
 * Update tweets through April
+* Update WSJ through April
 
 ## 2018-05-24
 * Met with Harrison to go over project, walk through some code, generate tasks
