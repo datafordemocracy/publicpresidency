@@ -1,3 +1,17 @@
+## 2018-06-01
+* Update presidential documents through April
+* Update NYT and WP articles through April
+
+## 2018-05-24
+* Met with Harrison to go over project, walk through some code, generate tasks
+
+## 2018-04-20
+* Created and delivered presentation on project: [https://datafordemocracy.github.io/engagingnews/](https://datafordemocracy.github.io/engagingnews/)
+
+## 2018-04-13
+* Created and delivered workshop on text analysis in R, using trump tweets as illustration; updated Trump tweets through March
+* Created second illustration (didn't use) from presidential documents; updated presidential documents through February
+
 ## 2018-03-30
 1. Read through Gautam's text.txt; emailed back with the following:
 
