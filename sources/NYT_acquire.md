@@ -1,5 +1,5 @@
 # Acquiring New York Times articles about President Trump
-We pulled the New York Times articls from LexisNexis Academic, licensed through the UVA Libary.
+We pulled the New York Times articls from LexisNexis Academic, licensed through the UVA Libary.^1
 
 Using the "Advanced Options" for searching
 * select The New York Times in the source field,
@@ -23,3 +23,5 @@ We repeated this process a second time to retrieve the article metadata. In the 
 * select the first 500 items in Document Range and save the file to the NYT directory (again, iterating as needed to get metadata for all articles).
 
 And Bob's your uncle!
+
+1. Accessed via Carnegie Mellon for March 2018-May 2018
