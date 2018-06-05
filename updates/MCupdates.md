@@ -1,3 +1,10 @@
+## 2018-06-08
+* Harrison updated NYT/WP through May
+* Harrison updated MSNBC and CNN through May (error with TSR, only May; look into March/April)
+* Updated WSJ through May
+* Updated tweets through May
+* Selected Buzzfeed, Breitbart as ideologically-leaning digital news sites to work on
+
 ## 2018-06-01
 * Update presidential documents through April
 * Update NYT and WP articles through April
