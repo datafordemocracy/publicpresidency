@@ -11,7 +11,7 @@
 # 8. Yet more quanteda can do...
 # Michele Claibourn (mclaibourn@virginia.edu)
 # April 4, 2018, mpc
-# Updated: May 31, 2018 
+# Updated: August 29, 2018  (documents through July 31, 2018)
 ###################################################################################
 
 rm(list=ls())
@@ -55,7 +55,7 @@ ggplot(presdocuments, aes(x=date, color=type3)) + geom_point(stat="count")
 
 # prettier version
 # Create date breaks to get chosen tick marks on graph
-date.vec <- seq(from=as.Date("2017-01-20"), to=as.Date("2018-05-04"), by="weeks") # update to Friday after last story
+date.vec <- seq(from=as.Date("2017-01-20"), to=as.Date("2018-08-03"), by="weeks") # update to Friday after last story
 ggplot(presdocuments, aes(x=date, color=type3)) + geom_point(stat="count") + 
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) + 
   labs(title = "Number of Presidential Documents", 
@@ -192,7 +192,7 @@ ggplot(pd_freq, aes(x = reorder(feature, frequency), y = frequency)) +
 #    keyness, similarity
 ###################################################################################
 # a. comparison cloud
-# compare documents (2 to 8) - 2017 and 2018 sotu
+# compare documents: 2017 and 2018 sotu (93, 940)
 # function: textplot_wordcloud
 corpus_subset(pd_corpus, X %in% c(93,940)) %>% 
   dfm(remove_punct = TRUE, remove_numbers = TRUE,
@@ -348,10 +348,9 @@ ggplot(presdocuments, aes(x = dim1, y = dim2, color = type3)) +
   geom_point(alpha = 0.5)
 
 # What are the few that vary substantially on the second dimension?
-pdca_dim2 <- pdca_data %>% filter(dim2 < -4 | dim2 > 2)
-presdocuments %>% filter(docid %in% pdca_dim2$docid) %>% 
+presdocuments %>% filter(dim2 < -4 | dim2 > 2) %>% 
   select("docid", "title", "date")
-# texts(pd_corpus)[docnames(pd_corpus) %in% pdca_dim2$docid]
+# texts(pd_corpus)[docnames(pd_corpus) %in% pdca_dim2$docid] # removed pdca_dim2, no longer works
 
 
 ###################################################################################
@@ -399,9 +398,9 @@ head(pd_col, 50)
 # d. retain important multi-word expressions
 # function: tokens_compound
 head(pd_col, 200)
-pd_ctokens <- tokens_compound(pd_tokens, pd_col[c(1,3,5,7,12,30,37,38,42)])
-head(pd_tokens[[3]],100) # before compounding
-head(pd_ctokens[[3]],100) # after compounding
+pd_ctokens <- tokens_compound(pd_tokens, pd_col[c(1,3,4,5,6,7,12,14,23,32,33,42,53,57,58)])
+head(pd_tokens[[3]],200) # before compounding
+head(pd_ctokens[[3]],200) # after compounding
 
 # function: token_ngrams generates all n-grams or skip-grams
 # can call "kwic" on a tokens object as well

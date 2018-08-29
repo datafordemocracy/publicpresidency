@@ -11,7 +11,7 @@
 # 8. Feature co-occurrence matrix: semantic networks
 # Michele Claibourn (mclaibourn@virginia.edu)
 # April 4, 2018, mpc
-# Updated: April 10, 2018 
+# Updated: August 29, 2018  (documents through July 31, 2018)
 ###################################################################################
 
 rm(list=ls())
@@ -63,7 +63,7 @@ ggplot(tw, aes(x=date, color=iphone)) + geom_point(stat="count")
 
 # prettier version
 # Create date breaks to get chosen tick marks on graph
-date.vec <- seq(from=as.Date("2017-01-20"), to=as.Date("2018-04-13"), by="weeks") # update to Friday after last story
+date.vec <- seq(from=as.Date("2017-01-20"), to=as.Date("2018-08-03"), by="weeks") # update to Friday after last story
 ggplot(tw, aes(x=date, color=iphone)) + geom_point(stat="count") + 
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) + 
   scale_color_manual(values=c("orange3","blue3"), name="Source") +
@@ -367,7 +367,7 @@ head(tw_col, 50)
 
 # d. retain important multi-word expressions
 # function: tokens_compound
-tw_ctokens <- tokens_compound(twtokens, tw_col[c(1,6,8,11,15,27,30,34)])
+tw_ctokens <- tokens_compound(twtokens, tw_col[c(1,4,7,8,11,18,22,25,39)])
 head(twtokens[[300]],20) # before compounding
 head(tw_ctokens[[300]],20) # after compounding
 
