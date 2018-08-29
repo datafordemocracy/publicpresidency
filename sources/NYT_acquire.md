@@ -7,7 +7,7 @@ Using the "Advanced Options" for searching
 * in Build Your Own Segment Search, select "LEAD" and enter Trump as the term. 
 Then search!
 
-After articles are returned, turn Duplicate Options to "On - High similarity" and sort the results by date (from oldest to newest).
+After articles are returned, turn Duplicate Options to "On - High similarity" and sort the results by date (from oldest to newest).^2
 
 We can only save 500 articles at a time. Hit the Save button. In the Download Documents window
 * change the format to "html",
@@ -25,5 +25,6 @@ We repeated this process a second time to retrieve the article metadata. In the 
 And Bob's your uncle!
 
 1. Accessed via Carnegie Mellon for March 2018-May 2018
+2. April 2018 threw errors when reading in due to a April 9 article ("Teaching Activities for: 'Trump Vows Big Price" for Syria Attack"), the text of which said it could not be formatted for output by LN; we deleted the record from the html and csv files.
 
 ### Last update: through 2018-07-31
