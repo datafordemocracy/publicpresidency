@@ -11,7 +11,7 @@
 # 8. Yet more quanteda can do...
 # Michele Claibourn (mclaibourn@virginia.edu)
 # April 4, 2018, mpc
-# Updated: April 8, 2018 
+# Updated: May 31, 2018 
 ###################################################################################
 
 rm(list=ls())
@@ -55,11 +55,11 @@ ggplot(presdocuments, aes(x=date, color=type3)) + geom_point(stat="count")
 
 # prettier version
 # Create date breaks to get chosen tick marks on graph
-date.vec <- seq(from=as.Date("2017-01-20"), to=as.Date("2018-03-02"), by="weeks") # update to Friday after last story
+date.vec <- seq(from=as.Date("2017-01-20"), to=as.Date("2018-05-04"), by="weeks") # update to Friday after last story
 ggplot(presdocuments, aes(x=date, color=type3)) + geom_point(stat="count") + 
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) + 
   labs(title = "Number of Presidential Documents", 
-       subtitle = "From the Daily Compilation: January 20, 2017 to February 28, 2018", 
+       subtitle = "From the Daily Compilation: January 20, 2017 to April 30, 2018", 
        x="Date", y="Number of Documents") +
   theme(axis.text.x=element_text(angle=90, size=8), 
         plot.title = element_text(face="bold", size=18, hjust=0), 

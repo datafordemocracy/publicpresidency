@@ -6,7 +6,7 @@
 # 3. Save data and output csv file
 # Michele Claibourn (mclaibourn@virginia.edu)
 # April 3, 2018, mpc
-# Updated: April 4, 2018 
+# Updated: May 31, 2018 
 ###################################################################################
 
 # devtools::install_github("kbenoit/readtext")

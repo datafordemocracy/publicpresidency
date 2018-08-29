@@ -3,10 +3,10 @@
 # Download daily compilations of prsidential documents (each month)
 # Calls function in pres_doc_fun.R
 # 1. January 2017...
-# 13. January 2018
+# 19. July 2018
 # Michele Claibourn (mclaibourn@virginia.edu)
-# July 2017, mpc
-# Updated: March 13, 2018
+# Created: July 2017, mpc
+# Updated: August 28, 2018
 ###################################################################################
 
 rm(list=ls())
@@ -17,7 +17,7 @@ library(stringr)
 library(quanteda)
 
 setwd("~/Box Sync/mpc/dataForDemocracy/presidency_project/presdoc")
-source("pres_doc_fun.R")
+source("codeR/pres_doc_fun.R")
 
 
 #################
@@ -317,6 +317,115 @@ presdoc <- rbind(presdoc, newpres)
 
 rm(newpres, source_page)
 save.image("acquire_presdoc.RData")
+
+
+##################
+# 15. March 2018
+##################
+load("acquire_presdoc.Rdata")
+source_page <- read_html("https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CPD&browsePath=2018%2F03&isCollapsed=false&leafLevelBrowse=false&isDocumentResults=true&ycord=238")
+
+# Get links, made document data set
+newpres <- get_presdoc_data(source_page)
+newpres <- make_presdoc_data(newpres)
+summary(newpres$date) # check
+
+# Download texts to subfolder
+setwd("docs") 
+scrape_presdoc(newpres)
+setwd("../")
+
+presdoc <- rbind(presdoc, newpres)
+
+rm(newpres, source_page)
+save.image("acquire_presdoc.RData")
+
+
+##################
+# 16. April 2018
+##################
+load("acquire_presdoc.Rdata")
+source_page <- read_html("https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CPD&browsePath=2018%2F04&isCollapsed=false&leafLevelBrowse=false&isDocumentResults=true&ycord=238")
+
+# Get links, made document data set
+newpres <- get_presdoc_data(source_page)
+newpres <- make_presdoc_data(newpres)
+summary(newpres$date) # check
+
+# Download texts to subfolder
+setwd("docs") 
+scrape_presdoc(newpres)
+setwd("../")
+
+presdoc <- rbind(presdoc, newpres)
+
+rm(newpres, source_page)
+save.image("acquire_presdoc.RData")
+
+##################
+# 17. May 2018
+##################
+load("acquire_presdoc.Rdata")
+source_page <- read_html("https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CPD&browsePath=2018%2F05&isCollapsed=false&leafLevelBrowse=false&isDocumentResults=true&ycord=0")
+
+# Get links, made document data set
+newpres <- get_presdoc_data(source_page)
+newpres <- make_presdoc_data(newpres)
+summary(newpres$date) # check
+
+# Download texts to subfolder
+setwd("docs") 
+scrape_presdoc(newpres)
+setwd("../")
+
+presdoc <- rbind(presdoc, newpres)
+
+rm(newpres, source_page)
+save.image("acquire_presdoc.RData")
+
+
+##################
+# 18. June 2018
+##################
+load("acquire_presdoc.Rdata")
+source_page <- read_html("https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CPD&browsePath=2018%2F06&isCollapsed=false&leafLevelBrowse=false&isDocumentResults=true&ycord=0")
+
+# Get links, made document data set
+newpres <- get_presdoc_data(source_page)
+newpres <- make_presdoc_data(newpres)
+summary(newpres$date) # check
+
+# Download texts to subfolder
+setwd("docs") 
+scrape_presdoc(newpres)
+setwd("../")
+
+presdoc <- rbind(presdoc, newpres)
+
+rm(newpres, source_page)
+save.image("acquire_presdoc.RData")
+
+##################
+# 19. July 2018
+##################
+load("acquire_presdoc.Rdata")
+source_page <- read_html("https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CPD&browsePath=2018%2F07&isCollapsed=false&leafLevelBrowse=false&isDocumentResults=true&ycord=72")
+
+# Get links, made document data set
+newpres <- get_presdoc_data(source_page)
+newpres <- make_presdoc_data(newpres)
+summary(newpres$date) # check
+
+# Download texts to subfolder
+setwd("docs") 
+scrape_presdoc(newpres)
+setwd("../")
+
+presdoc <- rbind(presdoc, newpres)
+
+rm(newpres, source_page)
+save.image("acquire_presdoc.RData")
+
 
 # NOTES
 # via https://www.govinfo.gov/link-docs/ could generate sequence of links; e.g., 
