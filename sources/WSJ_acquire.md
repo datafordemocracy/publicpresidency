@@ -14,3 +14,5 @@ Hit search to return results, and sort the results by date. In Factiva we can on
 * hit the save button, choosing "Article Format",
 * right-clicked the resulting results to save in the WSJ project directory,
 * then hit "Next 100" and repeated the process (after the first or second save, we had to prove we weren't a robot each time).
+
+### Last update: through 2018-07-31
