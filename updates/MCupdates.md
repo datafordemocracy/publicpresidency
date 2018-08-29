@@ -1,3 +1,7 @@
+## 2018-08-31
+* Update WP, NYT, WSJ through July 2018
+* Update Twitter and Presidential documents through July 2018
+
 ## 2018-06-08
 * Harrison updated NYT/WP through May
 * Harrison updated MSNBC and CNN through May (error with TSR, only May; look into March/April)
