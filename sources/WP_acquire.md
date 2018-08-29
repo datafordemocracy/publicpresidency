@@ -24,3 +24,5 @@ We repeated this process as second time to retrieve the article metadata. In the
 
 1. Accessed via Carnegie Mellon for March 2018-May 2018
 2. For October 2017, we sorted in reverse chronological order. The initial sort resulted in html files beginning with articles that were missing a headline; this appeared to cause a problem when reading the file into R, such that the text field was missing for all of these articles. Reversing the sort order appears to have resolved the problem.
+
+### Last update: through 2018-07-31
