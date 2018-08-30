@@ -9,6 +9,7 @@
 
 rm(list=ls())
 library(tidyverse)
+library(scales)
 
 # Run readNews.R first
 # Run exploreNews.R first
@@ -43,63 +44,136 @@ qmeta2 <- qmeta2 %>%
          PurityVice=(PurityVice/words)*100,
          MoralityGeneral=(MoralityGeneral/words)*100)
 
+library(gridExtra)
 
+# Care-Harm
+date.vec <- seq(from=as.Date("2017-01-20"), to=as.Date("2018-03-02"), by="2 weeks") # update to Friday after last story
 # Plot
-ggplot(qmeta2, aes(x=date, y=HarmVirtue)) +
+ph1 <- ggplot(qmeta2, aes(x=date, y=HarmVirtue)) +
   geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
   geom_hline(yintercept=mean(qmeta2$HarmVirtue), color="gray50") +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
-  ggtitle("HarmVirtue MF within Trump Coverage") +
-  labs(y = "HarmVirtue", x = "Date of Article") +
+  ggtitle("Care MF: Trump Coverage") +
+  labs(y = "Care Language", x = "Date of Article") +
   scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
-  theme(plot.title = element_text(face="bold", size=20, hjust=0),
-        axis.title = element_text(face="bold", size=14),
+  theme(plot.title = element_text(face="bold", size=16, hjust=0),
+        axis.title = element_text(face="bold", size=12),
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
         axis.text.x = element_text(angle=90),
-        legend.text=element_text(size=12))
+        legend.text=element_text(size=10))
 
-ggplot(qmeta2, aes(x=date, y=HarmVice)) + 
+ph2 <- ggplot(filter(qmeta2, HarmVice<100), aes(x=date, y=HarmVice)) + 
   geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
   geom_hline(yintercept=mean(qmeta2$HarmVice), color="gray50") +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
-  ggtitle("HarmVice MF within Trump Coverage") +
-  labs(y = "HarmVice", x = "Date of Article") +
+  ggtitle("Harm MF: Trump Coverage") +
+  labs(y = "Harm Language", x = "Date of Article") +
   scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
-  theme(plot.title = element_text(face="bold", size=20, hjust=0),
-        axis.title = element_text(face="bold", size=14),
+  theme(plot.title = element_text(face="bold", size=16, hjust=0),
+        axis.title = element_text(face="bold", size=12),
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
         axis.text.x = element_text(angle=90),
-        legend.text=element_text(size=12))
+        legend.text=element_text(size=10))
 
-ggplot(qmeta2, aes(x=date, y=FairnessVirtue)) + 
+grid.arrange(ph1, ph2, nrow = 1)
+
+# Just opeds
+# Plot
+phoped1 <- ggplot(filter(qmeta2, oped==1), aes(x=date, y=HarmVirtue)) +
+  geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
+  geom_hline(yintercept=mean(qmeta2$HarmVirtue), color="gray50") +
+  geom_smooth(aes(color=pub)) +
+  scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
+  ggtitle("Care MF: Trump Op-Eds") +
+  labs(y = "Care Language", x = "Date of Article") +
+  scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
+  theme(plot.title = element_text(face="bold", size=16, hjust=0),
+        axis.title = element_text(face="bold", size=12),
+        panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
+        axis.text.x = element_text(angle=90),
+        legend.text=element_text(size=10))
+
+phoped2 <- ggplot(filter(qmeta2, HarmVice<100 & oped==1), aes(x=date, y=HarmVice)) + 
+  geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
+  geom_hline(yintercept=mean(qmeta2$HarmVice), color="gray50") +
+  geom_smooth(aes(color=pub)) +
+  scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
+  ggtitle("Harm MF: Trump Op-Eds") +
+  labs(y = "Harm Language", x = "Date of Article") +
+  scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
+  theme(plot.title = element_text(face="bold", size=16, hjust=0),
+        axis.title = element_text(face="bold", size=12),
+        panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
+        axis.text.x = element_text(angle=90),
+        legend.text=element_text(size=10))
+
+grid.arrange(phoped1, phoped2, nrow = 1)
+
+# Ingroup/loyalty-Others/betrayal
+pi1 <- ggplot(filter(qmeta2, IngroupVirtue<100), aes(x=date, y=IngroupVirtue)) + 
   geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
   geom_hline(yintercept=mean(qmeta2$FairnessVirtue), color="gray50") +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
-  ggtitle("FairnessVirtue MF within Trump Coverage") +
-  labs(y = "FairnessVirtue", x = "Date of Article") +
+  ggtitle("Ingroup MF: Trump Coverage") +
+  labs(y = "Ingroup Language", x = "Date") +
   scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
-  theme(plot.title = element_text(face="bold", size=20, hjust=0),
-        axis.title = element_text(face="bold", size=14),
+  theme(plot.title = element_text(face="bold", size=16, hjust=0),
+        axis.title = element_text(face="bold", size=12),
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
         axis.text.x = element_text(angle=90),
-        legend.text=element_text(size=12))
+        legend.text=element_text(size=10))
 
-ggplot(qmeta2, aes(x=date, y=FairnessVice)) + 
+pi2 <- ggplot(filter(qmeta2, IngroupVice<100), aes(x=date, y=IngroupVice)) + 
   geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
   geom_hline(yintercept=mean(qmeta2$FairnessVice), color="gray50") +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
-  ggtitle("FairnessVice MF within Trump Coverage") +
-  labs(y = "FairnessVice", x = "Date of Article") +
+  ggtitle("Outgroup MF: Trump Coverage") +
+  labs(y = "Outgroup Language", x = "Date") +
   scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
-  theme(plot.title = element_text(face="bold", size=20, hjust=0),
-        axis.title = element_text(face="bold", size=14),
+  theme(plot.title = element_text(face="bold", size=16, hjust=0),
+        axis.title = element_text(face="bold", size=12),
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
         axis.text.x = element_text(angle=90),
-        legend.text=element_text(size=12))
+        legend.text=element_text(size=10))
+
+grid.arrange(pi1, pi2, nrow = 1)
+
+# OPEDS: Ingroup/loyalty-Others/betrayal
+pioped1 <- ggplot(filter(qmeta2, IngroupVirtue<100 & oped==1), aes(x=date, y=IngroupVirtue)) + 
+  geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
+  geom_hline(yintercept=mean(qmeta2$FairnessVirtue), color="gray50") +
+  geom_smooth(aes(color=pub)) +
+  scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
+  ggtitle("Ingroup MF: Trump Op-Eds") +
+  labs(y = "Ingroup Language", x = "Date") +
+  scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
+  theme(plot.title = element_text(face="bold", size=16, hjust=0),
+        axis.title = element_text(face="bold", size=12),
+        panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
+        axis.text.x = element_text(angle=90),
+        legend.text=element_text(size=10))
+
+pioped2 <- ggplot(filter(qmeta2, IngroupVice<100 & oped==1), aes(x=date, y=IngroupVice)) + 
+  geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
+  geom_hline(yintercept=mean(qmeta2$FairnessVice), color="gray50") +
+  geom_smooth(aes(color=pub)) +
+  scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
+  ggtitle("Outgroup MF: Trump Op-Eds") +
+  labs(y = "Outgroup Language", x = "Date") +
+  scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
+  theme(plot.title = element_text(face="bold", size=16, hjust=0),
+        axis.title = element_text(face="bold", size=12),
+        panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
+        axis.text.x = element_text(angle=90),
+        legend.text=element_text(size=10))
+
+grid.arrange(pioped1, pioped2, nrow = 1)
+
+
 
 # Plot barplot of all MF
 head(senMF,10)
