@@ -6,8 +6,8 @@
 # WP from Lexis-Nexis
 # Michele Claibourn
 # February 1, 2017
-# Updated March 20, 2018
-# with newspapers through February 28
+# Updated August 29, 2018
+# with newspapers through July 31, 2018
 ######################################
 
 #####################

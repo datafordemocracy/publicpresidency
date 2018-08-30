@@ -76,9 +76,13 @@ ggsave("figuresR/newspapervolume.png")
 ## Key words in context (from quanteda)
 # liecount <- kwic(qcorpus2, c("lie", "lies", "lied"), 3)
 # liecount
-# fakecount <- kwic(qcorpus2, c("fake"), 3)
-# fakecount
+fakecount <- kwic(qcorpus2, "fake", 3)
+head(fakecount)
+tail(fakecount)
 
+immig <- kwic(qcorpus2, "immig*", window = 3)
+head(immig)
+tail(immig)
 
 ## Frequent words/Wordclouds
 qcorpus_tokens  <- tokens(qcorpus2) 

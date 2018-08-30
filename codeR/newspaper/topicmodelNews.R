@@ -23,9 +23,10 @@ library(topicmodels)
 library(ggridges)
 library(lubridate)
 
-# Load the data and environment from exploreNews.R
+# Load the data and environment from moralfoundations1.R
 setwd("~/Box Sync/mpc/dataForDemocracy/presidency_project/newspaper/")
 load("workspaceR/newspaperMoral.RData")
+
 
 ####################
 # Topic Model Prep
@@ -46,6 +47,7 @@ npdfmReduced <- npdfmReduced[which(rowSums(npdfmReduced) > 0),]
 npdtm <- convert(npdfmReduced, to="topicmodels")
 npdtm
 
+
 #########################
 # Topic Model Estimation
 # Estimation, k=100
@@ -64,8 +66,6 @@ Sys.time() - t1 # ~ 4.7 hours
 # Topic Model Exploration
 # Estimation, k=100
 #########################
-
-# 1. Visualize results
 # a. Topic prevalence in corpus
 topiclab <- as.data.frame(t(terms(tm100, 5)))
 topicsum <- probtopic100 %>% 
@@ -106,7 +106,7 @@ ggplot(topicweeklong2, aes(x=week, y=terms2, height=prevalence, group=terms2)) +
   labs(y = "", x = "Weeks since Inauguration") +
   scale_x_continuous(breaks=seq(5,50,5)) +
   geom_density_ridges(stat="identity", scale = 2, fill="lightblue", color="lightblue") + 
-  theme_ridges(font_size=10)
+  theme_ridges(font_size=6)
 ggsave("figuresR/topicRidgePrevalenceWeek.png", width=13.75, height=13.75, units="in")
 
 # c. Topic prevalence by publication
@@ -140,11 +140,15 @@ ggplot(topicpublong, aes(x=reorder(terms, prev), y=prev, fill=pub)) +
   geom_bar(stat="identity", position="dodge", width=0.5) +
   scale_fill_manual(values=c("blue3", "turquoise", "orange3")) + 
   labs(x="Topic", y="Prevalence Percent") +
-  coord_flip() + ggtitle("Topic Prevalence by Publication")
+  coord_flip() + ggtitle("Topic Prevalence by Publication") +
+  theme(legend.text=element_text(size=6))
 ggsave("figuresR/topicprevalencepub.png", width=13.75, height=13.75, units="in")
 
 
-# 2. Dynamic visualization 
+#########################
+# Topic Model Dynamic Visualization
+# Estimation, k=100
+#########################
 # install.packages(c("LDAvis", "servr"))
 library(LDAvis)
 library(servr)
@@ -180,89 +184,3 @@ qmeta2 <- left_join(qmeta2, probtopic100, by="id")
 #  save
 save.image("workspaceR/newspaperTopicModel.RData")
 # load("workspaceR/newspaperTopicModel.RData")
-
-## Next steps?
-#################################
-# Structural Topic Model (stm)
-#################################
-library(stm)
-inaugdate <- as.Date("2017-01-20", format="%Y-%m-%d")
-qmeta2$days <- difftime(qmeta2$date, inaugdate, units="days")
-docvars(qcorpus2, "days") <- qmeta2$days
-
-paperDocVars <- docvars(qcorpus2)
-paperOut <- convert(npdfmReduced, to = "stm", 
-                  docvars = paperDocVars)
-
-## Explore
-# searchK estimates topic exclusivity, coherence; model likelihood, residuals for each k
-# t1 <- Sys.time()
-# paperEval <- searchK(paperOut$documents, paperOut$vocab, K = seq(10,100,10), 
-#                    prevalence = ~ as.factor(pub) + as.factor(month), 
-#                    data = paperOut$meta, init.type = "Spectral")
-# Sys.time() - t1 # ~ 6 hours
-# plot(paperEval)
-
-## Estimate with k=100
-paperFit100 <- stm(paperOut$documents, paperOut$vocab, K = 100,
-                prevalence = ~ as.factor(pub) + s(days), 
-                max.em.its = 100,
-                data = paperOut$meta, init.type = "Spectral")
-
-## Examine
-# Topic quality
-topicQuality(paperFit100, paperOut$documents)
-# Topic prevalence
-plot(paperFit100, type = "summary", labeltype="frex")
-# Topic top words
-labelTopics(paperFit100)
-# Topic prevalence by covariates
-paperEffect100 <- estimateEffect(1:100 ~ as.factor(pub) + s(days), 
-                                 paperFit100, meta = paperOut$meta)
-summary(paperEffect100, topics = 3)
-# plot(paperEffect100, covariate = "pub", topics = 3, # xlim=c(-0.2, 0.5),
-#      labeltype="custom", custom.labels=c("NYT", "WSJ", "WP"))
-# plot(paperEffect100, covariate = "days", method = "continuous", topics = 3)
-
-# Dynamic visualization
-# stmBrowser: https://github.com/mroberts/stmBrowser
-# library(stmBrowser)
-# 
-# stmBrowser(paperFit100, data=paperOut$meta, 
-#            covariates=c("pub", "days"), text="heading", 
-#            n=length(paperOut$documents), labeltype="frex", directory=getwd())
-
-library(htmlwidgets)
-devtools::install_github("timelyportfolio/stmBrowser@htmlwidget")
-stmwidget <- stmBrowser_widget(mod = paperFit100, data = paperOut$meta, 
-                  covariates = c("pub", "days"), text = "heading", 
-                  n = length(paperOut$documents), labeltype = "frex", width = 8, height = 8) 
-
-saveWidget(stmwidget, file = "stmwidget.html", selfcontained = FALSE, title = "Trump Newspaper Coverage: Topics")
-
-
-## More Plots
-paperTopics <- as.data.frame(paperFit100$theta)
-paperTopics <- cbind(paperTopics, qmeta2) # UPDATE debates16
-
-# Topic prevalance by publication
-pubTopics <- paperTopics %>% 
-  select(c(1:100,109)) %>% # all topics, pub
-  group_by(pub) %>% 
-  summarize_all(funs(sum))
-
-# Topic prevalence by month
-# topicsLong <- paperTopics %>% 
-#   select(V1:V100, month, pub) %>% # haven't created month
-#   gather(topic, value, -month, -pub)
-
-# topicsLongGeneral <- topicsLong %>% filter(date>as.Date("2016-09-01"))
-# p <- ggplot(topicsLongGeneral, aes(x=topic, y=value, fill=party))
-# p + geom_bar(stat="identity") + facet_wrap(~date) + 
-#   scale_fill_manual(values=c("blue3", "orange3"))
-
-#  save
-save.image("workspaceR/newspaperTopicModel2.RData")
-# load("workspaceR/newspaperTopicModel2.RData")
-
-# Unsupervised clustering for exploration...
