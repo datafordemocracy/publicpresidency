@@ -14,3 +14,5 @@ Used the [Trump Twitter Archive](http://www.trumptwitterarchive.com/)
 * Export json and copy result into file
 
 readTwitter.R reads the tweets in and creates a corpus
+
+Should we switch to pulling from the [GitHub repo](https://github.com/bpb27/trump_tweet_data_archive)? 
