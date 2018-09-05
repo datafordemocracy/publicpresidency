@@ -1,3 +1,7 @@
+## Reference links
+
+* [Network analysis of Trump tweets](https://anthonybonato.com/2018/08/01/the-math-behind-trumps-tweets/)
+
 ## Where we are
 * Process presidential documents to include tags, location, names and text.
 * Extracted Data from cable news, newspapers, presidential documents and twitter.
