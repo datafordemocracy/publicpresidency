@@ -1,7 +1,13 @@
+## 2018-09-14
+* Update WP, NYT, wSJ through August 2018
+* Update Twitter and Presidential documents through August 2018
+* Update cable news through August 2018
+
 ## 2018-08-31
 * Update WP, NYT, WSJ through July 2018
 * Update Twitter and Presidential documents through July 2018
-* TODO: update cable news (cnn, msnbc, fox); read in updated pres docs, tweets, and newspaper
+* Update cable news (cnn, msnbc, fox)
+* Read in updated pres docs, tweets, and newspaper
 
 ## 2018-06-08
 * Harrison updated NYT/WP through May
