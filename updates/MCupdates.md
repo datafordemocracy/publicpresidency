@@ -1,7 +1,7 @@
 ## 2018-09-14
-* Update WP, NYT, wSJ through August 2018
 * Update Twitter and Presidential documents through August 2018
-* Update cable news through August 2018
+* TODO: Update WP, NYT, wSJ through August 2018
+* TODO: Update cable news through August 2018
 
 ## 2018-08-31
 * Update WP, NYT, WSJ through July 2018
