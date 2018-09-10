@@ -5,7 +5,7 @@ Used the [Compilation of Presidential Documents collection](https://www.gpo.gov/
 * grabs the plain text of the documents and downloads as .txt files into /docs folder
 * generates `presdoc.RData` with initial metadata
 
-### Last update: through July 2018
+### Last update: through August 2018
 
 The `preprocess_pres.py` script or `process_presdoc.R` script
 * reads text files in from /docs folder
