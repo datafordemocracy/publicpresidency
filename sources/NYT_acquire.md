@@ -27,4 +27,4 @@ And Bob's your uncle!
 1. Accessed via Carnegie Mellon for March 2018-May 2018
 2. April 2018 threw errors when reading in due to a April 9 article ("Teaching Activities for: 'Trump Vows Big Price" for Syria Attack"), the text of which said it could not be formatted for output by LN; we deleted the record from the html and csv files.
 
-### Last update: through 2018-07-31
+### Last update: through 2018-08-31
