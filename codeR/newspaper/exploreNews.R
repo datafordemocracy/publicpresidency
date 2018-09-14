@@ -1,15 +1,15 @@
-###################################
-# Media Coverage of Trump: NYT, WSJ
+###################################################################
+# Media Coverage of Trump: NYT, WSJ, WP
 # Initial Exploration 
 # Michele Claibourn
-# February 21, 2017
-# Updated March 20, 2018
-##################################
+# Creaed February 21, 2017
+# Updated August 29, 2018 with newspapers through July 31, 2018
+###################################################################
 
-#####################
-# Loading libraries
-# Setting directories
-#####################
+
+###################################################################
+# Loading libraries, Setting directories, Loading data ----
+
 # install.packages("scales")
 # install.packages("wordcloud")
 # install.packages("RColorBrewer")
@@ -20,18 +20,21 @@ library(quanteda)
 library(scales)
 library(wordcloud)
 library(RColorBrewer)
+library(lubridate)
+
 
 # Load the data and environment from readNews.R
 setwd("~/Box Sync/mpc/dataForDemocracy/presidency_project/newspaper/")
 load("workspaceR/newspaper.Rdata")
 
 
-##################################
-# Exploring the text, pre-analysis
-##################################
+###################################################################
+# Exploration: volume of news articles ----
+
 # Some descriptives
 summary(qmeta$length)
-qmeta %>% group_by(pub) %>% summarize(mean(length, na.rm=TRUE), sd(length, na.rm=TRUE))
+qmeta %>% group_by(pub) %>% 
+  summarize(mean(length, na.rm=TRUE), sd(length, na.rm=TRUE))
 qcorpus2 <- corpus_subset(qcorpus, as.integer(length)>99)
 
 table(qmeta$pub)
@@ -41,7 +44,7 @@ table(qmeta2$pub)
 
 # Number of stories by day
 # Create date breaks to get chosen tick marks on graph
-date.vec <- seq(from=as.Date("2017-01-20"), to=as.Date("2018-03-02"), by="2 weeks") # update to Friday after last story
+date.vec <- seq(from=as.Date("2017-01-20"), to=as.Date("2018-09-07"), by="2 weeks") # update to Friday after last story
 ggplot(qmeta2, aes(x=date)) + geom_point(stat="count") + 
   facet_wrap(~pub) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) + 
@@ -56,35 +59,18 @@ ggplot(qmeta2, aes(x=date)) + geom_point(stat="count") +
 ggsave("figuresR/newspapervolume.png")
 
 
-## Clean up terms
-# common bigrams
-# qcorpus_tokens  <- tokens(qcorpus2) # textstat_collocations wants tokenized text
-# qcorpus_tokens <- tokens_remove(qcorpus_tokens, stopwords("english"), padding = TRUE)
-# bigrams <- textstat_collocations(qcorpus_tokens, min_count = 100, size = 2) # took about 45 minutes
-# bigrams[bigrams$count>1000,]
-## replace some key phrases with single-token versions
-# save_bigrams <- bigrams[c(1:2,4:6,12:13,24,52,57,64),] # save key bigrams
-## united states, white house, national security, health care, north korea,
-## executive order, justice department, attorney general, united nations,  
-## prime minister, supreme court
-# qcorpus3 <- tokens_compound(qcorpus_tokens, save_bigrams) 
-## hmmm, qcorpus3 is now a tokens object; 
-## also, this didn't do what I'd expected (i.e., replace selected phrases with concatenated phrase)
-## https://stackoverflow.com/questions/38931507/create-dfm-step-by-step-with-quanteda
+###################################################################
+# Exploration: Key words in context, word frequency ----
 
-
-## Key words in context (from quanteda)
-# liecount <- kwic(qcorpus2, c("lie", "lies", "lied"), 3)
-# liecount
 fakecount <- kwic(qcorpus2, "fake", 3)
 head(fakecount)
 tail(fakecount)
 
-immig <- kwic(qcorpus2, "immig*", window = 3)
+immig <- kwic(qcorpus2, "immig*", window = 2)
 head(immig)
 tail(immig)
 
-## Frequent words/Wordclouds
+# Frequent words/Wordclouds
 qcorpus_tokens  <- tokens(qcorpus2) 
 qcorpus_tokens <- tokens_remove(qcorpus_tokens, stopwords("english"), padding = TRUE)
 
@@ -121,39 +107,75 @@ qcorpus_tokens %>% dfm(groups = "pub", remove = c(stopwords("english")),
   textstat_keyness(target = "WSJ") %>% textplot_keyness()
 
 
-## Readability/Complexity Analysis (from quanteda)
-fk <- textstat_readability(qcorpus2, measure = "Flesch.Kincaid") # back to qcorpus2 (with stopwords)
-qmeta2$readability <- fk$Flesch.Kincaid 
+###################################################################
+# Use of the language of fake and lie/s ----
+# (possibly others, e.g., honest?); just for exploration...
 
-# Plot
-qmeta2 %>% filter(readability<100) %>% 
-  ggplot(aes(x = date, y = readability)) + 
-  geom_jitter(aes(color=pub), alpha=0.05, width=0.25, height=0.0, size=2) +
+fakelies <- dictionary(list(lies=c("lie", "lied", "lies"), fake="fake"))
+fakeliedfm  <- dfm(qcorpus2, dictionary=fakelies)
+head(fakeliedfm,10)
+
+# Turn this into a dataframe
+paperfakelie <- as.data.frame(fakeliedfm, row.names = fakeliedfm@Dimnames$docs)
+qmeta2[,ncol(qmeta2)+1:2] <- paperfakelie[,2:3]
+
+# Group by week
+byweek <- qmeta2 %>% 
+  mutate(week=week(date)) %>% 
+  group_by(week, pub) %>% 
+  summarize(fake=sum(fake), lie=sum(lies))
+
+# Plot!
+ggplot(byweek, aes(x=week, y=lie)) +
+  geom_jitter(aes(color=pub), alpha=0.05, width=0.2, height=0.0, size=2) +
+  geom_hline(yintercept=mean(qmeta2$anger), color="gray50") +
   geom_smooth(aes(color=pub)) +
-  scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) + 
-  ggtitle("'Readability' of Newspaper Coverage of Trump") +
-  labs(y = "Readability (grade level)", x = "Date of Article") +
-  scale_color_manual(values=c("blue3","turquoise","orange3"), name="Source") +
+  labs(title = "Frequency of 'Lies' in Trump Coverage",
+       subtitle = "New York Times, Washington Post, Wall Street Journal", 
+       y = "Anger Affect", x = "Date of Article") +
+  scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
   theme(plot.title = element_text(face="bold", size=18, hjust=0),
-        axis.title = element_text(face="bold", size=16),
+        axis.title = element_text(face="bold", size=14),
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
         axis.text.x = element_text(angle=90),
-        legend.text=element_text(size=10))
-ggsave("figuresR/newspaperreadability.png")
+        legend.text=element_text(size=12))
 
-qmeta2 %>% filter(readability<100) %>% 
-  group_by(pub) %>% summarize(mean(readability)) 
+ggplot(byweek, aes(x=week, y=fake)) +
+  geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
+  geom_hline(yintercept=mean(qmeta2$anger), color="gray50") +
+  geom_smooth(aes(color=pub)) +
+  labs(title = "Frequency of 'Fake' in Trump Coverage",
+       subtitle = "New York Times, Washington Post, Wall Street Journal", 
+       y = "Anger Affect", x = "Date of Article") +
+  scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
+  theme(plot.title = element_text(face="bold", size=18, hjust=0),
+        axis.title = element_text(face="bold", size=14),
+        panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
+        axis.text.x = element_text(angle=90),
+        legend.text=element_text(size=12))
 
-# What are the "complex" and "simple" articles?
-mincomplex <- qmeta2 %>% filter(readability <= 6)
-mincomplex[,c("heading", "pub", "date", "readability")] 
-# Many quizzes and transcripts of speeches/interviews
-
-maxcomplex <- qmeta2 %>% filter(readability >= 20)
-maxcomplex[,c("heading", "pub", "date", "readability")] # Identify article
-# Many "at a glance" collections, aggregated news summaries
-
-# Save
-rm("fk", "palD", "palO", "palB")
+# Save work
+rm("palD", "palO", "palB", "paperfakelie", "fakeliedfm", "fakelies", "fakecount", "immig")
 save.image("workspaceR/newspaperExplore.RData")
 # load("workspaceR/newspaperExplore.RData")
+
+
+###################################################################
+# Save for later ----
+## Clean up terms
+# common bigrams
+# qcorpus_tokens  <- tokens(qcorpus2) # textstat_collocations wants tokenized text
+# qcorpus_tokens <- tokens_remove(qcorpus_tokens, stopwords("english"), padding = TRUE)
+# bigrams <- textstat_collocations(qcorpus_tokens, min_count = 100, size = 2) # took about 45 minutes
+# bigrams[bigrams$count>1000,]
+## replace some key phrases with single-token versions
+# save_bigrams <- bigrams[c(1:2,4:6,12:13,24,52,57,64),] # save key bigrams
+## united states, white house, national security, health care, north korea,
+## executive order, justice department, attorney general, united nations,  
+## prime minister, supreme court
+# qcorpus3 <- tokens_compound(qcorpus_tokens, save_bigrams) 
+## hmmm, qcorpus3 is now a tokens object; 
+## also, this didn't do what I'd expected (i.e., replace selected phrases with concatenated phrase)
+## https://stackoverflow.com/questions/38931507/create-dfm-step-by-step-with-quanteda
+
+
