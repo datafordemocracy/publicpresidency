@@ -1,7 +1,8 @@
 ## 2018-09-14
 * Update Twitter and Presidential documents through August 2018
 * Update cable news through August 2018
-* TODO: Update WP, NYT, wSJ through August 2018
+* Update WP, NYT, wSJ through August 2018
+* Re-ran readNews.R, exploreNews.R, created complexityNews.R (pulled from past exploreNews.R), and sentimentNews.R -- though only with data through July 31.
 
 ## 2018-08-31
 * Update WP, NYT, WSJ through July 2018
