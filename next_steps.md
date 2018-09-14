@@ -1,11 +1,5 @@
 # Proposed Next Steps
 
-## Images?
-
-* Images of Trump from different news sources -- could algorithm predict source? and identify the kinds of features that might differentiate images (e.g., biased images, or images that produce different audience responses)
-* For example, search for images of Trump from Fox News (site:www.foxnews.com <trump>); need about 1000 images per class
-* Alternatively, use exisitng image data sets for classifying mood; train on that and feed in Trump images (from different media sources) to estimate different trump representations (happy/angry, etc.) by soruce
-
 ## Sources
 
 ### Sources so far
@@ -22,25 +16,25 @@
 
 ## Features
 
-### Captured so far
+### Captured so far from newspaper corpus
 
-* Publication source
-* Date
-* Title
-* Opinion or news item
-* Length
-* First 500 words
-* Readability (or other measures of complexity)
-* Polarity or tone (multiple dictionary methods; could be improved)
-* Other affect (anger, fear, trust, anticipation; could be improved)
-* Topics (output from LDA with k=100; could try structured topic model, something else)
-* Moral foundation dimensions, [dictionary here](http://moralfoundations.org/sites/default/files/files/downloads/moral%20foundations%20dictionary.dic))
+* Publication source (from Lexis-Nexis/Factiva)
+* Date (from Lexis-Nexis/Factiva)
+* Title (from Lexis-Nexis/Factiva)
+* Opinion or news item (from Lexis-Nexis/Factiva)
+* Length (from Lexis-Nexis/Factiva)
+* First 500 words (extracted in code)
+* Readability (calculated in code))
+* Polarity or tone (calculated in code; multiple dictionary methods, could be improved)
+* Other affect (calculated in code; anger, fear, trust, anticipation, could be improved)
+* Topics (calculated in code; output from LDA with k=100, could try structured topic model, something else)
+* Moral foundation dimensions, [dictionary here](http://moralfoundations.org/sites/default/files/files/downloads/moral%20foundations%20dictionary.dic)) (calculated in code)
 
 ### Potential new features
 
 * Named entities
 * Events (in the spirit of [Phoenix, Open Event Data Alliance](http://phoenixdata.org/), but for domestic/presidential)
-* Policy issue (via dictionary? [Lexicoder](http://www.lexicoder.com/) has beta policy dictionary, based on [policy agendas project](http://www.comparativeagendas.net/))
+* Policy issue (via dictionary? [Lexicoder](http://www.lexicoder.com/) has beta policy dictionary, based on [policy agendas project](http://www.comparativeagendas.net/)), or project-built dictionary?
 * Empath in Python (need clarification on what this would provide, [article here](https://hci.stanford.edu/publications/2016/ethan/empath-chi-2016.pdf))
 * Latent Variable Analysis via Exploratory Graph Analysis (Jessica)
 
@@ -55,6 +49,4 @@
 ## Other goals
  
 * Help regular people attend to what's being said about Trump's presidency, without having to read lots of news via visual web representations
-
- 
 
