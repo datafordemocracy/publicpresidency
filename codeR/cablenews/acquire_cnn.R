@@ -1,9 +1,9 @@
 ##############################################################
 # CNN Transcripts
 # Michele Claibourn
-# Acquire data: Jan 20, 2017 through Nov 16, 2017
+# Acquire data: initially Jan 20, 2017 through Nov 16, 2017
 # Anderson Cooper, Erin Burnnett, Wolf Blitzer/Situation Room
-# Updated: through July 31, 2018
+# Updated: through August 31, 2018
 ##############################################################
 
 rm(list=ls())
@@ -50,8 +50,11 @@ cnnac360$seg <- str_sub(cnnac360$urls, urllength-6, urllength-5)
 # cnnac360 <- cnnac360 %>% 
 #   filter(date > as.Date("2018-02-28") & date < as.Date("2018-06-01"))
 # On August run: Keep only transcripts since June 1, 2018 to July 31, 2018
+# cnnac360 <- cnnac360 %>% 
+#   filter(date > as.Date("2018-05-31") & date < as.Date("2018-08-01"))
+# On September run: Keep only transcripts since August 1, 2018 to August 31, 2018
 cnnac360 <- cnnac360 %>% 
-  filter(date > as.Date("2018-05-31") & date < as.Date("2018-08-01"))
+  filter(date > as.Date("2018-07-31") & date < as.Date("2018-09-01"))
 
 # Loop through each link in data.frame (nrow(cnnac360)) and 
 # a. grab the html (read_html()), isolating node with text (":nth-child(8)",
@@ -124,8 +127,11 @@ ebo$seg <- str_sub(ebo$urls, urllength-6, urllength-5)
 # ebo <- ebo %>% 
 #   filter(date > as.Date("2018-02-28") & date < as.Date("2018-06-01"))
 # On August run: Keep only transcripts since June 1, 2018 to July 31, 2018
+# ebo <- ebo %>% 
+#   filter(date > as.Date("2018-05-31") & date < as.Date("2018-08-01"))
+# On September run: Keep only transcripts since August 1, 2018 to August 31, 2018
 ebo <- ebo %>% 
-  filter(date > as.Date("2018-05-31") & date < as.Date("2018-08-01"))
+  filter(date > as.Date("2018-07-31") & date < as.Date("2018-09-01"))
 
 # Download transcripts as text files 
 for(i in seq(nrow(ebo))) {
@@ -205,8 +211,11 @@ tsr$seg <- str_sub(tsr$urls, urllength-6, urllength-5)
 # tsr <- tsr %>% 
 #   filter(date > as.Date("2018-02-28") & date < as.Date("2018-06-01"))
 # On August run: Keep only transcripts since June 1, 2018 to July 31, 2018
+# tsr <- tsr %>% 
+#   filter(date > as.Date("2018-05-31") & date < as.Date("2018-08-01"))
+# On September run: Keep only transcripts since August 1, 2018 to August 31, 2018
 tsr <- tsr %>% 
-  filter(date > as.Date("2018-05-31") & date < as.Date("2018-08-01"))
+  filter(date > as.Date("2018-07-31") & date < as.Date("2018-09-01"))
 
 # Download transcripts as text files 
 for(i in seq(nrow(tsr))) {

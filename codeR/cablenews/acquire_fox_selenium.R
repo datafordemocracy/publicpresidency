@@ -4,7 +4,7 @@
 # Acquire data: Jan 20, 2017 through February 28, 2018
 # Using Selenium (instead of rvest)
 # The Five, Hannity, The Story/MacCallum
-# Updated: August 29, 2018 through July 31, 2018
+# Updated: September 10, 2018 through August 31, 2018
 ##############################################################
 
 rm(list=ls())
@@ -30,9 +30,10 @@ remDr$getTitle() # check
 # Find the Show More button and click it n times 
 # 16 (on 8/29/18 to get back to 3/13/18)
 # 7 (on 3/14/18 to get back to 1/1/18)
+# 3 (on 9/10/18 to get back to 8/1/18)
 webMore <- remDr$findElement(using = 'css', value = ".button.load-more.js-load-more")
 counter <- 0
-while(counter<17){
+while(counter<4){
   webMore$clickElement()
   Sys.sleep(1) # add time between clicks
   counter <- sum(counter, 1)
@@ -74,8 +75,11 @@ five_url <- five_url %>%
 five_url <- cbind(five_url, five_titles_split)
 # in March run, filter > 2017-12-31
 # in August run, keep March 13 through July 31, 2018
+# five_url <- five_url %>% 
+#   filter(date > as.Date("2018-03-12") & date < as.Date("2018-08-01"))
+# in September run, keep August 1 through August 31, 2018
 five_url <- five_url %>% 
-  filter(date > as.Date("2018-03-12") & date < as.Date("2018-08-01"))
+  filter(date > as.Date("2018-07-31") & date < as.Date("2018-09-01"))
 
 # Download transcripts as text files 
 setwd("five") 
@@ -106,9 +110,10 @@ remDr$getTitle() # check
 # Find the Show More button and click it n times 
 # 4 (on 3/14/18 to get back to 1/1/18)
 # 10 (on 8/29/18 to get back to 3/13/18)
+# 2 (on 9/10/18 to get back to 8/1/18)
 webMore <- remDr$findElement(using = 'css', value = ".button.load-more.js-load-more")
 counter <- 0
-while(counter<11){
+while(counter<3){
   webMore$clickElement()
   Sys.sleep(1)
   counter <- sum(counter, 1)
@@ -149,8 +154,11 @@ hannity_url <- hannity_url %>%
 hannity_url <- cbind(hannity_url, hannity_titles_split)
 # in March run, filter > 2017-12-31
 # in August run, keep March 13 through July 31, 2018
+# hannity_url <- hannity_url %>% 
+#   filter(date > as.Date("2018-03-12") & date < as.Date("2018-08-01"))
+# in September run, keep August 1 through August 31, 2018
 hannity_url <- hannity_url %>% 
-  filter(date > as.Date("2018-03-12") & date < as.Date("2018-08-01"))
+  filter(date > as.Date("2018-07-31") & date < as.Date("2018-09-01"))
 
 # Download transcripts as text files 
 setwd("hannity") 
@@ -182,9 +190,10 @@ remDr$getTitle() # check
 # Find the Show More button and click it n times 
 # 20 (on 3/14/18 to get back 5/1/2017)
 # 10 (on 8/29/18 to get back to 3/13/18)
+# 1 (on 9/10/18 to get back to 8/1/18)
 webMore <- remDr$findElement(using = 'css', value = ".button.load-more.js-load-more")
 counter <- 0
-while(counter<10){
+while(counter<2){
   webMore$clickElement()
   Sys.sleep(2)
   counter <- sum(counter, 1)
@@ -224,8 +233,11 @@ story_url <- story_url[-nrow(story_url),] # stray row at end
 
 story_url <- cbind(story_url, story_titles_split)
 # in August run, keep March 13 through July 31, 2018
+# story_url <- story_url %>% 
+#   filter(date > as.Date("2018-03-12") & date < as.Date("2018-08-01"))
+# in September run, keep August 1 through August 31, 2018
 story_url <- story_url %>% 
-  filter(date > as.Date("2018-03-12") & date < as.Date("2018-08-01"))
+  filter(date > as.Date("2018-07-31") & date < as.Date("2018-09-01"))
 
 # Download transcripts as text files 
 # if (!file.exists("theStory")) {
