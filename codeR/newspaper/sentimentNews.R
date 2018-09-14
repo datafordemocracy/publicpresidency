@@ -1,32 +1,32 @@
-###################################
-# Media Coverage of Trump: NYT, WSJ
+###################################################################
+# Media Coverage of Trump: NYT, WSJ, WP
 # Sentiment (quanteda) 
 # Michele Claibourn
-# February 21, 2017
-# Updated March 20, 2018
-##################################
+# Created February 21, 2017
+# Updated August 29, 2018 with newspapers through July 31, 2018
+###################################################################
 
-#####################
-# Loading libraries
-# Setting directories
-#####################
+###################################################################
+# Loading libraries, Setting directories, Loading data ----
+
 # install.packages("tidytext")
+# install.packages("sentimentr")
 
 rm(list=ls())
 library(tidyverse)
 library(quanteda)
 library(scales)
 library(tidytext)
+library(sentimentr)
 
-# Load the data and environment from exploreNews.R
+# Load the data and environment from complexityNews.R
 setwd("~/Box Sync/mpc/dataForDemocracy/presidency_project/newspaper/")
-load("workspaceR/newspaperExplore.RData")
+load("workspaceR/newspaperComplex.RData")
 
 
-####################
-# Sentiment Analysis 
-# via quanteda
-####################
+###################################################################
+# Sentiment Analysis, bing dictionary  ---- 
+
 # Pull dictionaries from tidytext 
 # (all are freely available online, and could be loaded as word vectors)
 bing <- sentiments %>% filter(lexicon=="bing") 
@@ -35,7 +35,7 @@ table(bing$sentiment)
 # sample(bing$word[bing$sentiment=="positive"], 10) # examples
 
 
-## Overall Tone/Polarity ##
+# Overall Tone/Polarity ##
 sentDict <- dictionary(list(positive = bing$word[bing$sentiment=="positive"], negative = bing$word[bing$sentiment=="negative"]))
 paperDFM <- dfm(qcorpus2, dictionary = sentDict) # apply dictionary
 head(paperDFM,10)
@@ -50,7 +50,7 @@ summary(paperTone$tone)
 ggplot(paperTone, aes(x=tone)) + geom_histogram(bins=50)
 
 # Add to existing data frame
-qmeta2[,ncol(qmeta2)+1:3] <- paperTone[,c(1,2,4)]
+qmeta2[,ncol(qmeta2)+1:3] <- paperTone[,c(2,3,5)]
 # And create new variables
 qmeta2 <- qmeta2 %>% mutate(words = as.integer(length), 
                               perpos = (positive/words)*100, 
@@ -59,7 +59,7 @@ qmeta2 <- qmeta2 %>% mutate(words = as.integer(length),
 
 # Plot!
 # Create date breaks to get chosen tick marks on graph
-date.vec <- seq(from=as.Date("2017-01-20"), to=as.Date("2018-03-02"), by="week") # update to Friday after last story
+date.vec <- seq(from=as.Date("2017-01-20"), to=as.Date("2018-09-07"), by="week") # update to Friday after last story
 ggplot(qmeta2, aes(x=date, y=pertone)) + 
   geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=.05) +
   geom_hline(yintercept=median(qmeta2$pertone), color="gray50") +
@@ -90,7 +90,6 @@ maxtone[,c("heading", "pub", "date", "pertone")]
 qmeta2$leadline[qmeta2$heading==maxtone$heading]
 # texts(qcorpus2)[docvars(qcorpus2, "heading")==maxtone$heading]
 
-
 # Plot just opeds
 ggplot(filter(qmeta2, oped==1), aes(x=date, y=pertone)) + 
   geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=.15) +
@@ -112,7 +111,9 @@ ggsave("figuresR/opedtone_naive.png")
 qmeta2 %>% filter(oped==1) %>% group_by(pub) %>% 
   summarize(mean(pertone), sd(pertone)) 
 
-## Other Emotional Affect ##
+
+###################################################################
+# Other Emotional Affect, nrc dictionary  ----
 nrc <- sentiments %>% filter(lexicon=="nrc") 
 table(nrc$sentiment)
 sample(nrc$word[nrc$sentiment=="anger"], 10) # examples
@@ -127,7 +128,7 @@ head(paperAffectDFM,10)
 # Turn this into a dataframe, add to existing dataframe
 paperAffect <- as.data.frame(paperAffectDFM, row.names = paperAffectDFM@Dimnames$docs)
 # Add to dataframe
-qmeta2[,ncol(qmeta2)+1:4] <- paperAffect[,1:4]
+qmeta2[,ncol(qmeta2)+1:4] <- paperAffect[,2:5]
 
 qmeta2 <- qmeta2 %>% 
   mutate(anger=(angerW/words)*100,
@@ -199,9 +200,9 @@ qmeta2$leadline[qmeta2$heading==checkfear$heading]
 # texts(qcorpus2)[docvars(qcorpus2, "heading")==checkfear$heading]
 
 
-## Text polarity accounting for amplifiers/modifiers/qualifiers
-# install.packages("sentimentr")
-library(sentimentr)
+###################################################################
+# Text polarity accounting for amplifiers/modifiers/qualifiers ----
+
 # sentimentr operates on the sentence level
 sentSent <- sentiment(qcorpus2$documents$texts) # apply sentiment function
 
@@ -257,81 +258,16 @@ ggplot(filter(qmeta2, oped==1), aes(x=date, y=avgSent)) +
 qmeta2 %>% filter(oped==1) %>% group_by(pub) %>% 
   summarize(mean(avgSent), sd(avgSent)) 
 
-# Sentiment trajectories
-# sentSentNYT <- sentSent %>% filter(element_id<=length(qmeta2$pub[qmeta2$pub=="NYT"]))
-# sentSentWSJ <- sentSent %>% filter(element_id>length(qmeta2$pub[qmeta2$pub=="NYT"]))
-
-# sentiment trajectory of NYT articles (first 20)
-# p <- ggplot(filter(sentSentNYT, element_id<21), aes(x=sentence_id, y=sentiment, group=element_id))
-# p + geom_line(aes(color=element_id), alpha=0.5)
-
-# p <- ggplot(filter(sentSentNYT, element_id<21), aes(x=sentence_id, y=sentiment))
-# p + geom_line() + facet_wrap(~element_id)
-
-
-## First three sentencences only (approximate the casual readers)
-# sentSentNYT3 <- sentSent %>% filter(element_id<=length(qmeta2$pub[qmeta2$pub=="NYT"]) & sentence_id<4)
-# sentSentWSJ3 <- sentSent %>% filter(element_id>length(qmeta2$pub[qmeta2$pub=="WSJ"]) & sentence_id<4)
-
-## Initial sentiment trajectory of NYT
-# p <- ggplot(sentSentNYT3, aes(x=sentence_id, y=sentiment, group=element_id))
-# p + geom_line(aes(color=element_id), alpha=0.25)
-
-## Initial sentiment trajectory of WSJ
-# p <- ggplot(sentSentWSJ3, aes(x=sentence_id, y=sentiment, group=element_id))
-# p + geom_line(aes(color=element_id), alpha=0.25)
-
 # Save
 rm("mintone", "maxtone", "checkanger", "checkfear", "bing", "nrc", "paperAffect", "paperTone", "affectDict", "sentDict")
 save.image("workspaceR/newspaperSentiment.RData")
 # load("workspaceR/newspaperSentiment.RData")
 
 
-fakelies <- dictionary(list(lies=c("lie", "lied", "lies"), fake="fake"))
-fakeliedfm  <- dfm(qcorpus2, dictionary=fakelies)
-head(fakeliedfm,10)
-
-# Turn this into a dataframe
-paperfakelie <- as.data.frame(fakeliedfm, row.names = fakeliedfm@Dimnames$docs)
-qmeta2[,ncol(qmeta2)+1:2] <- paperfakelie[,1:2]
-
-# Group by week
-library(lubridate)
-byweek <- qmeta2 %>% 
-  mutate(week=week(date)) %>% 
-  group_by(week, pub) %>% 
-  summarize(fake=sum(fake), lie=sum(lies))
-
-# Plot!
-ggplot(byweek, aes(x=week, y=lies)) +
-  geom_jitter(aes(color=pub), alpha=0.05, width=0.2, height=0.0, size=2) +
-  geom_hline(yintercept=mean(qmeta2$anger), color="gray50") +
-  geom_smooth(aes(color=pub)) +
-  labs(title = "Frequency of 'Lies' in Trump Coverage",
-       subtitle = "New York Times, Washington Post, Wall Street Journal", 
-       y = "Anger Affect", x = "Date of Article") +
-  scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
-  theme(plot.title = element_text(face="bold", size=18, hjust=0),
-        axis.title = element_text(face="bold", size=14),
-        panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
-        axis.text.x = element_text(angle=90),
-        legend.text=element_text(size=12))
-
-ggplot(byweek, aes(x=week, y=fake)) +
-  geom_jitter(aes(color=pub), alpha=0.15, width=0.2, height=0.0, size=2) +
-  geom_hline(yintercept=mean(qmeta2$anger), color="gray50") +
-  geom_smooth(aes(color=pub)) +
-  labs(title = "Frequency of 'Fake' in Trump Coverage",
-       subtitle = "New York Times, Washington Post, Wall Street Journal", 
-       y = "Anger Affect", x = "Date of Article") +
-  scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
-  theme(plot.title = element_text(face="bold", size=18, hjust=0),
-        axis.title = element_text(face="bold", size=14),
-        panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
-        axis.text.x = element_text(angle=90),
-        legend.text=element_text(size=12))
-
-## Next steps?
+###################################################################
+# Next steps ----
 # Consider Lexicoder Sentiment Dictionary...http://www.lexicoder.com/
-# Need to output the text of each article in the corpus to separate file in common folder (e.g., writeCorpus from tm)
-# also contains beta version of policy dictionary to identify attention to policy areas
+# Need to output the text of each article in the corpus to separate file 
+# in common folder (e.g., writeCorpus from tm).
+# Also contains beta version of policy dictionary to identify attention 
+# to policy areas

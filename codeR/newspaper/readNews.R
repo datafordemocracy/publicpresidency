@@ -1,19 +1,16 @@
-#######################################
+###################################################################
 # Media Coverage of Trump
 # Read, format newspaper articles
-# NYT from Lexis-Nexis
-# WSJ from Factiva
-# WP from Lexis-Nexis
+# NYT and WP from Lexis-Nexis; WSJ from Factiva
 # Michele Claibourn
-# February 1, 2017
-# Updated August 29, 2018
-# with newspapers through July 31, 2018
-######################################
+# Created February 1, 2017
+# Updated August 29, 2018 with newspapers through July 31, 2018
+####################################################################
 
-#####################
-# Loading libraries
-# Setting directories
-#####################
+
+####################################################################
+# Loading libraries, Setting directories, Creating functions ----
+
 # install.packages("tm")
 # install.packages("tm.plugin.lexisnexis")
 # install.packages("tm.plugin.factiva")
@@ -35,22 +32,33 @@ setwd("~/Box Sync/mpc/dataForDemocracy/presidency_project/newspaper/")
 source("codeR/readFactivaHTML3.R")
 assignInNamespace("readFactivaHTML", readFactivaHTML3, ns="tm.plugin.factiva")
 
-##########################
-# Read in NYT articles 
-# using tm.plugin (and tm)
-##########################
-nytfiles <- DirSource(directory="nyt2/", pattern=".html", recursive=TRUE)
-
-# Function to read article files and turn into a corpus
-readmyfiles <- function(x){
+# Function to read lexis-nexis article files and turn into a corpus
+read_lnfiles <- function(x){
   source <- LexisNexisSource(x)
   Corpus(source)
 }
 
-nytcorpus <- lapply(nytfiles$filelist, readmyfiles) 
+# Function to read lexis-nexis meta files and turn into a dataframe
+read_lnmeta <- function(x){
+  read_csv(x)
+}
+
+# Function to read factiva files and turn into a corpus
+read_fvfiles <- function(x){
+  source <- FactivaSource(x)
+  Corpus(source)
+}
+
+
+####################################################################
+# Read in NYT articles, using tm.plugin and tm, and clean up ----
+
+# List article files
+nytfiles <- DirSource(directory="nyt2/", pattern=".html", recursive=TRUE)
+
+# Read article files
+nytcorpus <- lapply(nytfiles$filelist, read_lnfiles) 
 nytcorpus <- do.call(c, nytcorpus)
-# do.call is a shortcut for this (calling c() on each element in the list)
-# corpus <- c(corpus[[1]], corpus[[2]], corpus[[3]], corpus[[4]], corpus[[5]])
 
 # View the corpus
 nytcorpus
@@ -69,19 +77,18 @@ nytcorpus <- tm_map(nytcorpus, content_transformer(function(x) gsub("U.S.", "Uni
 # "Follow The New York Times Opinion section on Facebook and Twitter (@NYTopinion), and sign up for the Opinion Today newsletter."
 nytcorpus <- tm_map(nytcorpus, content_transformer(function(x) gsub("Follow The New York Times Opinion section on Facebook and Twitter (@NYTopinion), and sign up for the Opinion Today newsletter.", "", x)))
 
-#################################
-# Read in NYT metadata
-# saved in csv files, using readr
-#################################
-nytfiles <- DirSource(directory="nyt2/", pattern="CSV", recursive=TRUE)
 
-# Function to read CSV files and turn into a dataframe
-readmymeta <- function(x){
-  read_csv(x)
-}
+####################################################################
+# Read in NYT metadata, using readr, and clean up ----
 
-nytmeta <- lapply(nytfiles$filelist, readmymeta) 
+# List meta files
+nytmetafiles <- DirSource(directory="nyt2/", pattern="CSV", recursive=TRUE)
+length(nytmetafiles) == length(nytfiles) # test that meta and articles match
+
+# Read meta files
+nytmeta <- lapply(nytmetafiles$filelist, read_lnmeta) 
 nytmeta <- do.call(rbind, nytmeta)
+nrow(nytmeta) == length(nytcorpus) # test that meta and articles still match
 
 # Improve the metadata
 nytmeta$length <- as.integer(str_extract(nytmeta$LENGTH, "[0-9]{1,4}"))
@@ -92,19 +99,14 @@ nytmeta$blog <- if_else(str_detect(nytmeta$PUBLICATION, "Blogs"), 1, 0)
 nytmeta <- nytmeta %>% select(byline = BYLINE, headline = HEADLINE, length, date, pub, oped, blog, subject = SUBJECT, person = PERSON)
 
 
-##########################
-# Read in WP articles 
-# using tm.plugin (and tm)
-##########################
+####################################################################
+# Read in WP articles, using tm.plugin and tm, and clean up ----
+
+# List article files
 wpfiles <- DirSource(directory="wp/", pattern=".html", recursive=TRUE)
 
-# Function to read article files and turn into a corpus
-readmyfiles <- function(x){
-  source <- LexisNexisSource(x)
-  Corpus(source)
-}
-
-wpcorpus <- lapply(wpfiles$filelist, readmyfiles) 
+# Read article files
+wpcorpus <- lapply(wpfiles$filelist, read_lnfiles) 
 wpcorpus <- do.call(c, wpcorpus)
 
 # View the corpus
@@ -116,19 +118,17 @@ meta(wpcorpus[[1]])
 wpcorpus <- tm_map(wpcorpus, content_transformer(function(x) gsub("U.S.", "United States", x)))
 
 
-#################################
-# Read in WP metadata
-# saved in csv files, using readr
-#################################
-wpfiles <- DirSource(directory="wp/", pattern="CSV", recursive=TRUE)
+####################################################################
+# Read in WP metadata, using readr, and clean up ----
 
-# Function to read CSV files and turn into a dataframe
-readmymeta <- function(x){
-  read_csv(x)
-}
+# List meta files
+wpmetafiles <- DirSource(directory="wp/", pattern="CSV", recursive=TRUE)
+length(wpmetafiles) == length(wpfiles) # test that meta and articles match
 
-wpmeta <- lapply(wpfiles$filelist, readmymeta) 
+# Read meta files
+wpmeta <- lapply(wpmetafiles$filelist, read_lnmeta) 
 wpmeta <- do.call(rbind, wpmeta)
+nrow(wpmeta) == length(wpcorpus) # test that meta and articles still match
 
 # Improve the metadata
 wpmeta$length <- as.integer(str_extract(wpmeta$LENGTH, "[0-9]{1,4}"))
@@ -139,19 +139,14 @@ wpmeta$blog <- 0
 wpmeta <- wpmeta %>% select(byline = BYLINE, headline = HEADLINE, length, date, pub, oped, blog, subject = SUBJECT, person = PERSON)
 
 
-##########################
-# Read in WSJ articles 
-# using tm.plugin (and tm)
-##########################
+####################################################################
+# Read in WSJ articles, using tm.plugin and tm, and clean up ----
+
+# List article files
 wsjfiles <- DirSource(directory="wsj/", pattern=".htm", recursive=TRUE)
 
-# Function to read article files and turn into a corpus
-readmyfiles <- function(x){
-  source <- FactivaSource(x)
-  Corpus(source)
-}
-
-wsjcorpus <- lapply(wsjfiles$filelist, readmyfiles) 
+# Read article files
+wsjcorpus <- lapply(wsjfiles$filelist, read_fvfiles) 
 wsjcorpus <- do.call(c, wsjcorpus)
 
 # View the corpus
@@ -168,10 +163,9 @@ wsjcorpus <- tm_map(wsjcorpus, content_transformer(function(x) gsub("U.S.", "Uni
 wsjcorpus <- tm_map(wsjcorpus, content_transformer(function(x) gsub("---", "", x))) # change this to regexp?
 
 
-#################################
-# Turn NYT into a quanteda corpus
-# and assign metadata
-#################################
+####################################################################
+# Turn NYT into a quanteda corpus and assign metadata ----
+
 qcorpus_nyt <- corpus(nytcorpus) # note corpus is from quanteda, Corpus is from tm
 summary(qcorpus_nyt, showmeta=TRUE)
 
@@ -189,10 +183,9 @@ docvars(qcorpus_nyt, c("description", "language", "intro", "section", "coverage"
 summary(qcorpus_nyt, showmeta=TRUE)
 
 
-#################################
-# Turn WP into a quanteda corpus
-# and assign metadata
-#################################
+####################################################################
+# Turn WP into a quanteda corpus and assign metadata ----
+
 qcorpus_wp <- corpus(wpcorpus) 
 summary(qcorpus_wp, showmeta=TRUE)
 
@@ -210,10 +203,9 @@ docvars(qcorpus_wp, c("description", "language", "intro", "section", "coverage",
 summary(qcorpus_wp, showmeta=TRUE)
 
 
-#################################
-# Turn WSJ into a quanteda corpus
-# and assign metadata
-#################################
+####################################################################
+# Turn WSJ into a quanteda corpus and assign metadata ----
+
 qcorpus_wsj <- corpus(wsjcorpus) # note corpus is from quanteda, Corpus is from tm
 summary(qcorpus_wsj, showmeta=TRUE)
 
@@ -231,10 +223,9 @@ docvars(qcorpus_wsj, c("description", "language", "edition", "section", "coverag
 summary(qcorpus_wsj, showmeta=TRUE)
 
 
-#################
-# Combine corpora
-# and metadata
-#################
+####################################################################
+# Combine corpora and metadata and save in workspaceR ----
+
 qcorpus <- qcorpus_nyt + qcorpus_wsj + qcorpus_wp
 qcorpus
 summary(qcorpus)
@@ -243,7 +234,6 @@ qmeta <- docvars(qcorpus)
 # add approx first two paragraphs as field in qmeta; probably a better way
 qmeta$leadlines <- str_sub(qcorpus$documents$texts, 1,500)
 
-
-## Save data
-save(nytcorpus, qcorpus_nyt, wsjcorpus, qcorpus_wsj, wpcorpus, qcorpus_wp, qcorpus, qmeta, file="workspaceR/newspaper.Rdata")
+# Save data
+save(nytcorpus, nytmeta, qcorpus_nyt, wsjcorpus, qcorpus_wsj, wpcorpus, wpmeta, qcorpus_wp, qcorpus, qmeta, file="workspaceR/newspaper.Rdata")
 # load("workspaceR/newspaper.RData")
