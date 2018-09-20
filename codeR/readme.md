@@ -11,6 +11,17 @@
   * Generates directories maddow, lastword, allin containing .tx files of each day's show transcript
 
 ## Newspaper (newspaper)
+* `readNews.R`: 
+* `readFactivaHTML3.R`: 
+* `readNewsError.R`: 
+* `exploreNews.R`: 
+* `complexityNews.R`:
+* `sentimentNews.R`: 
+* `moralFoundation1.R`: 
+* `topicmodelNews.R`: 
+* `topicmodelEvaluationNews.R`:
+* `stmTopicModelNews.R`: 
+* `namedEntitiesNews.R`: 
 
 ## Presidential documents (presdoc)
 * `pres_doc_fun.R`: contains functions used in `acquire_presdoc.R` 
