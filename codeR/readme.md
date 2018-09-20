@@ -28,3 +28,6 @@
   * creates a corpus object (`pd_corpus`) and adds extracted features to `presdocuments` dataframe
 
 ## Twitter
+* `analyze_twitter.R`: reads in tweets (json files) exported from Trump Twitter Archive and saved in trumptwitter directory
+  * creates `tw` dataframe with tweets and metadata
+  * creates `twcorpus` as corpus object and adds extracted features to `tw` dataframe
