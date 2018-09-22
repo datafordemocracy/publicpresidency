@@ -1,3 +1,6 @@
+## 2018-09-21
+* added readme to codeR folder to provide basic description of each file's purpose, inputs, and outputs
+
 ## 2018-09-14
 * Update Twitter and Presidential documents through August 2018
 * Update cable news through August 2018
