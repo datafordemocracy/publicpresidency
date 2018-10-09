@@ -12,6 +12,7 @@ Used the [Trump Twitter Archive](http://www.trumptwitterarchive.com/)
   * updated through 6/30/2018, mpc
   * updated through 7/31/2018, mpc
   * updated through 8/31/2018, mpc
+  * updated through 9/30/2018, mpc
 * Export json and copy result into file
 
 readTwitter.R reads the tweets in and creates a corpus
