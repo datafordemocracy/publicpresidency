@@ -68,10 +68,10 @@ meta(nytcorpus[[1]])
 # In later exploration, found that NYT and WSJ use different abbreviation styles, 
 # altered the most common ones in NYT to match WSJ
 # f.b.i; c.i.a; e.p.a (appears mostly with periods (sometimes all caps) in NYT; usually all caps (sometimes with periods) in WSJ
-nytcorpus <- tm_map(nytcorpus, content_transformer(function(x) gsub("F.B.I.", "FBI", x)))
-nytcorpus <- tm_map(nytcorpus, content_transformer(function(x) gsub("C.I.A.", "CIA", x)))
-nytcorpus <- tm_map(nytcorpus, content_transformer(function(x) gsub("E.P.A.", "EPA", x)))
-nytcorpus <- tm_map(nytcorpus, content_transformer(function(x) gsub("U.S.", "United States", x)))
+nytcorpus <- tm_map(nytcorpus, content_transformer(function(x) gsub("F.B.I.", "FBI", x, fixed = TRUE)))
+nytcorpus <- tm_map(nytcorpus, content_transformer(function(x) gsub("C.I.A.", "CIA", x, fixed = TRUE)))
+nytcorpus <- tm_map(nytcorpus, content_transformer(function(x) gsub("E.P.A.", "EPA", x, fixed = TRUE)))
+nytcorpus <- tm_map(nytcorpus, content_transformer(function(x) gsub("U.S.", "United States", x, fixed = TRUE)))
 
 # Need to do something about this text -- appears frequently, and is pulled out as topic in later analysis...
 # "Follow The New York Times Opinion section on Facebook and Twitter (@NYTopinion), and sign up for the Opinion Today newsletter."
@@ -115,7 +115,7 @@ wpcorpus[[1]][1]
 meta(wpcorpus[[1]])
 
 # In later exploration, found that WP and WSJ use different abbreviation styles, 
-wpcorpus <- tm_map(wpcorpus, content_transformer(function(x) gsub("U.S.", "United States", x)))
+wpcorpus <- tm_map(wpcorpus, content_transformer(function(x) gsub("U.S.", "United States", x, fixed = TRUE)))
 
 
 ####################################################################
@@ -158,7 +158,7 @@ meta(wsjcorpus[[1]])
 # "License this article from Dow Jones Reprint Service[http://www.djreprints.com/link/DJRFactiva.html?FACTIVA=wjco20170123000044]"
 wsjcorpus <- tm_map(wsjcorpus, content_transformer(function(x) gsub("License this article from Dow Jones Reprint Service\\[[[:print:]]+\\]", "", x)))
 # Replace U.S. with United States for later bigram analysis
-wsjcorpus <- tm_map(wsjcorpus, content_transformer(function(x) gsub("U.S.", "United States", x)))
+wsjcorpus <- tm_map(wsjcorpus, content_transformer(function(x) gsub("U.S.", "United States", x, fixed = TRUE)))
 # Replace "---" with null (causes problems for readability in WSJ "roundup"-style pieces, where items are separated by ---)
 wsjcorpus <- tm_map(wsjcorpus, content_transformer(function(x) gsub("---", "", x))) # change this to regexp?
 
