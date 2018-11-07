@@ -11,37 +11,25 @@
 # 8. Feature co-occurrence matrix: semantic networks
 # Michele Claibourn (mclaibourn@virginia.edu)
 # April 4, 2018, mpc
-# Updated: August 29, 2018  (documents through July 31, 2018)
+# Updated: November 7, 2018  (documents through October 31, 2018); switched to boxr
 ###################################################################################
 
-rm(list=ls())
 library(quanteda)
 library(tidyverse)
-library(RJSONIO) # didn't mention this one in email (but you don't need it)
+library(readtext)
 library(scales)
-library(RColorBrewer) # didn't to mention this one in email!
+library(RColorBrewer) 
+library(boxr)
 
-setwd("~/Box Sync/mpc/dataForDemocracy/presidency_project/trumptwitter/")
+box_auth()
+box_setwd(42183744020) # trumptwitter folder
 
 
-###################################################################################
-# 1. Read in data, explore metadata
-###################################################################################
-setwd("tweets/")
-# List of json files
-files <- dir(pattern=".json") # vector of all json file names
-
-# Read in JSON files and create dataframe of tweets
-tw_list <- map(files, fromJSON) # read in
-tw <-  map_df(tw_list, bind_rows) # convert list of dfs into one df
-setwd("../")
-###################################################################################
-# Save the twitter data frame
-save(tw, file = "tw.RData")
-# load("tw.RData") # read in the twitter data frame
-###################################################################################
-# encoding errors? Try
-# 
+########################################
+# 1. Read in data, explore metadata ----
+dir.create("temp")
+box_fetch(48589448057, local_dir = "temp/") # download to temp tweets folder
+tw <- readtext("temp/*.json", text_field = "text") 
 
 # Create date variable
 tw$date <- paste0(str_sub(tw$created_at, 5, 10), ",", str_sub(tw$created_at, 27,30))
@@ -62,8 +50,8 @@ tw %>% slice(which.max(favorite_count)) %>% select(text)
 ggplot(tw, aes(x=date, color=iphone)) + geom_point(stat="count")
 
 # prettier version
-# Create date breaks to get chosen tick marks on graph
-date.vec <- seq(from=as.Date("2017-01-20"), to=as.Date("2018-08-03"), by="weeks") # update to Friday after last story
+# create date breaks to get chosen tick marks on graph
+date.vec <- seq(from=as.Date("2017-01-20"), to=as.Date("2018-11-02"), by="weeks") # update to Friday after last story
 ggplot(tw, aes(x=date, color=iphone)) + geom_point(stat="count") + 
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) + 
   scale_color_manual(values=c("orange3","blue3"), name="Source") +
@@ -77,9 +65,8 @@ ggplot(tw, aes(x=date, color=iphone)) + geom_point(stat="count") +
         legend.position="bottom")
 
 
-###################################################################################
-# 2. Create corpus and docvars
-###################################################################################
+###################################
+# 2. Create corpus and docvars ----
 # function: corpus
 twcorpus <- corpus(tw, docid_field = "id_str", text_field = "text")
 twcorpus
@@ -95,9 +82,9 @@ tw$nword <- ntoken(twcorpus)
 tw$nsentence <- nsentence(twcorpus)
 # also: nytpe(), ndoc(), nfeat()
 
-###################################################################################
-# 3. Work with a corpus 
-###################################################################################
+
+############################
+# 3. Work with a corpus ----
 # a. Subset a corpus: select documents based on document variables
 # function: corpus_subset
 twcorpusi <- corpus_subset(twcorpus, iphone == "iphone")
@@ -109,9 +96,8 @@ twcorpus_sent <- corpus_reshape(twcorpus, to = "sentences")
 twcorpus_sent
 
 
-###################################################################################
-# 4. Operations on a corpus: kwic, complexity 
-###################################################################################
+##################################################
+# 4. Operations on a corpus: kwic, complexity ---- 
 # a. key words in context
 # function: kwic
 kwicwin <- kwic(twcorpus, "win*")
@@ -148,13 +134,13 @@ tw %>%
 texts(twcorpus)[docvars(twcorpus, "readFK") <= 1]
 
 
-###################################################################################
-# 5. Document feature matrix (dfm): bag-of-words, frequencies, clouds
-###################################################################################
+##########################################################################
+# 5. Document feature matrix (dfm): bag-of-words, frequencies, clouds ----
 # a. create a document feature matrix from a corpus or a tokens object
 # function: dfm
+stopwords2 <- stopwords()[c(1:173,175)] # keep "very"
 tw_dfm <- dfm(twcorpus, remove_punct = TRUE, remove_numbers = TRUE, 
-              remove_url = TRUE, tolower = TRUE, remove = stopwords("english"),
+              remove_url = TRUE, tolower = TRUE, remove = c(stopwords2, "amp", "rt"),
               verbose = TRUE)
 tw_dfm
 # generates same dfm as: tw_dfm <- dfm(twtokens) 
@@ -185,14 +171,14 @@ ggplot(tw_freq, aes(x = reorder(feature, frequency), y = frequency)) +
   theme_minimal() + coord_flip()
 
 
-###################################################################################
-# 6. Comparisons on a dfm: comparison clouds, relative frequencies, keyness, similarity
-###################################################################################
+###############################
+# 6. Comparisons on a dfm: ----
+# comparison clouds, relative frequencies, keyness, similarity
 # a. comparison cloud
 # compare groups: groups arugment to dfm
 # function: textplot_wordcloud
 dfm(twcorpus, groups = "iphone", remove_punct = TRUE, remove_numbers = TRUE,
-    tolower = TRUE, remove_url = TRUE, remove = stopwords("english")) %>% 
+    tolower = TRUE, remove_url = TRUE, remove = c(stopwords2, "amp", "rt")) %>% 
   textplot_wordcloud(comparison = TRUE, max_words = 200,
                      color = c("orange3", "blue3"),
                      min_size = .3, max_size = 3, labelsize = 1)
@@ -216,7 +202,7 @@ ggplot(tw_relfreq, aes(x = nrow(tw_relfreq):1, y = frequency)) +
 # function: textstat_keyness, textplot_keyness
 twsource_key <- dfm(twcorpus, groups = "iphone", remove_punct = TRUE, 
                     remove_numbers = TRUE, tolower = TRUE, remove_url = TRUE, 
-                    remove = stopwords("english")) %>% 
+                    remove = c(stopwords2, "amp", "rt")) %>% 
   textstat_keyness(target = "iphone")
 
 textplot_keyness(twsource_key)
@@ -225,7 +211,7 @@ textplot_keyness(twsource_key)
 # function: textstat_dist
 # stem words
 tw_dfm_stem <- dfm(twcorpus, remove_punct = TRUE, remove_numbers = TRUE,
-                  tolower = TRUE, remove_url = TRUE, remove = stopwords("english"),
+                  tolower = TRUE, remove_url = TRUE, remove = c(stopwords2, "amp", "rt"),
                   stem = TRUE, verbose = TRUE)
 # trim dfm (only words that occur at least three times in corpus and in at least three documents)
 tw_dfm_stem <- dfm_trim(tw_dfm_stem, min_count = 3, min_docfreq = 3)
@@ -240,9 +226,8 @@ plot(tw_cluster, xlab = "", main = "Euclidean Distance on Normalized Token Frequ
      sub = "", cex = 0.5)
 
 
-###################################################################################
-# 7. Dictionary methods: sentiment
-###################################################################################
+#######################################
+# 7. Dictionary methods: sentiment ----
 # a. apply dictionary, lexicon frequency
 # function: dictionary
 # quanteda contains the Lexicoder Sentiment Dictionary 
@@ -256,11 +241,10 @@ tw_dfm_lsd <- dfm(twcorpus, dictionary = data_dictionary_LSD2015[1:2],
                remove_punct = TRUE, tolower = TRUE)
 
 # turn this into a dataframe, add to existing dataframe
-tw_df_lsd <- as.data.frame(tw_dfm_lsd, row.names = tw_dfm_lsd@Dimnames$docs)
-
+tw_df_lsd <- convert(tw_dfm_lsd, to = "data.frame")
 # add to iniital dataframe
 tw[,ncol(tw)+1:2] <- tw_df_lsd[,2:3]
-summary(tw[,13:14])
+summary(tw[,14:15])
 
 # some manipulation to generate document scores
 tw <- tw %>% mutate(posprop = positive/nword,
@@ -292,9 +276,8 @@ tw %>%
   select("date", "text")
 
 
-###################################################################################
-# 8. Feature co-occurrence matrix: semantic networks
-###################################################################################
+#########################################################
+# 8. Feature co-occurrence matrix: semantic networks ----
 # a. feature co-occurrence matrix, co-occurrences of tokens
 tw_dfm_trim <- dfm_trim(tw_dfm, min_count = 5) # reduce dfm
 tw_fcm <- fcm(tw_dfm_trim)  # generate feature co-occurrence
@@ -310,8 +293,9 @@ tag_fcm <- fcm(tag_dfm) # generate feature co-occurrence
 top_tags <- names(topfeatures(tag_dfm, 100)) # most frequently occurring tags
 head(top_tags, 10)
 tag_fcm <- fcm_select(tag_fcm, top_tags) # select these from fcm
+size <- log(colSums(dfm_select(tag_dfm, top_tags))) # scale for vertices
 textplot_network(tag_fcm, min_freq = 0.1, edge_color = 'blue3', 
-                 edge_alpha = 0.8, edge_size = 5) 
+                 vertex_size = size / max(size) * 3) 
 
 # co-occuring usernames
 user_dfm <- dfm_select(tw_dfm, ('@*')) # extract users
@@ -319,8 +303,9 @@ user_fcm <- fcm(user_dfm) # generate feature co-occurrence
 topuser <- names(topfeatures(user_dfm, 100)) # most frequently occurring users
 head(topuser)
 user_fcm <- fcm_select(user_fcm, topuser) # select these from fcm
+size <- log(colSums(dfm_select(user_dfm, topuser))) # scale for vertices
 textplot_network(user_fcm, min_freq = 0.1, edge_color = 'orange3', 
-                 edge_alpha = 0.8, edge_size = 5)
+                 vertex_size = size / max(size) * 3)
 
 
 ###################################################################################
@@ -333,9 +318,10 @@ textplot_network(user_fcm, min_freq = 0.1, edge_color = 'orange3',
 #   feed a dfm into topicmodel or stm for topic modeling
 ###################################################################################
 
-# Save all of the work
-save.image("trumptwitter.RData")
-# load("trumptwitter.RData")
+# Save the work so far
+box_save(dir_id = 57112339241, file_name = "trumptwitter.RData") # verified update
+# box_setwd(57112339241)
+# box_load(287471698861) # but can't reload...
 
 
 ###################################################################################
