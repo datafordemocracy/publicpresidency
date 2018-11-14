@@ -3,7 +3,7 @@
 # Michele Claibourn
 # Acquire data: initially Jan 20, 2017 through Nov 16, 2017
 # Rachel Maddow, Last Word/O'Donnell, All In/Hayes
-# Updated: through August 31, 2018
+# Updated: through September 30, 2018
 ##############################################################
 
 rm(list=ls())
@@ -60,8 +60,10 @@ maddow$date <- as.Date(maddow$date, "%Y-%m-%d")
 # maddow <- maddow %>% 
 #   filter(date > as.Date("2018-05-31") & date < as.Date("2018-08-01"))
 # On September run: Keep only transcripts since August 1, 2018 to August 31, 2018
+# On October run: Keep only transcripts since September 1, 2018 to September 30, 2018
+# On November run: Keep only transcripts since October 1, 2018 to October 31, 2018
 maddow <- maddow %>% 
-  filter(date > as.Date("2018-07-31") & date < as.Date("2018-09-01"))
+  filter(date > as.Date("2018-09-30") & date < as.Date("2018-11-01"))
 
 # Loop through each link in data.frame (nrow(maddow)) and 
 # a. grab the html (read_html()), isolating node with text (".pane-node-body .pane-content",
@@ -123,11 +125,11 @@ lastword$date <- as.Date(lastword$date, "%Y-%m-%d")
 # lastword <- lastword %>% 
 #   filter(date > as.Date("2018-02-28") & date < as.Date("2018-06-01"))
 # On August run: Keep only transcripts since June 1, 2018 to July 31, 2018
-lastword <- lastword %>% 
-  filter(date > as.Date("2018-05-31") & date < as.Date("2018-08-01"))
 # On September run: Keep only transcripts since August 1, 2018 to August 31, 2018
+# On October run: Keep only transcripts since September 1, 2018 to September 30, 2018
+# On November run: Keep only transcripts since October 1, 2018 to October 31, 2018
 lastword <- lastword %>% 
-  filter(date > as.Date("2018-07-31") & date < as.Date("2018-09-01"))
+  filter(date > as.Date("2018-09-30") & date < as.Date("2018-11-01"))
 
 # Download transcripts as text files 
 for(i in seq(nrow(lastword))) {
@@ -188,8 +190,10 @@ allin$date <- as.Date(allin$date, "%Y-%m-%d")
 # allin <- allin %>% 
 #   filter(date > as.Date("2018-05-31") & date < as.Date("2018-08-01"))
 # On September run: Keep only transcripts since August 1, 2018 to August 31, 2018
+# On October run: Keep only transcripts since September 1, 2018 to September 30, 2018
+# On November run: Keep only transcripts since October 1, 2018 to October 31, 2018
 allin <- allin %>% 
-  filter(date > as.Date("2018-07-31") & date < as.Date("2018-09-01"))
+  filter(date > as.Date("2018-09-30") & date < as.Date("2018-11-01"))
 
 # Download transcripts as text files 
 for(i in seq(nrow(allin))) {
