@@ -16,6 +16,14 @@
 # install.packages("tm.plugin.factiva")
 # install.packages("quanteda")
 
+# When you start collecting data, you'll need to create 3 folders - nytread, wpread, wsjread - these folders should include the first 
+# article you download from these newspapers. In order to not waste time by generating all files again, the code creates a new folder
+# where you should download your articles into after the initial creation of the quanteda corpuses.
+# New folders are named - nytnew, wpnew, wsjnew
+# You should also create a folder in the directory called workspaceR where we will store Rdata files for each news source
+
+# Change the directories to your local folders wherever it says #change to your own folder
+
 rm(list=ls())
 library(tm)
 library(xml2) # instead of XML?
@@ -24,12 +32,13 @@ library(tm.plugin.lexisnexis)
 library(quanteda)
 library(tidyverse)
 library(rvest)
+library(stringr)
 
 # Point to path for html files
-setwd("~/Box Sync/mpc/dataForDemocracy/presidency_project/newspaper/")
+setwd("~/Box Sync")
 
 # Adjust readFactivaHTML function (see readNewsError.R for background)
-source("codeR/readFactivaHTML3.R")
+source("/Users/aycankatitas/publicpresidency/codeR/newspaper/readFactivaHTML3.R") #change to your own folder
 assignInNamespace("readFactivaHTML", readFactivaHTML3, ns="tm.plugin.factiva")
 
 # Function to read lexis-nexis article files and turn into a corpus
@@ -51,120 +60,275 @@ read_fvfiles <- function(x){
 
 
 ####################################################################
+
+### NEW YORK TIMES
 # Read in NYT articles, using tm.plugin and tm, and clean up ----
 
+# Check if a new article folder exists, if not, create one 
+ifelse(!dir.exists("./nytnew"), dir.create("./nytnew"), FALSE) 
+
 # List article files
-nytfiles <- DirSource(directory="nyt2/", pattern=".html", recursive=TRUE)
+# Check if new folder has any files in it 
+nytnewfolder <- list.files("./nytnew") #change to your own folder
 
-# Read article files
-nytcorpus <- lapply(nytfiles$filelist, read_lnfiles) 
-nytcorpus <- do.call(c, nytcorpus)
+# If new folder doesn't have any files, process the files for the first time - This step is to be followed when you first 
+# start collecting articles from NYT
+if(length(nytnewfolder)==0){
+  
+  # Read article files
+  nytfiles <- DirSource(directory="nytread/", pattern=".html", recursive=TRUE) #change directory to your own folder
+  nytcorpus <- lapply(nytfiles$filelist, read_lnfiles) 
+  nytcorpus <- do.call(c, nytcorpus)
+  
+  # In later exploration, found that NYT and WSJ use different abbreviation styles, 
+  # altered the most common ones in NYT to match WSJ
+  # f.b.i; c.i.a; e.p.a (appears mostly with periods (sometimes all caps) in NYT; usually all caps (sometimes with periods) in WSJ
+  # this code searches the corpus and replaces all appearances of F.B.I. with FBI 
+  
+  nytcorpus <- tm_map(nytcorpus, content_transformer(function(x) gsub("F.B.I.", "FBI", x)))
+  nytcorpus <- tm_map(nytcorpus, content_transformer(function(x) gsub("C.I.A.", "CIA", x)))
+  nytcorpus <- tm_map(nytcorpus, content_transformer(function(x) gsub("E.P.A.", "EPA", x)))
+  nytcorpus <- tm_map(nytcorpus, content_transformer(function(x) gsub("U.S.", "United States", x)))
+  
+  # Need to do something about this text -- appears frequently, and is pulled out as topic in later analysis...
+  # "Follow The New York Times Opinion section on Facebook and Twitter (@NYTopinion), and sign up for the Opinion Today newsletter."
+  
+  nytcorpus <- tm_map(nytcorpus, content_transformer(function(x) gsub("Follow The New York Times Opinion section on Facebook and Twitter (@NYTopinion), and sign up for the Opinion Today newsletter.", "", x)))
+  
+  # Read in NYT metadata, using readr, and clean up ----
+  
+  # List meta files
+  nytmetafiles <- DirSource(directory="nytread/", pattern="CSV", recursive=TRUE) # change directory to your own folder
+  length(nytmetafiles) == length(nytfiles) # test that meta and articles match
+  
+  # Read meta files
+  nytmeta <- lapply(nytmetafiles$filelist, read_lnmeta) 
+  nytmeta <- do.call(rbind, nytmeta)
+  nrow(nytmeta) == length(nytcorpus) # test that meta and articles still match
+  
+  # Improve the metadata
+  nytmeta$length <- as.integer(str_extract(nytmeta$LENGTH, "[0-9]{1,4}"))
+  nytmeta$date <- as.Date(nytmeta$DATE, "%B %d, %Y")
+  nytmeta$pub <- "NYT"
+  nytmeta$oped <- if_else(str_detect(nytmeta$SECTION, "Editorial Desk"), 1, 0)
+  nytmeta$blog <- if_else(str_detect(nytmeta$PUBLICATION, "Blogs"), 1, 0)
+  nytmeta <- nytmeta %>% dplyr::select(byline = BYLINE, headline = HEADLINE, length, date, pub, oped, blog, subject = SUBJECT, person = PERSON)
+  save(nytcorpus,nytmeta, file="workspaceR_newspaper/nyt.Rdata") #change to your own folder
+} else { # If new folder has files in it - This means you already created an R data from old newspapers
+  load("workspaceR_newspaper/nyt.Rdata") #change to your own folder
+  
+  # Add in new files from new folders 
+  nytfilesnew <- DirSource(directory="nytnew/", pattern=".html", recursive=TRUE)#change directory to your own folder
+  # Read article files
+  nytcorpusnew <- lapply(nytfilesnew$filelist, read_lnfiles) 
+  nytcorpusnew <- do.call(c, nytcorpusnew)
+  
+  #Repeat the same steps as before
+  nytcorpusnew <- tm_map(nytcorpusnew, content_transformer(function(x) gsub("F.B.I.", "FBI", x)))
+  nytcorpusnew <- tm_map(nytcorpusnew, content_transformer(function(x) gsub("C.I.A.", "CIA", x)))
+  nytcorpusnew <- tm_map(nytcorpusnew, content_transformer(function(x) gsub("E.P.A.", "EPA", x)))
+  nytcorpusnew <- tm_map(nytcorpusnew, content_transformer(function(x) gsub("U.S.", "United States", x)))
+  
+  nytcorpusnew <- tm_map(nytcorpusnew, content_transformer(function(x) gsub("Follow The New York Times Opinion section on Facebook and Twitter (@NYTopinion), and sign up for the Opinion Today newsletter.", "", x)))
+  
+  nytmetafilesnew <- DirSource(directory="nytnew/", pattern="CSV", recursive=TRUE)#change directory to your own folder
+  length(nytmetafilesnew) == length(nytfilesnew) # test that meta and articles match
+  
+  # Read meta files
+  nytmetanew <- lapply(nytmetafilesnew$filelist, read_lnmeta) 
+  nytmetanew <- do.call(rbind, nytmetanew)
+  nrow(nytmetanew) == length(nytcorpusnew) # test that meta and articles still match
+  
+  # Improve the metadata
+  nytmetanew$length <- as.integer(str_extract(nytmetanew$LENGTH, "[0-9]{1,4}"))
+  nytmetanew$date <- as.Date(nytmetanew$DATE, "%B %d, %Y")
+  nytmetanew$pub <- "NYT"
+  nytmetanew$oped <- if_else(str_detect(nytmetanew$SECTION, "Editorial Desk"), 1, 0)
+  nytmetanew$blog <- if_else(str_detect(nytmetanew$PUBLICATION, "Blogs"), 1, 0)
+  nytmetanew <- nytmetanew %>% dplyr::select(byline = BYLINE, headline = HEADLINE, length, date, pub, oped, blog, subject = SUBJECT, person = PERSON)
+  
+  # Combining old and new stuff
+  
+  ## Combine nytcorpuses together 
+  nytcorpus <-  c(nytcorpus, nytcorpusnew)
+  
+  ## Combine metafiles together 
+  
+  nytmeta <- rbind(nytmeta,nytmetanew)
+  save(nytcorpus,nytmeta, file="workspaceR_newspaper/nyt.Rdata")
+}
 
-# View the corpus
-nytcorpus
-nytcorpus[[1]][1]
-meta(nytcorpus[[1]])
+## Move old files into new folder 
 
-# In later exploration, found that NYT and WSJ use different abbreviation styles, 
-# altered the most common ones in NYT to match WSJ
-# f.b.i; c.i.a; e.p.a (appears mostly with periods (sometimes all caps) in NYT; usually all caps (sometimes with periods) in WSJ
-nytcorpus <- tm_map(nytcorpus, content_transformer(function(x) gsub("F.B.I.", "FBI", x, fixed = TRUE)))
-nytcorpus <- tm_map(nytcorpus, content_transformer(function(x) gsub("C.I.A.", "CIA", x, fixed = TRUE)))
-nytcorpus <- tm_map(nytcorpus, content_transformer(function(x) gsub("E.P.A.", "EPA", x, fixed = TRUE)))
-nytcorpus <- tm_map(nytcorpus, content_transformer(function(x) gsub("U.S.", "United States", x, fixed = TRUE)))
+files <- list.files("./nytnew")
 
-# Need to do something about this text -- appears frequently, and is pulled out as topic in later analysis...
-# "Follow The New York Times Opinion section on Facebook and Twitter (@NYTopinion), and sign up for the Opinion Today newsletter."
-nytcorpus <- tm_map(nytcorpus, content_transformer(function(x) gsub("Follow The New York Times Opinion section on Facebook and Twitter (@NYTopinion), and sign up for the Opinion Today newsletter.", "", x)))
-
-
-####################################################################
-# Read in NYT metadata, using readr, and clean up ----
-
-# List meta files
-nytmetafiles <- DirSource(directory="nyt2/", pattern="CSV", recursive=TRUE)
-length(nytmetafiles) == length(nytfiles) # test that meta and articles match
-
-# Read meta files
-nytmeta <- lapply(nytmetafiles$filelist, read_lnmeta) 
-nytmeta <- do.call(rbind, nytmeta)
-nrow(nytmeta) == length(nytcorpus) # test that meta and articles still match
-
-# Improve the metadata
-nytmeta$length <- as.integer(str_extract(nytmeta$LENGTH, "[0-9]{1,4}"))
-nytmeta$date <- as.Date(nytmeta$DATE, "%B %d, %Y")
-nytmeta$pub <- "NYT"
-nytmeta$oped <- if_else(str_detect(nytmeta$SECTION, "Editorial Desk"), 1, 0)
-nytmeta$blog <- if_else(str_detect(nytmeta$PUBLICATION, "Blogs"), 1, 0)
-nytmeta <- nytmeta %>% select(byline = BYLINE, headline = HEADLINE, length, date, pub, oped, blog, subject = SUBJECT, person = PERSON)
+lapply(files, function(x){
+  from <- paste("./nytnew/",files,sep="") #change to your own folder
+  to = paste("./nytread/",files,sep="") #change to your own folder
+  file.rename(from=from,to=to)
+})
 
 
 ####################################################################
 # Read in WP articles, using tm.plugin and tm, and clean up ----
 
-# List article files
-wpfiles <- DirSource(directory="wp/", pattern=".html", recursive=TRUE)
+# Check if a new files folder exists for WP, if not create one 
+ifelse(!dir.exists("./wpnew"), dir.create("./wpnew"), FALSE) #change to your own folder
 
-# Read article files
-wpcorpus <- lapply(wpfiles$filelist, read_lnfiles) 
-wpcorpus <- do.call(c, wpcorpus)
+# List files in the new folder
+wpnewfolder <- list.files("./wpnew") #change to your own folder
 
-# View the corpus
-wpcorpus
-wpcorpus[[1]][1]
-meta(wpcorpus[[1]])
+# If new folder is empty, process files in the original folder for WP - Steps are the same as NYT
+if(length(wpnewfolder)==0){
+  
+  # List article files
+  wpfiles <- DirSource(directory="wpread/", pattern=".html", recursive=TRUE)#change to your own folder
+  
+  # Read article files
+  wpcorpus <- lapply(wpfiles$filelist, read_lnfiles) 
+  wpcorpus <- do.call(c, wpcorpus)
+  
+  # In later exploration, found that WP and WSJ use different abbreviation styles, 
+  wpcorpus <- tm_map(wpcorpus, content_transformer(function(x) gsub("U.S.", "United States", x)))
+  
+  ####################################################################
+  # Read in WP metadata, using readr, and clean up ----
+  
+  # List meta files
+  wpmetafiles <- DirSource(directory="wpread/", pattern="CSV", recursive=TRUE)#change to your own folder
+  length(wpmetafiles) == length(wpfiles) # test that meta and articles match
+  
+  # Read meta files
+  wpmeta <- lapply(wpmetafiles$filelist, read_lnmeta) 
+  wpmeta <- do.call(rbind, wpmeta)
+  nrow(wpmeta) == length(wpcorpus) # test that meta and articles still match
+  
+  # Improve the metadata
+  wpmeta$length <- as.integer(str_extract(wpmeta$LENGTH, "[0-9]{1,4}"))
+  wpmeta$date <- as.Date(wpmeta$DATE, "%B %d, %Y")
+  wpmeta$pub <- "WP"
+  wpmeta$oped <- if_else(str_detect(wpmeta$SECTION, "Editorial") | str_detect(wpmeta$SECTION, "Outlook"), 1, 0)
+  wpmeta$blog <- 0
+  wpmeta <- wpmeta %>% dplyr::select(byline = BYLINE, headline = HEADLINE, length, date, pub, oped, blog, subject = SUBJECT, person = PERSON)
+  save(wpcorpus,wpmeta, file="workspaceR_newspaper/wp.Rdata") #change to your own folder
+} else{
+  # Load WP files
+  load("workspaceR_newspaper/wp.Rdata")
+  # Do the same steps as before for the new WP files
+  # List article files
+  wpfilesnew <- DirSource(directory="wpnew/", pattern=".html", recursive=TRUE) #change to your own folder
+  
+  # Read article files
+  wpcorpusnew <- lapply(wpfilesnew$filelist, read_lnfiles) 
+  wpcorpusnew <- do.call(c, wpcorpusnew)
+  
+  # In later exploration, found that WP and WSJ use different abbreviation styles, 
+  wpcorpusnew <- tm_map(wpcorpusnew, content_transformer(function(x) gsub("U.S.", "United States", x)))
+  
+  # Do the same steps as before for the new WP meta files 
+  
+  # List meta files
+  wpmetafilesnew <- DirSource(directory="wpnew/", pattern="CSV", recursive=TRUE) #changeto your own folder
+  length(wpmetafilesnew) == length(wpfilesnew) # test that meta and articles match
+  
+  # Read meta files
+  wpmetanew <- lapply(wpmetafilesnew$filelist, read_lnmeta) 
+  wpmetanew <- do.call(rbind, wpmetanew)
+  nrow(wpmetanew) == length(wpcorpusnew) # test that meta and articles still match
+  
+  # Improve the metadata
+  wpmetanew$length <- as.integer(str_extract(wpmetanew$LENGTH, "[0-9]{1,4}"))
+  wpmetanew$date <- as.Date(wpmetanew$DATE, "%B %d, %Y")
+  wpmetanew$pub <- "WP"
+  wpmetanew$oped <- if_else(str_detect(wpmetanew$SECTION, "Editorial") | str_detect(wpmetanew$SECTION, "Outlook"), 1, 0)
+  wpmetanew$blog <- 0
+  wpmetanew <- wpmetanew %>% dplyr::select(byline = BYLINE, headline = HEADLINE, length, date, pub, oped, blog, subject = SUBJECT, person = PERSON)
+  
+  # Combining old and new stuff
+  ## Combine nytcorpuses together 
+  wpcorpus <-  c(wpcorpus, wpcorpusnew)
+  
+  ## Combine metafiles together 
+  
+  wpmeta <- rbind(wpmeta,wpmetanew)
+  save(wpcorpus,wpmeta, file="workspaceR_newspaper/wp.Rdata") #change to your own folder
+}  
+  
 
-# In later exploration, found that WP and WSJ use different abbreviation styles, 
-wpcorpus <- tm_map(wpcorpus, content_transformer(function(x) gsub("U.S.", "United States", x, fixed = TRUE)))
+files <- list.files("./wpnew") #change to your own folder
 
+lapply(files, function(x){
+  from <- paste("./wpnew/",files,sep="") #change to your own folder
+  to = paste("./wpread/",files,sep="") #change to your own folder
+  file.rename(from=from,to=to)
+})
 
-####################################################################
-# Read in WP metadata, using readr, and clean up ----
-
-# List meta files
-wpmetafiles <- DirSource(directory="wp/", pattern="CSV", recursive=TRUE)
-length(wpmetafiles) == length(wpfiles) # test that meta and articles match
-
-# Read meta files
-wpmeta <- lapply(wpmetafiles$filelist, read_lnmeta) 
-wpmeta <- do.call(rbind, wpmeta)
-nrow(wpmeta) == length(wpcorpus) # test that meta and articles still match
-
-# Improve the metadata
-wpmeta$length <- as.integer(str_extract(wpmeta$LENGTH, "[0-9]{1,4}"))
-wpmeta$date <- as.Date(wpmeta$DATE, "%B %d, %Y")
-wpmeta$pub <- "WP"
-wpmeta$oped <- if_else(str_detect(wpmeta$SECTION, "Editorial") | str_detect(wpmeta$SECTION, "Outlook"), 1, 0)
-wpmeta$blog <- 0
-wpmeta <- wpmeta %>% select(byline = BYLINE, headline = HEADLINE, length, date, pub, oped, blog, subject = SUBJECT, person = PERSON)
-
+# Gives error if there's only 1 file, but moves files anyway
 
 ####################################################################
 # Read in WSJ articles, using tm.plugin and tm, and clean up ----
 
-# List article files
-wsjfiles <- DirSource(directory="wsj/", pattern=".htm", recursive=TRUE)
+# Check if a new files folder exists for WSJ, if not create one 
+ifelse(!dir.exists("./wsjnew"), dir.create("./wsjnew"), FALSE) #change to your own folder
 
-# Read article files
-wsjcorpus <- lapply(wsjfiles$filelist, read_fvfiles) 
-wsjcorpus <- do.call(c, wsjcorpus)
+# List files in the new folder
+wsjnewfolder <- list.files("./wsjnew") #change to your own folder
 
-# View the corpus
-wsjcorpus
-wsjcorpus[[1]][1]
-meta(wsjcorpus[[1]])
+# If new folder is empty, process files in the original folder for WP - Steps are the same as NYT
+if(length(wsjnewfolder)==0){
+  # List article files
+  wsjfiles <- DirSource(directory="wsjread/", pattern=".htm", recursive=TRUE) #change to your own folder
+  # Read article files
+  wsjcorpus <- lapply(wsjfiles$filelist, read_fvfiles) 
+  wsjcorpus <- do.call(c, wsjcorpus)
+  
+  # Remove Factiva-added line from WSJ articles (discovered in later exploration): 
+  # "License this article from Dow Jones Reprint Service[http://www.djreprints.com/link/DJRFactiva.html?FACTIVA=wjco20170123000044]"
+  wsjcorpus <- tm_map(wsjcorpus, content_transformer(function(x) gsub("License this article from Dow Jones Reprint Service\\[[[:print:]]+\\]", "", x)))
+  
+  # Replace U.S. with United States for later bigram analysis
+  wsjcorpus <- tm_map(wsjcorpus, content_transformer(function(x) gsub("U.S.", "United States", x)))
 
-# Remove Factiva-added line from WSJ articles (discovered in later exploration): 
-# "License this article from Dow Jones Reprint Service[http://www.djreprints.com/link/DJRFactiva.html?FACTIVA=wjco20170123000044]"
-wsjcorpus <- tm_map(wsjcorpus, content_transformer(function(x) gsub("License this article from Dow Jones Reprint Service\\[[[:print:]]+\\]", "", x)))
-# Replace U.S. with United States for later bigram analysis
-wsjcorpus <- tm_map(wsjcorpus, content_transformer(function(x) gsub("U.S.", "United States", x, fixed = TRUE)))
-# Replace "---" with null (causes problems for readability in WSJ "roundup"-style pieces, where items are separated by ---)
-wsjcorpus <- tm_map(wsjcorpus, content_transformer(function(x) gsub("---", "", x))) # change this to regexp?
+  # Replace "---" with null (causes problems for readability in WSJ "roundup"-style pieces, where items are separated by ---)
+  wsjcorpus <- tm_map(wsjcorpus, content_transformer(function(x) gsub("---", "", x))) # change this to regexp?
+  save(wsjcorpus, file="workspaceR_newspaper/wsj.Rdata") #change to your own folder
+} else{
+  load("workspaceR_newspaper/wsj.Rdata") #change to your own folder
+  wsjfilesnew <- DirSource(directory="wsjnew/", pattern=".htm", recursive=TRUE) #change to your own folder
+  # Read article files
+  wsjcorpusnew <- lapply(wsjfilesnew$filelist, read_fvfiles) 
+  wsjcorpusnew <- do.call(c, wsjcorpusnew)
+  
+  # Remove Factiva-added line from WSJ articles (discovered in later exploration): 
+  # "License this article from Dow Jones Reprint Service[http://www.djreprints.com/link/DJRFactiva.html?FACTIVA=wjco20170123000044]"
+  wsjcorpusnew <- tm_map(wsjcorpusnew, content_transformer(function(x) gsub("License this article from Dow Jones Reprint Service\\[[[:print:]]+\\]", "", x)))
+  
+  # Replace U.S. with United States for later bigram analysis
+  wsjcorpusnew <- tm_map(wsjcorpusnew, content_transformer(function(x) gsub("U.S.", "United States", x)))
+  
+  # Replace "---" with null (causes problems for readability in WSJ "roundup"-style pieces, where items are separated by ---)
+  wsjcorpusnew <- tm_map(wsjcorpusnew, content_transformer(function(x) gsub("---", "", x))) # change this to regexp?
+  
+  # Combining old and new stuff
+  ## Combine nytcorpuses together 
+  wsjcorpus <-  c(wsjcorpus, wsjcorpusnew)
+  
+  save(wsjcorpus, file="workspaceR_newspaper/wsj.Rdata") #change to your own folder
+}
+
+files <- list.files("./wsjnew") #change to your own folder
+
+lapply(files, function(x){
+  from <- paste("./wsjnew/",files,sep="") #change to your own folder
+  to = paste("./wsjread/",files,sep="") #change to your own folder 
+  file.rename(from=from,to=to)
+})
+
+
 
 
 ####################################################################
-# Turn NYT into a quanteda corpus and assign metadata ----
+# Turn NYT into quanteda and assign meta 
 
 qcorpus_nyt <- corpus(nytcorpus) # note corpus is from quanteda, Corpus is from tm
 summary(qcorpus_nyt, showmeta=TRUE)
@@ -202,9 +366,9 @@ docvars(qcorpus_wp, "subject") <- wpmeta$subject
 docvars(qcorpus_wp, c("description", "language", "intro", "section", "coverage", "company", "stocksymbol", "industry", "type", "wordcount", "rights")) <- NULL
 summary(qcorpus_wp, showmeta=TRUE)
 
-
 ####################################################################
 # Turn WSJ into a quanteda corpus and assign metadata ----
+
 
 qcorpus_wsj <- corpus(wsjcorpus) # note corpus is from quanteda, Corpus is from tm
 summary(qcorpus_wsj, showmeta=TRUE)
@@ -222,18 +386,24 @@ docvars(qcorpus_wsj, "blog") <- 0
 docvars(qcorpus_wsj, c("description", "language", "edition", "section", "coverage", "company", "industry", "infocode", "infodesc", "wordcount", "publisher", "rights")) <- NULL
 summary(qcorpus_wsj, showmeta=TRUE)
 
+## Save corpuses into Rdata
 
-####################################################################
-# Combine corpora and metadata and save in workspaceR ----
+qcorpus <- qcorpus_nyt + qcorpus_wp + qcorpus_wsj
 
-qcorpus <- qcorpus_nyt + qcorpus_wsj + qcorpus_wp
-qcorpus
-summary(qcorpus)
+# If you'd like to view corpuses
+#qcorpus
+#summary(qcorpus)
 qmeta <- docvars(qcorpus)
 
 # add approx first two paragraphs as field in qmeta; probably a better way
+# work on finding out a way to add first 4-5 sentences into leadlines section 
 qmeta$leadlines <- str_sub(qcorpus$documents$texts, 1,500)
 
 # Save data
-save(nytcorpus, nytmeta, qcorpus_nyt, wsjcorpus, qcorpus_wsj, wpcorpus, wpmeta, qcorpus_wp, qcorpus, qmeta, file="workspaceR/newspaper.Rdata")
-# load("workspaceR/newspaper.RData")
+save(nytcorpus, nytmeta, qcorpus_nyt, wsjcorpus, qcorpus_wsj, wpcorpus, wpmeta, qcorpus_wp, qcorpus, qmeta, file="workspaceR_newspaper/newspaper.Rdata")
+#change to your own folder
+
+
+
+
+
