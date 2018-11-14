@@ -319,9 +319,9 @@ textplot_network(user_fcm, min_freq = 0.1, edge_color = 'orange3',
 ###################################################################################
 
 # Save the work so far
-box_save(dir_id = 57112339241, file_name = "trumptwitter.RData") # verified update
+box_save_image(dir_id = 57112339241, file_name = "trumptwitter.RData") # verified update
 # box_setwd(57112339241)
-# box_load(287471698861) # but can't reload...
+# box_load(287471698861) 
 
 
 ###################################################################################
