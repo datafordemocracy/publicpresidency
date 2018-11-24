@@ -25,7 +25,7 @@ library(lubridate)
 
 # Load the data and environment from readNews.R
 setwd("~/Box Sync/mpc/dataForDemocracy/presidency_project/newspaper/")
-load("workspaceR/newspaper.Rdata")
+load("workspaceR_newspaper/newspaper.Rdata")
 
 
 ###################################################################
