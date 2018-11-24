@@ -3,7 +3,7 @@
 # Initial Exploration 
 # Michele Claibourn
 # Creaed February 21, 2017
-# Updated August 29, 2018 with newspapers through July 31, 2018
+# Updated November 24 to include through October 31, 2018
 ###################################################################
 
 
@@ -34,26 +34,26 @@ load("workspaceR_newspaper/newspaper.Rdata")
 # Some descriptives
 summary(qmeta$length)
 qmeta %>% group_by(pub) %>% 
-  summarize(mean(length, na.rm=TRUE), sd(length, na.rm=TRUE))
-qcorpus2 <- corpus_subset(qcorpus, as.integer(length)>99)
+  summarize(mean(length, na.rm = TRUE), sd(length, na.rm = TRUE))
+qcorpus2 <- corpus_subset(qcorpus, as.integer(length) > 99)
 
 table(qmeta$pub)
 qmeta$pub <- as.factor(qmeta$pub)
-qmeta2 <- subset(qmeta, as.integer(length)>99)
+qmeta2 <- subset(qmeta, as.integer(length) > 99)
 table(qmeta2$pub)
 
 # Number of stories by day
 # Create date breaks to get chosen tick marks on graph
-date.vec <- seq(from=as.Date("2017-01-20"), to=as.Date("2018-09-07"), by="2 weeks") # update to Friday after last story
-ggplot(qmeta2, aes(x=date)) + geom_point(stat="count") + 
+date.vec <- seq(from = as.Date("2017-01-20"), to = as.Date("2018-11-02"), by="2 weeks") # update to Friday after last story
+ggplot(qmeta2, aes(x = date)) + geom_point(stat = "count") + 
   facet_wrap(~pub) +
-  scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) + 
+  scale_x_date(labels = date_format("%m/%d"), breaks = date.vec) + 
   labs(title = "Volume of Trump Coverage", 
        subtitle = "New York Times, Washington Post, Wall Street Journal", 
-       x="Date", y="Number of Stories") +
-  theme(axis.text.x=element_text(angle=90, size=8), 
-        plot.title = element_text(face="bold", size=18, hjust=0), 
-        axis.title = element_text(face="bold", size=16),
+       x = "Date", y = "Number of Stories") +
+  theme(axis.text.x = element_text(angle = 90, size = 8), 
+        plot.title = element_text(face = "bold", size = 18, hjust = 0), 
+        axis.title = element_text(face = "bold", size = 16),
         panel.grid.minor = element_blank(),
         legend.position="none")
 ggsave("figuresR/newspapervolume.png")
@@ -78,7 +78,7 @@ npdfm <- dfm(qcorpus_tokens, remove_punct = TRUE,
              ngrams = 1:2, verbose = TRUE) # turn it into a document-feature matrix
 topfeatures(npdfm, 100) 
 palD <- brewer.pal(8, "Paired")
-textplot_wordcloud(npdfm, max.words = 200, colors = palD, scale = c(3, .5))
+textplot_wordcloud(npdfm, max_words = 200, min_size = 0.5, max_size= 3, color = palD)
 
 # Wordcloud by source
 bynpdfm <- dfm(qcorpus_tokens, groups = "pub",
@@ -87,9 +87,9 @@ bynpdfm <- dfm(qcorpus_tokens, groups = "pub",
 palO <- colorRampPalette(brewer.pal(9,"Oranges"))(32)[13:32]
 palB <- colorRampPalette(brewer.pal(9,"Blues"))(32)[13:32]
 
-textplot_wordcloud(bynpdfm[1], max.words = 200, colors = palB, scale = c(3, .5)) # nyt
-textplot_wordcloud(bynpdfm[2], max.words = 200, colors = palO, scale = c(3, .5)) # wsj
-textplot_wordcloud(bynpdfm[3], max.words = 200, colors = palB, scale = c(3, .5)) # wp 
+textplot_wordcloud(bynpdfm[1], max_words = 200, color = palB, min_size = 0.5, max_size = 3) # nyt
+textplot_wordcloud(bynpdfm[2], max_words = 200, color = palO, min_size = 0.5, max_size = 3) # wsj
+textplot_wordcloud(bynpdfm[3], max_words = 200, color = palB, min_size = 0.5, max_size = 3) # wp 
 
 # Wordcloud of opinion-editorial pieces
 qcorpus_oped <- corpus_subset(qcorpus2, oped==1)
@@ -97,9 +97,9 @@ qcorpus_oped_tokens  <- tokens(qcorpus_oped)
 qcorpus_oped_tokens <- tokens_remove(qcorpus_oped_tokens, stopwords("english"))
 bynpdfmoped <- dfm(qcorpus_oped_tokens, groups = "pub", remove_punct = TRUE)
 
-textplot_wordcloud(bynpdfmoped[1], max.words = 150, colors = palB, scale = c(3, .5)) # nyt
-textplot_wordcloud(bynpdfmoped[2], max.words = 150, colors = palO, scale = c(3, .5)) # wsj
-textplot_wordcloud(bynpdfmoped[3], max.words = 150, colors = palB, scale = c(3, .5)) # wp
+textplot_wordcloud(bynpdfmoped[1], max_words = 150, color = palB, min_size = 0.5, max_size = 3) # nyt
+textplot_wordcloud(bynpdfmoped[2], max_words = 150, color = palO, min_size = 0.5, max_size = 3) # wsj
+textplot_wordcloud(bynpdfmoped[3], max_words = 150, color = palB, min_size = 0.5, max_size = 3) # wp
 
 # Plot keyness
 qcorpus_tokens %>% dfm(groups = "pub", remove = c(stopwords("english")),
@@ -111,12 +111,12 @@ qcorpus_tokens %>% dfm(groups = "pub", remove = c(stopwords("english")),
 # Use of the language of fake and lie/s ----
 # (possibly others, e.g., honest?); just for exploration...
 
-fakelies <- dictionary(list(lies=c("lie", "lied", "lies"), fake="fake"))
-fakeliedfm  <- dfm(qcorpus2, dictionary=fakelies)
-head(fakeliedfm,10)
+fakelies <- dictionary(list(lies = c("lie", "lied", "lies"), fake = "fake"))
+fakeliedfm  <- dfm(qcorpus2, dictionary = fakelies)
+head(fakeliedfm, 10)
 
 # Turn this into a dataframe
-paperfakelie <- as.data.frame(fakeliedfm, row.names = fakeliedfm@Dimnames$docs)
+paperfakelie <- convert(fakeliedfm, to = "data.frame")
 qmeta2[,ncol(qmeta2)+1:2] <- paperfakelie[,2:3]
 
 # Group by week
@@ -156,8 +156,8 @@ ggplot(byweek, aes(x=week, y=fake)) +
 
 # Save work
 rm("palD", "palO", "palB", "paperfakelie", "fakeliedfm", "fakelies", "fakecount", "immig")
-save.image("workspaceR/newspaperExplore.RData")
-# load("workspaceR/newspaperExplore.RData")
+save.image("workspaceR_newspaper/newspaperExplore.RData")
+# load("workspaceR_newspaper/newspaperExplore.RData")
 
 
 ###################################################################
