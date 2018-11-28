@@ -8,6 +8,12 @@
 * Television news transcripts (e.g., Fox, CNN, MSNBC)
 * Trump twitter feed (from [Trump Twitter Archive](http://www.trumptwitterarchive.com/))
 * Formal presidential statements (from [The Daily Compilation of Presidential Documents](https://www.gpo.gov/fdsys/browse/collection.action?collectionCode=CPD&browsePath=2017&isCollapsed=false&leafLevelBrowse=false&ycord=0); ideally with available metadata like subject codes and named entities)
+* Update Fox from Factiva
+* Consider adding ABC world news tonight, NBC Nightly News, CBS Evening news (scrapable?)
+* Consider updating cable shows: 5-9 range
+   * Fox: The Five, Bret Baier, Martha MacCallum, Tucker Carlson, Hannity (from factiva)
+   * CNN: Situation Room (2), Erin Burnnet, Anderson Cooper, Cuomo (presumably scrapable)
+   * MSNBC: Meet the Press, Ari Melbar, Chris Matthews, Chris Haeys, Rachel Maddow (presumably scrapable)
 
 ### Possible additional sources
 
