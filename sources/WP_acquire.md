@@ -1,4 +1,24 @@
 # Acquiring Washington Post articles about President Trump
+## Beginning November 2018
+The Lexis Nexis platform switched to Nexis Uni, and the prior procedure no longer works (it looks like only 50 articles can be downloaded at a time, and not in html format). We switched to Factiva, using the same process as for the WSJ
+
+We pulled the Washington Post articls from Factiva, licensed through the UVA Libary.
+
+We used the following for the search:
+* In Source we selected "The Washington Post",
+* in Dates we chose "Enter date range" and entered dates encompassing the fisrt and last day of each month,
+* we set Duplicates to "Identical", and
+* in the Free Text Search field we used "trump/F100/" to capture articles where the word trump appeared within the first 100 words.
+
+Hit search to return results, and sort the results by date. In Factiva we can only download 100 articles at at time.^1 We
+* checked the box at the top of the list to select the first 100 articles shown,
+* go to Display Options on the right and choose "Full Article/Report plus Indexing",
+* hit the save button, choosing "Article Format",
+* right-clicked the resulting results to save in the WSJ project directory,
+* then hit "Next 100" and repeated the process (after the first or second save, we had to prove we weren't a robot each time).
+
+### Last update: through 2018-11-30
+
 We pulled the Washington Post articls from LexisNexis Academic, licensed through the UVA Libary.^1
 
 Using the "Advanced Options" for searching
