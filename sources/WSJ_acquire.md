@@ -1,4 +1,4 @@
-# Acquring Wall Street Journal articles about President Trump
+# Acquiring Wall Street Journal articles about President Trump
 
 We pulled the Wall Street Journal articls from Factiva, licensed through the UVA Libary.
 
@@ -15,7 +15,7 @@ Hit search to return results, and sort the results by date. In Factiva we can on
 * right-clicked the resulting results to save in the WSJ project directory,
 * then hit "Next 100" and repeated the process (after the first or second save, we had to prove we weren't a robot each time).
 
-### Last update: through 2018-10-31
+### Last update: through 2018-11-30
 
 1. Beginning in September 2018, the limit seems to have changed to 50 articles at a time.
 2. In October 2018, the limit was back up to 100.
