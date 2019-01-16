@@ -2,7 +2,7 @@
 ## Beginning November 2018
 The Lexis Nexis platform switched to Nexis Uni, and the prior procedure no longer works (it looks like only 50 articles can be downloaded at a time, and not in html format). We switched to Factiva, using the same process as for the WSJ
 
-We pulled the Wall Street Journal articls from Factiva, licensed through the UVA Libary.
+We pulled the New York Times articles from Factiva, licensed through the UVA Libary.
 
 We used the following for the search:
 * In Source we selected "The New York Times",
