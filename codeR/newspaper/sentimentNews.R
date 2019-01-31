@@ -9,6 +9,10 @@
 ###################################################################
 # Loading libraries, Setting directories, Loading data ----
 
+## NOTE: Where data is pulled from and figures need to be changed - Aycan 
+
+# Put sample articles as a text output to see bing, lexicoder positive/negative
+
 # install.packages("tidytext")
 # install.packages("sentimentr")
 
@@ -18,11 +22,15 @@ library(quanteda)
 library(scales)
 library(tidytext)
 library(sentimentr)
+library(ggplot2)
 
 # Load the data and environment from complexityNews.R
-setwd("~/Box Sync/mpc/dataForDemocracy/presidency_project/newspaper/")
-load("workspaceR/newspaperComplex.RData")
+setwd("~/Box Sync/")
+load("workspaceR_newspaper/newspaperComplex.RData")
 
+###################################################################
+
+#qcorpus2a <- corpus_subset(qcorpus2, 1:ndoc(qcorpus2) %in% 0:1000)
 
 ###################################################################
 # Sentiment Analysis, bing dictionary  ---- 
@@ -41,6 +49,7 @@ paperDFM <- dfm(qcorpus2, dictionary = sentDict) # apply dictionary
 head(paperDFM,10)
 
 # Turn this into a dataframe, create tone=positive-negative
+#paperDFM@Dimnames shows dimensions of the corpus to access 
 paperTone <- as.data.frame(paperDFM, row.names = paperDFM@Dimnames$docs)
 paperTone$id <- row.names(paperTone) # put row names into column
 
@@ -48,6 +57,9 @@ paperTone <- paperTone %>%
   mutate(tone = positive - negative)
 summary(paperTone$tone)
 ggplot(paperTone, aes(x=tone)) + geom_histogram(bins=50)
+ggsave("newfiguresR/bingtonehist.png")
+
+#qmeta2a <- qmeta2[1:1000,]
 
 # Add to existing data frame
 qmeta2[,ncol(qmeta2)+1:3] <- paperTone[,c(2,3,5)]
@@ -60,12 +72,13 @@ qmeta2 <- qmeta2 %>% mutate(words = as.integer(length),
 # Plot!
 # Create date breaks to get chosen tick marks on graph
 date.vec <- seq(from=as.Date("2017-01-20"), to=as.Date("2018-09-07"), by="week") # update to Friday after last story
+
 ggplot(qmeta2, aes(x=date, y=pertone)) + 
   geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=.05) +
   geom_hline(yintercept=median(qmeta2$pertone), color="gray50") +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
-  labs(title = "'Tone' of Trump Coverage", 
+  labs(title = "'Tone' of Trump Coverage - Bing", 
        subtitle = "New York Times, Washington Post, Wall Street Journal", 
        y = "Overall Tone\n(% positive words - % neg words)", 
        x = "Date of Article") +
@@ -75,19 +88,39 @@ ggplot(qmeta2, aes(x=date, y=pertone)) +
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
         axis.text.x = element_text(angle=90),
         legend.text=element_text(size=12))
-ggsave("figuresR/newspapertone_naive.png")
+ggsave("newfiguresR/bingnewspapertone_naive.png")
 
 summary(qmeta2$pertone)
-qmeta2 %>% group_by(pub) %>% summarize(mean(pertone), sd(pertone)) 
+
+# create a comparison dataframe to compare tone characteristics across dictionaries
+comparison <- data.frame(qmeta2 %>% group_by(pub) %>% summarize(mean(pertone), 
+                                                                 sd(pertone), min(pertone),max(pertone))) %>% 
+  mutate(oped=0,
+         dict="bing")
+
+comparison <- comparison %>% 
+  rename(meantone = "mean.pertone.",
+         sdtone = "sd.pertone.",
+         mintone= "min.pertone.",
+         maxtone= "max.pertone.")
+
 
 mintone <- qmeta2 %>% filter(pertone == min(pertone))
 mintone[,c("heading", "pub", "date", "pertone")] # Identify article
 qmeta2$leadline[qmeta2$heading==mintone$heading] # first 500 characters of article
 # texts(qcorpus2)[docvars(qcorpus2, "heading")==mintone$heading]
 
+mintone <- as.data.frame(list(dict="bing",type="min",mintone),stringsAsFactors = F)
+
 maxtone <- qmeta2 %>% filter(pertone == max(pertone))
 maxtone[,c("heading", "pub", "date", "pertone")]
 qmeta2$leadline[qmeta2$heading==maxtone$heading]
+
+maxtone <- as.data.frame(list(dict="bing",type="max",maxtone),stringsAsFactors = F)
+
+# store min and max tone articles in toneart dataframe 
+toneart <- rbind(mintone,maxtone)
+
 # texts(qcorpus2)[docvars(qcorpus2, "heading")==maxtone$heading]
 
 # Plot just opeds
@@ -96,7 +129,7 @@ ggplot(filter(qmeta2, oped==1), aes(x=date, y=pertone)) +
   geom_hline(yintercept=median(qmeta2$pertone), color="gray50") +
   geom_smooth(aes(color=pub)) +
   scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
-  labs(title = "'Tone' of Trump Op-Ed Coverage", 
+  labs(title = "'Tone' of Trump Op-Ed Coverage - Bing", 
        subtitle = "New York Times, Washington Post, Wall Street Journal", 
        y = "Overall Tone\n(% positive words - % neg words)", 
        x = "Date of Article") +
@@ -106,10 +139,18 @@ ggplot(filter(qmeta2, oped==1), aes(x=date, y=pertone)) +
         panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
         axis.text.x = element_text(angle=90),
         legend.text=element_text(size=12))
-ggsave("figuresR/opedtone_naive.png")
+ggsave("figuresR/bingopedtone_naive.png")
 
-qmeta2 %>% filter(oped==1) %>% group_by(pub) %>% 
-  summarize(mean(pertone), sd(pertone)) 
+comped <- data.frame(qmeta2 %>% filter(oped==1) %>% group_by(pub) %>% 
+  summarize(mean(pertone), sd(pertone), min(pertone), max(pertone))) %>%
+  mutate(oped=1,
+         dict="bing") %>% 
+  rename(meantone="mean.pertone.",
+         sdtone="sd.pertone.",
+         mintone="min.pertone.",
+         maxtone="max.pertone.")
+
+comparison <- rbind(comparison, comped)
 
 
 ###################################################################
@@ -265,9 +306,109 @@ save.image("workspaceR/newspaperSentiment.RData")
 
 
 ###################################################################
-# Next steps ----
-# Consider Lexicoder Sentiment Dictionary...http://www.lexicoder.com/
-# Need to output the text of each article in the corpus to separate file 
-# in common folder (e.g., writeCorpus from tm).
+## Lexicoder 
+newslexi <- dfm(qcorpus2, dictionary = data_dictionary_LSD2015) 
+head(newslexi,10)
+
+### Not accounting for negations 
+# Turn this into a dataframe, create tone=positive-negative
+#paperDFM@Dimnames shows dimensions of the corpus to access 
+lexiTone <- as.data.frame(newslexi, row.names = newslexi@Dimnames$docs)
+lexiTone$id <- row.names(lexiTone) # put row names into column
+
+lexiTone <- lexiTone %>% 
+  mutate(ltone = positive - negative) %>% 
+  rename(lpositive="positive",
+         lnegative="negative")
+summary(lexiTone$ltone)
+ggplot(lexiTone, aes(x=ltone)) + geom_histogram(bins=50)
+ggsave("newfiguresR/lexitonehist.png")
+
+# Add to existing data frame
+
+qmeta2[ ,ncol(qmeta2)+1:3] <- lexiTone[ ,c(2,3,7)]
+# And create new variables
+qmeta2 <- qmeta2 %>% mutate(lperpos = (lpositive/words)*100, 
+                            lperneg = (lnegative/words)*100,
+                            lpertone = lperpos - lperneg)
+
+# Plot!
+# Create date breaks to get chosen tick marks on graph
+date.vec <- seq(from=as.Date("2017-01-20"), to=as.Date("2018-09-07"), by="week") # update to Friday after last story
+
+ggplot(qmeta2, aes(x=date, y=lpertone)) + 
+  geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=.05) +
+  geom_hline(yintercept=median(qmeta2$lpertone), color="gray50") +
+  geom_smooth(aes(color=pub)) +
+  scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
+  labs(title = "'Tone' of Trump Coverage - Lexicode", 
+       subtitle = "New York Times, Washington Post, Wall Street Journal", 
+       y = "Overall Tone\n(% positive words - % neg words)", 
+       x = "Date of Article") +
+  scale_color_manual(values=c("blue3","turquoise", "orange3"), name="Source") +
+  theme(plot.title = element_text(face="bold", size=20, hjust=0),
+        axis.title = element_text(face="bold", size=14),
+        panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
+        axis.text.x = element_text(angle=90),
+        legend.text=element_text(size=12))
+ggsave("newfiguresR/lexnewspapertone_naive.png")
+
+summary(qmeta2$lpertone)
+
+# create a comparison dataframe to compare tone characteristics across dictionaries
+lcomparison <- data.frame(qmeta2 %>% group_by(pub) %>% summarize(mean(lpertone), 
+                                                                 sd(lpertone), min(lpertone),max(lpertone))) %>% 
+  mutate(oped=0,
+         dict="lexicode") %>% 
+  rename(meantone = "mean.lpertone.",
+         sdtone = "sd.lpertone.",
+         mintone= "min.lpertone.",
+         maxtone= "max.lpertone.")
+
+comparison <- rbind(comparison,lcomparison)
+
+
+lmintone <- qmeta2 %>% filter(lpertone == min(lpertone))
+lmintone[,c("heading", "pub", "date", "lpertone")] # Identify article
+qmeta2$leadline[qmeta2$heading==lmintone$heading] # first 500 characters of article
+# texts(qcorpus2)[docvars(qcorpus2, "heading")==mintone$heading]
+
+lmaxtone <- qmeta2 %>% filter(lpertone == max(lpertone))
+lmaxtone[,c("heading", "pub", "date", "lpertone")]
+qmeta2$leadline[qmeta2$heading==lmaxtone$heading]
+
+
+# texts(qcorpus2)[docvars(qcorpus2, "heading")==maxtone$heading]
+
+# Plot just opeds
+ggplot(filter(qmeta2, oped==1), aes(x=date, y=pertone)) + 
+  geom_jitter(aes(color=pub), width=0.2, height=0.0, size=2, alpha=.15) +
+  geom_hline(yintercept=median(qmeta2$pertone), color="gray50") +
+  geom_smooth(aes(color=pub)) +
+  scale_x_date(labels = date_format("%m/%d"), breaks=date.vec) +
+  labs(title = "'Tone' of Trump Op-Ed Coverage", 
+       subtitle = "New York Times, Washington Post, Wall Street Journal", 
+       y = "Overall Tone\n(% positive words - % neg words)", 
+       x = "Date of Article") +
+  scale_color_manual(values=c("blue3","turquoise", "orange3"), name="Source") +
+  theme(plot.title = element_text(face="bold", size=20, hjust=0),
+        axis.title = element_text(face="bold", size=14),
+        panel.grid.minor = element_blank(), legend.position = c(0.95,0.9),
+        axis.text.x = element_text(angle=90),
+        legend.text=element_text(size=12))
+ggsave("newfiguresR/lexopedtone_naive.png")
+
+lcomped <- data.frame(qmeta2 %>% filter(oped==1) %>% group_by(pub) %>% 
+                       summarize(mean(lpertone), sd(lpertone), min(lpertone), max(lpertone))) %>%
+  mutate(oped=1,
+         dict="lexicode") %>% 
+  rename(meantone="mean.lpertone.",
+         sdtone="sd.lpertone.",
+         mintone="min.lpertone.",
+         maxtone="max.lpertone.")
+
+comparison <- rbind(comparison, lcomped)
+
+
 # Also contains beta version of policy dictionary to identify attention 
 # to policy areas
