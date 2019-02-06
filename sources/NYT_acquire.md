@@ -17,7 +17,7 @@ Hit search to return results, and sort the results by date. In Factiva we can on
 * right-clicked the resulting results to save in the WSJ project directory,
 * then hit "Next 100" and repeated the process (after the first or second save, we had to prove we weren't a robot each time).
 
-### Last update: through 2018-11-30
+### Last update: through 2018-12-31
 
 ## January 2017 through October 2018
 We pulled the New York Times articls from LexisNexis Academic, licensed through the UVA Libary.^1
