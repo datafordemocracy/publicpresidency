@@ -3,7 +3,7 @@
 # Initial Exploration 
 # Michele Claibourn
 # Creaed February 21, 2017
-# Updated November 24 to include through October 31, 2018
+# Updated February 6, 2019 to include through December 2018
 ###################################################################
 
 
@@ -44,7 +44,7 @@ table(qmeta2$pub)
 
 # Number of stories by day
 # Create date breaks to get chosen tick marks on graph
-date.vec <- seq(from = as.Date("2017-01-20"), to = as.Date("2018-11-02"), by="2 weeks") # update to Friday after last story
+date.vec <- seq(from = as.Date("2017-01-20"), to = as.Date("2019-01-04"), by="2 weeks") # update to Friday after last story
 ggplot(qmeta2, aes(x = date)) + geom_point(stat = "count") + 
   facet_wrap(~pub) +
   scale_x_date(labels = date_format("%m/%d"), breaks = date.vec) + 
@@ -105,6 +105,7 @@ textplot_wordcloud(bynpdfmoped[3], max_words = 150, color = palB, min_size = 0.5
 qcorpus_tokens %>% dfm(groups = "pub", remove = c(stopwords("english")),
                        remove_punct = TRUE, ngrams = 1:2) %>% 
   textstat_keyness(target = "WSJ") %>% textplot_keyness()
+# suggests some things clean up again...
 
 
 ###################################################################

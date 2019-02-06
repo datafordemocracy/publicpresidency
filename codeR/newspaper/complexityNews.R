@@ -3,7 +3,7 @@
 # Readability/complexity of news 
 # Michele Claibourn
 # Creaed February 21, 2017
-# Updated August 29, 2018 with newspapers through July 31, 2018
+# Updated February 6, 2019 to include through December 2018
 ###################################################################
 
 
@@ -18,7 +18,7 @@ library(RColorBrewer)
 
 # Load the data and environment from readNews.R
 setwd("~/Box Sync/mpc/dataForDemocracy/presidency_project/newspaper/")
-load("workspaceR/newspaperExplore.RData")
+load("workspaceR_newspaper/newspaperExplore.RData")
 
 
 ###################################################################
@@ -56,5 +56,5 @@ maxcomplex[,c("heading", "pub", "date", "readability")] # Identify article
 
 # Save
 rm("fk", "mincomplex", "maxcomplex")
-save.image("workspaceR/newspaperComplex.RData")
-# load("workspaceR/newspaperComplex.RData")
+save.image("workspaceR_newspaper/newspaperComplex.RData")
+# load("workspaceR_newspaper/newspaperComplex.RData")
