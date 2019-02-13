@@ -133,7 +133,7 @@ ggplot(byweek, aes(x=week, y=lie)) +
   geom_smooth(aes(color=pub)) +
   labs(title = "Frequency of 'Lies' in Trump Coverage",
        subtitle = "New York Times, Washington Post, Wall Street Journal", 
-       y = "Anger Affect", x = "Date of Article") +
+       y = "Fake Count", x = "Date of Article") +
   scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
   theme(plot.title = element_text(face="bold", size=18, hjust=0),
         axis.title = element_text(face="bold", size=14),
@@ -147,7 +147,7 @@ ggplot(byweek, aes(x=week, y=fake)) +
   geom_smooth(aes(color=pub)) +
   labs(title = "Frequency of 'Fake' in Trump Coverage",
        subtitle = "New York Times, Washington Post, Wall Street Journal", 
-       y = "Anger Affect", x = "Date of Article") +
+       y = "Lies Count", x = "Date of Article") +
   scale_color_manual(values=c("blue3", "turquoise", "orange3"), name="Source") +
   theme(plot.title = element_text(face="bold", size=18, hjust=0),
         axis.title = element_text(face="bold", size=14),
@@ -157,6 +157,7 @@ ggplot(byweek, aes(x=week, y=fake)) +
 
 # Save work
 rm("palD", "palO", "palB", "paperfakelie", "fakeliedfm", "fakelies", "fakecount", "immig")
+rm("bynpdfm", "bynpdfmoped", "byweek", "npdfm")
 save.image("workspaceR_newspaper/newspaperExplore.RData")
 # load("workspaceR_newspaper/newspaperExplore.RData")
 
@@ -178,5 +179,4 @@ save.image("workspaceR_newspaper/newspaperExplore.RData")
 ## hmmm, qcorpus3 is now a tokens object; 
 ## also, this didn't do what I'd expected (i.e., replace selected phrases with concatenated phrase)
 ## https://stackoverflow.com/questions/38931507/create-dfm-step-by-step-with-quanteda
-
 

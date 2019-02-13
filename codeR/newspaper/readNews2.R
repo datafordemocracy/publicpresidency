@@ -4,7 +4,7 @@
 # NYT and WP from Lexis-Nexis; WSJ from Factiva
 # Created February 1, 2017, Michele Claibourn
 # Updated by Aycan Katitas to read only new articles
-# Updated by mpc February 6, 2019 to accomodate nyt and wp from factiva
+# Updated by mpc February 6, 2019 to accommodate nyt and wp from factiva
 # Updated February 6 to read in through December 2018
 ####################################################################
 
@@ -32,7 +32,6 @@ rm(list=ls())
 library(tm)
 library(xml2) # instead of XML?
 library(tm.plugin.factiva)
-# library(tm.plugin.lexisnexis)
 library(quanteda)
 library(tidyverse)
 library(rvest)
@@ -56,9 +55,6 @@ read_fvfiles <- function(x){
 # Read in WSJ articles, using tm.plugin and tm, and clean up ----
 # Check if folder for read articles exists, and create if needed 
 ifelse(!dir.exists("./wsjread"), dir.create("./wsjread"), FALSE) #change to your own folder
-
-# List files in the new folder
-wsjnewfolder <- list.files("./wsjnew") 
 
 # Read article files
 wsjfilesnew <- DirSource(directory="wsjnew/", pattern=".htm", recursive=TRUE) #change to your own folder
@@ -94,9 +90,6 @@ lapply(files, function(x){
 # Read in NYT articles, using tm.plugin and tm, and clean up ----
 # Check folder for read articles exists, and create if needed
 ifelse(!dir.exists("./nytread"), dir.create("./nytread"), FALSE) 
-
-# List article files
-nytnewfolder <- list.files("./nytnew") 
 
 # Read article files
 nytfilesnew <- DirSource(directory="nytnew/", pattern=".htm", recursive=TRUE) # change directory to your own folder
@@ -143,9 +136,6 @@ lapply(files, function(x){
 # Read in WP articles, using tm.plugin and tm, and clean up ----
 # Check folder for read articles exists, and create if needed
 ifelse(!dir.exists("./wpread"), dir.create("./wpread"), FALSE) 
-
-# List article files
-wpnewfolder <- list.files("./wpnew") #change to your own folder
 
 # Read article files
 wpfilesnew <- DirSource(directory="wpnew/", pattern=".htm", recursive=TRUE) # change directory to your own folder
@@ -200,9 +190,9 @@ docvars(qcorpus_nyt, "length") <- docvars(qcorpus_nyt, "wordcount")
 docvars(qcorpus_nyt, "date") <- docvars(qcorpus_nyt, "datetimestamp")
 docvars(qcorpus_nyt, "date") <- as.Date(docvars(qcorpus_nyt, "date"))
 docvars(qcorpus_nyt, "pub") <- "NYT"
-oped <- c("EDITORIALS & OPINIONS")
-docvars(qcorpus_nyt, "oped") <- if_else(str_detect(docvars(qcorpus_nyt, "subject"), paste(oped, collapse = '|')), 1, 0)
-docvars(qcorpus_nyt, "blog") <- if_else(str_detect(docvars(qcorpus_nyt, "type"), "Web Blog"), 1, 0)
+oped <- c("Editorial Desk", "Op-Ed", "OPINION")
+docvars(qcorpus_nyt, "oped") <- if_else(str_detect(docvars(qcorpus_nyt, "section"), paste(oped, collapse = '|')), 1, 0)
+docvars(qcorpus_nyt, "blog") <- 0
 
 # Remove several empty (or unused) metadata fields
 docvars(qcorpus_nyt, c("description", "language", "edition", "section", "coverage", "company", "industry", "infocode", "infodesc", "wordcount", "publisher", "rights", "type")) <- NULL
@@ -217,9 +207,8 @@ summary(qcorpus_wp, showmeta=TRUE)
 docvars(qcorpus_wp, "length") <- docvars(qcorpus_wp, "wordcount")
 docvars(qcorpus_wp, "date") <- docvars(qcorpus_wp, "datetimestamp")
 docvars(qcorpus_wp, "date") <- as.Date(docvars(qcorpus_wp, "date"))
+docvars(qcorpus_wp, "oped") <- if_else(str_detect(docvars(qcorpus_wp, "section"), "Editorial"), 1, 0)
 docvars(qcorpus_wp, "pub") <- "WP"
-oped <- c("EDITORIALS & OPINIONS")
-docvars(qcorpus_wp, "oped") <- if_else(str_detect(docvars(qcorpus_wp, "subject"), paste(oped, collapse = '|')), 1, 0)
 docvars(qcorpus_wp, "blog") <- 0
 
 # Remove several empty (or unused) metadata fields
