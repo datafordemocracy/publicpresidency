@@ -16,7 +16,6 @@
 
 rm(list=ls())
 library(tidyverse)
-# library(forcats)
 library(quanteda)
 library(tm)
 library(topicmodels)
@@ -25,7 +24,7 @@ library(lubridate)
 
 # Load the data and environment from moralfoundations1.R
 setwd("~/Box Sync/mpc/dataForDemocracy/presidency_project/newspaper/")
-load("workspaceR/newspaperMoral.RData")
+load("workspaceR_newspaper/newspaperMoral.RData")
 
 
 ####################
@@ -39,10 +38,10 @@ topfeatures(npdfm, 20)
 # stopwords("english") # what words did we remove?
 
 # Trim low frequency words, and words that appear across few documents (to reduce the size of the matrix)
-npdfmReduced <- dfm_trim(npdfm, min_count = 100, min_docfreq = 5, max_docfreq = 21400)
+npdfmReduced <- dfm_trim(npdfm, min_termfreq = 100, min_docfreq = 50, max_docfreq = nrow(npdfm) - 50)
 npdfmReduced
 
-# Remove empty rows and confert to a tm corpus (the topicmodels package expects the triplet matrix format used by tm)
+# Remove empty rows and convert to a tm corpus (the topicmodels package expects the triplet matrix format used by tm)
 npdfmReduced <- npdfmReduced[which(rowSums(npdfmReduced) > 0),]
 npdtm <- convert(npdfmReduced, to="topicmodels")
 npdtm
@@ -50,15 +49,15 @@ npdtm
 
 #########################
 # Topic Model Estimation
-# Estimation, k=100
+# Estimation, k=200
 # using topicmodels
 #########################
 # 1. Estimate model
 seed1=823 # for reproducibility
 t1 <- Sys.time()
-tm100 <- LDA(npdtm, k=100, control=list(seed=seed1)) # estimate lda model with 50 topics
-probterms100 <- as.data.frame(posterior(tm100)$terms) # all the topic-term probabilities
-probtopic100 <- as.data.frame(posterior(tm100)$topics) # all the document-topic probabilities
+tm200 <- LDA(npdtm, k=200, control=list(seed=seed1)) # estimate lda model with 50 topics
+probterms200 <- as.data.frame(posterior(tm200)$terms) # all the topic-term probabilities
+probtopic200 <- as.data.frame(posterior(tm200)$topics) # all the document-topic probabilities
 Sys.time() - t1 # ~ 4.7 hours
 
 
